@@ -1,0 +1,50 @@
+*, ::before, ::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    color: #fff;
+    background: #003567;
+}
+
+.calendar {
+    padding: 1rem;
+}
+
+.calendar-head,
+.calendar-body {
+    width: min(80%, 70rem);
+    margin: auto;
+    display: flex;
+}
+
+.calendar-head {
+    /* border: 1px solid #e1e1e1; */
+    height: 4rem;
+}
+
+.calendar-head div {
+    width: calc(100%/7);
+}
+
+.calendar-body {
+    
+}
+
+.calendar-day {
+    height: 80rem;
+    width: calc(100%/7);
+}
+
+.calendar-half-hour {
+    height: calc(100%/36);
+    border: 1px solid #e1e1e1;
+    border-radius: 0.5rem;
+}
+
+.calendar-half-hour:hover {
+    cursor: pointer;
+    border: 1px solid #e1e1e1;
+}
