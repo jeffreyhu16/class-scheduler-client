@@ -2,8 +2,8 @@
   "name": "backend",
   "version": "1.0.0",
   "main": "App.js",
-  "devDependencies": {},
   "scripts": {
+    "start": "node ./App.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -11,6 +11,7 @@
   "description": "",
   "dependencies": {
     "express": "^4.17.3",
+    "luxon": "^2.3.1",
     "node-schedule": "^2.1.0"
   }
 }
