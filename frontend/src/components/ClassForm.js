@@ -29,48 +29,59 @@ export default function ClassForm(props) {
     return (
         <div className="class-form">
             <form onLoad={handleOnLoad} onSubmit={handleSubmit}>
-                <label htmlFor="startTime">Start</label>
-                <input
-                    type="text"
-                    name="startTime"
-                    id="startTime"
-                    placeholder={startTime}
-                    onChange={handleChange}
-                >
-                </input>
-                <label htmlFor="endTime">End</label>
-                <input
-                    type="text"
-                    name="endTime"
-                    id="endTime"
-                    onChange={handleChange}
-                >
-                </input>
-                <label htmlFor="studentName">Student</label>
+                <div className="form-time">
+                    <input
+                        type="text"
+                        name="startTime"
+                        className="startTime"
+                        placeholder="Start"
+                        onChange={handleChange}
+                    >
+                    </input>
+                    <input
+                        type="text"
+                        name="endTime"
+                        className="endTime"
+                        placeholder="End"
+                        onChange={handleChange}
+                    >
+                    </input>
+                </div>
                 <input
                     type="text"
                     name="studentName"
-                    id="studentName"
+                    className="studentName"
+                    placeholder="Student Name"
                     onChange={handleChange}
                 >
                 </input>
-                <label htmlFor="coachName">Coach</label>
                 <input
                     type="text"
                     name="coachName"
-                    id="coachName"
+                    className="coachName"
+                    placeholder="Coach Name"
                     onChange={handleChange}
                 >
                 </input>
-                <label htmlFor="location">Location</label>
                 <input
                     type="text"
                     name="location"
-                    id="location"
+                    className="location"
+                    placeholder="Location"
                     onChange={handleChange}
                 >
                 </input>
-                <button type="submit"></button>
+                <div className="form-button-group">
+                    <button
+                        onClick={''}
+                        className="form-cancel-button">
+                        Cancel
+                    </button>
+                    <button
+                        type="submit" className="form-submit-button">
+                        Save
+                    </button>
+                </div>
             </form>
         </div>
     )

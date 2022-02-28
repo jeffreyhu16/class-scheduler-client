@@ -14,8 +14,16 @@ export default function CalendarHalfHour(props) {
     }
 
     return (
-        <div onClick={()=>handleClick(props.halfHour)} className={`calendar-half-hour day-${props.day} half-hour-${props.halfHour}`}>
-            {clickArr[props.halfHour] && <ClassForm weekData={props.weekData} day={props.day} halfHour={props.halfHour} />}
+        <div 
+            onClick={()=>handleClick(props.halfHour)} 
+            className={`calendar-half-hour day-${props.day} half-hour-${props.halfHour}`}
+        >
+            {clickArr[props.halfHour] && 
+            <ClassForm 
+                weekData={props.weekData} 
+                day={props.day} 
+                halfHour={props.halfHour} 
+            />}
         </div>
     )
 }
