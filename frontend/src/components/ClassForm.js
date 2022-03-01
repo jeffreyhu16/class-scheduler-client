@@ -1,40 +1,38 @@
 import React from 'react'
 
 export default function ClassForm(props) {
-    const [inputs, setInputs] = React.useState([]);
-    let startTime
-    let date
-    let hour
+    // const [inputs, setInputs] = React.useState([]);
+    // const [isCancel, setIsCancel] = React.useState(false);
 
-    function handleOnLoad() {
-        let weekArr = Object.entries(props.weekData);
-        date = weekArr[props.day - 1][1];
-        hour = props.halfHour / 2 + 6;
+    // const weekArr = Object.entries(props.weekData);
+    // const date = weekArr[props.day - 1][1];
+    // const hour = props.halfHour / 2 + 6;
 
-        startTime = props.halfHour % 2 !== 0 ?
-            new Date(date).setHours(hour) :
-            new Date(date).setHours(hour, 30);
-    }
+    // const startTime = props.halfHour % 2 !== 0 ?
+    //     new Date(date).setHours(hour) :
+    //     new Date(date).setHours(hour, 30);
+    console.log('form');
 
-    function handleChange(e) {
-        const name = e.target.name;
-        const value = e.target.value;
-        setInputs(prevInputs => [...prevInputs, { [name]: value }]);
-    }
+    // function handleChange(e) {
+    //     const name = e.target.name;
+    //     const value = e.target.value;
+    //     setInputs(prevInputs => [...prevInputs, { [name]: value }]);
+    // }
 
-    function handleSubmit() {
-        fetch('/')
-    }
+    // function handleSubmit() {
+    //     fetch('/')
+    // }
+    return <div></div>
 
-    return (
-        <div className="class-form">
-            <form onLoad={handleOnLoad} onSubmit={handleSubmit}>
+  {/*  return !isCancel && (
+        <div     className="class-form">
+             <form onSubmit={handleSubmit}>
                 <div className="form-time">
                     <input
                         type="text"
                         name="startTime"
                         className="startTime"
-                        placeholder="Start"
+                        placeholder={startTime}
                         onChange={handleChange}
                     >
                     </input>
@@ -73,7 +71,7 @@ export default function ClassForm(props) {
                 </input>
                 <div className="form-button-group">
                     <button
-                        onClick={''}
+                        onClick={() => setIsCancel(true)}
                         className="form-cancel-button">
                         Cancel
                     </button>
@@ -82,7 +80,7 @@ export default function ClassForm(props) {
                         Save
                     </button>
                 </div>
-            </form>
+            </form> 
         </div>
-    )
+    ) */}
 }

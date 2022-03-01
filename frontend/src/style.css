@@ -9,24 +9,61 @@ body {
     background: #003567;
 }
 
-.calendar {
+h1, h2, p {
+    margin-top: 0;
+}
+
+.header-container {
+    padding: 1em 5em;
+}
+
+h1 {
+    margin-bottom: 0;
+}
+
+.main-page-container {
+    display: flex;
+    justify-content: space-evenly;
+    margin: 0 auto;
+    width: min(90%, 100rem);
+}
+
+.navbar, .calendar {
     padding: 1rem;
+    background: #00407b;
+    box-shadow: 0 0 2rem 0.5rem rgba(0, 0, 0, 0.2);
+}
+
+.navbar {
+    width: 25%;
+}
+
+.calendar {
+    width: 70%;
+    padding: 2em 4em 2em 0;
 }
 
 .calendar-head,
 .calendar-body {
-    width: min(80%, 70rem);
     margin: auto;
     display: flex;
 }
 
 .calendar-head {
-    /* border: 1px solid #e1e1e1; */
     height: 4rem;
 }
 
-.calendar-head div {
+.calendar-head-group {
     width: calc(100%/8);
+}
+
+.calendar-head-day,
+.calendar-head-date {
+    text-align: center;
+}
+
+.calendar-head-day {
+    text-transform: uppercase;
 }
 
 .calendar-body {
@@ -35,12 +72,14 @@ body {
 
 .calendar-time {
     width: calc(100%/8);
-    
+    letter-spacing: 0.02rem;
 }
 
 .calendar-hour {
     height: calc(100%/18);
-    border: 1px solid #e1e1e1;
+    text-align: right;
+    padding-right: 0.5em;
+    /* border: 1px solid #e1e1e1; */
 }
 
 .calendar-day {
@@ -51,20 +90,20 @@ body {
 .calendar-half-hour {
     height: calc(100%/36);
     border: 1px solid #e1e1e1;
-    border-radius: 0.5rem;
+    /* border-radius: 0.5rem; */
     /* position: relative; */
 }
 
 .calendar-half-hour:hover {
-    cursor: pointer;
     border: 1px solid #e1e1e1;
+    background: rgba(255, 255, 255, 0.65);
 }
 
 .class-form {
     background: #00407b;
     color: #fff;
     position: fixed;
-    padding: 1rem;
+    padding: 1.5rem;
     width: min(60%, 30rem);
     height: 60%;
     top: 50%;
@@ -120,7 +159,7 @@ button {
 }
 
 .form-button-group {
-    padding: 1em;
+    padding: 0em;
     margin-top: auto;
     display: flex;
     justify-content: space-between;
@@ -136,8 +175,10 @@ button {
     
 }
 
-.form-submit-button:hover {
+.form-submit-button:hover,
+.form-cancel-button:hover {
     background: #0055a4;
+    cursor: pointer;
 }
 
 .overlay {

@@ -1,10 +1,14 @@
 import React from 'react'
 import Calendar from './Calendar'
+import Navbar from './Navbar'
 
 export default function Main() {
     return (
         <main>
-            <Calendar/>
+            <div className="main-page-container">
+                <Navbar/>
+                <Calendar/>
+            </div>
         </main>
     )
 }

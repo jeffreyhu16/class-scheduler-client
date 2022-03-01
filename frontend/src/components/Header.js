@@ -3,7 +3,9 @@ import React from 'react'
 export default function Header() {
     return (
         <header>
-            <h1>Class Scheduler</h1>
+            <div className="header-container">
+                <h1>Class Scheduler</h1>
+            </div>
         </header>
     )
 }

@@ -2,28 +2,28 @@ import React from 'react'
 import ClassForm from './ClassForm'
 
 export default function CalendarHalfHour(props) {
-    let arr = new Array(37).fill(null);
-    let [clickArr, setClickArr] = React.useState(arr);
+    // const [clickArr, setClickArr] = React.useState(new Array(37).fill(null));
+    const [isClick, setIsClick] = React.useState(false)
 
-    function handleClick(index) {
-        setClickArr(prevClickArr => {
-            prevClickArr[index] = true;
-            return prevClickArr;
-        });
-        console.log(clickArr[index]);
+    function handleClick() {
+        // setClickArr(prevClickArr => {
+        //     prevClickArr[props.halfHour] = true;
+        //     return prevClickArr;
+        // });
+        setIsClick(true)
     }
 
     return (
         <div 
-            onClick={()=>handleClick(props.halfHour)} 
+            onClick={handleClick} 
             className={`calendar-half-hour day-${props.day} half-hour-${props.halfHour}`}
         >
-            {clickArr[props.halfHour] && 
+            {/* {isClick && 
             <ClassForm 
                 weekData={props.weekData} 
                 day={props.day} 
                 halfHour={props.halfHour} 
-            />}
+            />} */}
         </div>
     )
 }

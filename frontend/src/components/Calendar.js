@@ -39,7 +39,7 @@ export default function Calendar() {
                 setCalendarDays(tempArr);
             });
     }, [weekInfo]);
-    
+
 
     let j = 0
     let hourCount = new Date('2022-01-01T05:00:00').getHours();
@@ -47,25 +47,23 @@ export default function Calendar() {
         return (
             <div className={`calendar-hour half-hour-${++j} half-hour-${++j}`}>
                 {++hourCount > 12 ? hourCount - 12 : hourCount}
-                {hourCount > 11 ? 'pm' : 'am'}
+                {hourCount > 11 ? ' pm' : ' am'}
             </div>
         )
     });
 
     return (
-        <>
-            <div className="calendar">
-                <div className="calendar-head">
-                    <div></div>
-                    {weekInfo}
-                </div>
-                <div className="calendar-body">
-                    <div className="calendar-time">
-                        {calendarTimes}
-                    </div>
-                    {calendarDays}
-                </div>
+        <div className="calendar">
+            <div className="calendar-head">
+                <div className="calendar-head-group"></div>
+                {weekInfo}
             </div>
-        </>
+            <div className="calendar-body">
+                <div className="calendar-time">
+                    {calendarTimes}
+                </div>
+                {calendarDays}
+            </div>
+        </div>
     )
 }
