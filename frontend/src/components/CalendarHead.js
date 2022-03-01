@@ -1,7 +1,7 @@
 import React from 'react'
 
-export default function CalendarHeads(props) {
-    
+export default function CalendarHead(props) {
+
     let calendarHeads = [];
     for (let key in props.weekData) {
         calendarHeads.push(
@@ -15,8 +15,5 @@ export default function CalendarHeads(props) {
             </div>
         );
     }
-
-    return (
-        <>{calendarHeads}</>
-    )
+    return <>{calendarHeads}</>
 }

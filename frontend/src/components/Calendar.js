@@ -1,13 +1,11 @@
 import React from 'react'
-import CalendarHeads from './CalendarHeads';
-import CalendarTimes from './CalendarTimes';
-import CalendarDays from './CalendarDays'
+import CalendarHead from './CalendarHead';
+import CalendarTime from './CalendarTime';
+import CalendarDay from './CalendarDay'
 
 export default function Calendar() {
 
     const [weekData, setWeekData] = React.useState({});
-    // const [weekInfo, setWeekInfo] = React.useState([]);
-    // const [calendarDays, setCalendarDays] = React.useState([]);
     
     React.useEffect(() => {
         fetch('/getFullWeek')
@@ -15,32 +13,28 @@ export default function Calendar() {
             .then(data => setWeekData(data));
     }, []);
 
+    let i = 0;
+    let calendarDayArr = [...Array(7)].map(() => {
+        return (
+            <div className={`calendar-day day-${++i}`}>
+                <CalendarDay weekData={weekData} day={i} />
+            </div>
+            
+        )
+    });
+
     return (
         <div className="calendar">
             <div className="calendar-head">
-                <CalendarHeads weekData={weekData} />
+                <div className="calendar-head-group"></div>
+                <CalendarHead weekData={weekData} />
             </div>
             <div className="calendar-body">
                 <div className="calendar-time">
-                    <CalendarTimes />
+                    <CalendarTime />
                 </div>
-                <CalendarDays weekData={weekData}/>
+                {calendarDayArr}
             </div>
         </div>
     )
-
-    // return (
-    //     <div className="calendar">
-    //         <div className="calendar-head">
-    //             <div className="calendar-head-group"></div>
-    //             {weekInfo}
-    //         </div>
-    //         <div className="calendar-body">
-    //             <div className="calendar-time">
-    //                 {calendarTimes}
-    //             </div>
-    //             {calendarDays}
-    //         </div>
-    //     </div>
-    // )
 }

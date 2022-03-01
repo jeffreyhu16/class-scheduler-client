@@ -1,8 +1,8 @@
 import React from 'react'
 
 export default function ClassForm(props) {
-    // const [inputs, setInputs] = React.useState([]);
-    // const [isCancel, setIsCancel] = React.useState(false);
+    const [inputs, setInputs] = React.useState([]);
+    const [isCancel, setIsCancel] = React.useState(false);
 
     // const weekArr = Object.entries(props.weekData);
     // const date = weekArr[props.day - 1][1];
@@ -11,28 +11,27 @@ export default function ClassForm(props) {
     // const startTime = props.halfHour % 2 !== 0 ?
     //     new Date(date).setHours(hour) :
     //     new Date(date).setHours(hour, 30);
-    console.log('form');
+    // console.log(startTime);
+    console.log('form')
+    function handleChange(e) {
+        const name = e.target.name;
+        const value = e.target.value;
+        setInputs(prevInputs => [...prevInputs, { [name]: value }]);
+    }
 
-    // function handleChange(e) {
-    //     const name = e.target.name;
-    //     const value = e.target.value;
-    //     setInputs(prevInputs => [...prevInputs, { [name]: value }]);
-    // }
+    function handleSubmit() {
+        fetch('/')
+    }
 
-    // function handleSubmit() {
-    //     fetch('/')
-    // }
-    return <div></div>
-
-  {/*  return !isCancel && (
-        <div     className="class-form">
+    return !isCancel && (
+        <div className="class-form">
              <form onSubmit={handleSubmit}>
                 <div className="form-time">
                     <input
                         type="text"
                         name="startTime"
                         className="startTime"
-                        placeholder={startTime}
+                        placeholder={''}
                         onChange={handleChange}
                     >
                     </input>
@@ -82,5 +81,5 @@ export default function ClassForm(props) {
                 </div>
             </form> 
         </div>
-    ) */}
+    )
 }

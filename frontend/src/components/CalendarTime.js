@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function CalendarTimes() {
+export default function CalendarTime() {
 
     let j = 0
     let hourCount = new Date('2022-01-01T05:00:00').getHours();
