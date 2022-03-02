@@ -2,18 +2,21 @@ import React from 'react'
 
 export default function CalendarHead(props) {
 
-    let calendarHeads = [];
-    for (let key in props.weekData) {
-        calendarHeads.push(
-            <div className="calendar-head-group">
-                <div className="calendar-head-day">
-                    {key}
+    let weekDataArr, calendarHeads
+    if (props.weekData.mon) {
+        weekDataArr = Object.entries(props.weekData);
+        calendarHeads = weekDataArr.map(weekDay => {
+            return (
+                <div className="calendar-head-group">
+                    <div className="calendar-head-day">
+                        {weekDay[0]}
+                    </div>
+                    <div className="calendar-head-date">
+                        {weekDay[1].day}
+                    </div>
                 </div>
-                <div className="calendar-head-date">
-                    {props.weekData[key].slice(8)}
-                </div>
-            </div>
-        );
+            )
+        });
     }
     return <>{calendarHeads}</>
 }

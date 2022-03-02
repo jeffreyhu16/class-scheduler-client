@@ -8,7 +8,7 @@ export default function Calendar() {
     const [weekData, setWeekData] = React.useState({});
     
     React.useEffect(() => {
-        fetch('/getFullWeek')
+        fetch('/date/getFullWeek')
             .then(res => res.json())
             .then(data => setWeekData(data));
     }, []);

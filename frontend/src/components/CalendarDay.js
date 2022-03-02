@@ -11,6 +11,8 @@ export default function CalendarDay(props) {
                 day={props.day} 
                 halfHour={++i}
             />
+            // make form parallel here//
+            
         )
     });
     return <>{calendarHalfHourArr}</>

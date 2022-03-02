@@ -1,76 +1,124 @@
 import React from 'react'
+import { DateTime } from 'luxon'
 
 export default function ClassForm(props) {
-    const [inputs, setInputs] = React.useState([]);
-    const [isCancel, setIsCancel] = React.useState(false);
+    const [inputs, setInputs] = React.useState({});
+    // const [isShow, setIsShow] = React.useState(props.isShow);
+    let weekArr, date, hour, min, startTime, endTime, startTimeString, endTimeString
+    // console.log(props.isShow)
+    if (props.weekData.mon) {
+        weekArr = Object.entries(props.weekData);
+        date = weekArr[props.day - 1][1];
+        hour = Math.floor((props.halfHour - 1) / 2 + 3);
+        min = (props.halfHour - 1) % 2 * 30;
 
-    // const weekArr = Object.entries(props.weekData);
-    // const date = weekArr[props.day - 1][1];
-    // const hour = props.halfHour / 2 + 6;
+        startTime =
+            DateTime.fromObject(date)
+                .setZone('Australia/Melbourne')
+                .plus({ hours: hour, minutes: min });
+        endTime =
+            DateTime.fromObject(date)
+                .setZone('Australia/Melbourne')
+                .plus({ hours: hour + 1, minutes: min });
 
-    // const startTime = props.halfHour % 2 !== 0 ?
-    //     new Date(date).setHours(hour) :
-    //     new Date(date).setHours(hour, 30);
-    // console.log(startTime);
-    console.log('form')
+        startTimeString = startTime.toLocaleString(DateTime.TIME_SIMPLE);
+        endTimeString = endTime.toLocaleString(DateTime.TIME_SIMPLE);
+    }
+
     function handleChange(e) {
-        const name = e.target.name;
-        const value = e.target.value;
-        setInputs(prevInputs => [...prevInputs, { [name]: value }]);
+        setInputs(prevInputs => {
+            return {
+                ...prevInputs,
+                [e.target.name]: e.target.value
+            }
+        });
     }
 
-    function handleSubmit() {
-        fetch('/')
+    function handleCancel(e) {
+        e.preventDefault();
+        props.toggleForm();
     }
 
-    return !isCancel && (
+    function handleSubmit(e) {
+        e.preventDefault();
+        fetch('/class/singleClass', {
+            method: 'POST',
+            body: JSON.stringify({ inputs: inputs })
+        })
+            .then(res => res.json())
+            .then(data => console.log(data));
+    }
+
+    return props.isShow && (
         <div className="class-form">
-             <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit}>
                 <div className="form-time">
+                    <label htmlFor="startTime"></label>
                     <input
                         type="text"
+                        id="startTime"
                         name="startTime"
                         className="startTime"
-                        placeholder={''}
+                        // value={startTime}
+                        placeholder={startTimeString}
                         onChange={handleChange}
                     >
                     </input>
+                    <label htmlFor="endTime"></label>
                     <input
                         type="text"
+                        id="endTime"
                         name="endTime"
                         className="endTime"
-                        placeholder="End"
+                        // value={endTime}
+                        placeholder={endTimeString}
                         onChange={handleChange}
                     >
                     </input>
                 </div>
+                <label htmlFor="studentName"></label>
                 <input
                     type="text"
+                    id="studentName"
                     name="studentName"
                     className="studentName"
                     placeholder="Student Name"
                     onChange={handleChange}
                 >
                 </input>
+                <label htmlFor="coachName"></label>
                 <input
                     type="text"
+                    id="coachName"
                     name="coachName"
                     className="coachName"
                     placeholder="Coach Name"
                     onChange={handleChange}
                 >
                 </input>
+                <label htmlFor="location"></label>
                 <input
                     type="text"
+                    id="location"
                     name="location"
                     className="location"
                     placeholder="Location"
                     onChange={handleChange}
                 >
                 </input>
+                <label htmlFor="note"></label>
+                <textarea
+                    id="note"
+                    name="note"
+                    className="note"
+                    placeholder="Notes"
+                    onChange={handleChange}
+                    // onClick={handleCancel}
+                >
+                </textarea>
                 <div className="form-button-group">
                     <button
-                        onClick={() => setIsCancel(true)}
+                        onClick={handleCancel}
                         className="form-cancel-button">
                         Cancel
                     </button>
@@ -79,7 +127,7 @@ export default function ClassForm(props) {
                         Save
                     </button>
                 </div>
-            </form> 
+            </form>
         </div>
     )
 }
