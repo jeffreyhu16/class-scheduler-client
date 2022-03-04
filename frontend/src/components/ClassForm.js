@@ -2,15 +2,16 @@ import React from 'react'
 import { DateTime } from 'luxon'
 
 export default function ClassForm(props) {
+    const { weekData, day, halfHour, isShow, toggleForm } = props;
     const [inputs, setInputs] = React.useState({});
-    // const [isShow, setIsShow] = React.useState(props.isShow);
+    // const [isShow, setIsShow] = React.useState(isShow);
     let weekArr, date, hour, min, startTime, endTime, startTimeString, endTimeString
-    // console.log(props.isShow)
-    if (props.weekData.mon) {
-        weekArr = Object.entries(props.weekData);
-        date = weekArr[props.day - 1][1];
-        hour = Math.floor((props.halfHour - 1) / 2 + 3);
-        min = (props.halfHour - 1) % 2 * 30;
+    // console.log(isShow)
+    if (weekData.mon) {
+        weekArr = Object.entries(weekData);
+        date = weekArr[day - 1][1];
+        hour = Math.floor((halfHour - 1) / 2 + 3);
+        min = (halfHour - 1) % 2 * 30;
 
         startTime =
             DateTime.fromObject(date)
@@ -36,7 +37,7 @@ export default function ClassForm(props) {
 
     function handleCancel(e) {
         e.preventDefault();
-        props.toggleForm();
+        toggleForm();
     }
 
     function handleSubmit(e) {
@@ -45,11 +46,12 @@ export default function ClassForm(props) {
             method: 'POST',
             body: JSON.stringify({ inputs: inputs })
         })
-            .then(res => res.json())
-            .then(data => console.log(data));
+        // .then(res => res.json())
+        // .then(data => console.log(data))
+        // .catch(err => console.log(err));        
     }
 
-    return props.isShow && (
+    return isShow && (
         <div className="class-form">
             <form onSubmit={handleSubmit}>
                 <div className="form-time">

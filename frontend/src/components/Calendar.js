@@ -1,12 +1,16 @@
 import React from 'react'
-import CalendarHead from './CalendarHead';
-import CalendarTime from './CalendarTime';
+import CalendarHead from './CalendarHead'
+import CalendarTime from './CalendarTime'
 import CalendarDay from './CalendarDay'
 
 export default function Calendar() {
 
     const [weekData, setWeekData] = React.useState({});
-    
+    const [isGlow, setIsGlow] = React.useState({
+        day: [...Array(7)].fill(false),
+        hour: [...Array(18)].fill(false)
+    });
+ 
     React.useEffect(() => {
         fetch('/date/getFullWeek')
             .then(res => res.json())
@@ -17,21 +21,20 @@ export default function Calendar() {
     let calendarDayArr = [...Array(7)].map(() => {
         return (
             <div className={`calendar-day day-${++i}`}>
-                <CalendarDay weekData={weekData} day={i} />
+                <CalendarDay weekData={weekData} setIsGlow={setIsGlow} day={i}/>
             </div>
-            
         )
     });
 
     return (
         <div className="calendar">
-            <div className="calendar-head">
-                <div className="calendar-head-group"></div>
-                <CalendarHead weekData={weekData} />
+            <div className="calendar-head-group">
+                <div className="calendar-head-empty"></div>
+                <CalendarHead weekData={weekData} isGlow={isGlow}/>
             </div>
             <div className="calendar-body">
                 <div className="calendar-time">
-                    <CalendarTime />
+                    <CalendarTime isGlow={isGlow} />
                 </div>
                 {calendarDayArr}
             </div>

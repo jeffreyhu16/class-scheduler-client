@@ -4,7 +4,10 @@ export default function Header() {
     return (
         <header>
             <div className="header-container">
-                <h1>Class Scheduler</h1>
+                <div className="header-title">
+                    <h1>Class Scheduler</h1>
+                </div>
+                <div className="header-nav"></div>
             </div>
         </header>
     )

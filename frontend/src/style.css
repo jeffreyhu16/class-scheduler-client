@@ -1,3 +1,5 @@
+@import './main.css';
+
 *, ::before, ::after {
     box-sizing: border-box;
 }
@@ -14,90 +16,109 @@ h1, h2, p {
 }
 
 .header-container {
-    padding: 1em 5em;
+    /* padding: 1em 5em; */
 }
 
 h1 {
     margin-bottom: 0;
 }
 
+.header-container,
 .main-page-container {
     display: flex;
-    justify-content: space-evenly;
-    margin: 0 auto;
-    width: min(90%, 100rem);
+    justify-content: space-between;
+    margin: 1em auto;
+    width: min(90%, 120rem);
 }
 
-.navbar, .calendar {
+.header-container {
+    
+}
+
+.header-title,
+.header-nav,
+.navbar, 
+.calendar {
     padding: 1rem;
     background: #00407b;
     box-shadow: 0 0 2rem 0.5rem rgba(0, 0, 0, 0.2);
 }
 
+.header-title,
 .navbar {
-    width: 25%;
+    width: 20%;
 }
 
+.header-title {
+    text-align: center;
+}
+
+.header-nav,
 .calendar {
-    width: 70%;
-    padding: 2em 4em 2em 0;
+    width: 79%;
+    padding: 2em 3em 2em 0;
 }
 
-.calendar-head,
+.calendar-head-group,
 .calendar-body {
     margin: auto;
     display: flex;
 }
 
-.calendar-head {
+.calendar-head-group {
     height: 4rem;
 }
 
-.calendar-head-group {
-    width: calc(100%/8);
+.calendar-head {
+    width: calc(92%/7);
 }
 
 .calendar-head-day,
 .calendar-head-date {
     text-align: center;
+    /* text-shadow: 0 0 0.5rem #ffffff; */
 }
 
 .calendar-head-day {
     text-transform: uppercase;
+    margin-bottom: 0.2em;
 }
 
 .calendar-body {
     /* position: relative; */
 }
 
+.calendar-head-empty,
 .calendar-time {
-    width: calc(100%/8);
+    width: 8%;
     letter-spacing: 0.02rem;
 }
 
 .calendar-hour {
     height: calc(100%/18);
     text-align: right;
-    padding-right: 0.5em;
+    padding: 0.4em 0.8em 0 0;
     /* border: 1px solid #e1e1e1; */
 }
 
 .calendar-day {
     height: 80rem;
-    width: calc(100%/8);
+    width: calc(92%/7);
+    border-right: 1px solid rgba(225, 225, 225, 0.2);
 }
-
 
 .calendar-half-hour {
     height: calc(100%/36);
-    border: 1px solid #e1e1e1;
-    /* border-radius: 0.5rem; */
-    /* position: relative; */
+    border-top: 1px solid rgba(225, 225, 225, 0.2);
 }
 
 .calendar-half-hour:hover {
-    border: 1px solid #e1e1e1;
     background: rgba(255, 255, 255, 0.65);
+}
+
+.calendar-day:nth-of-type(8),
+.half-hour-1 {
+    border: none;
 }
 
 .class-form {
