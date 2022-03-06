@@ -1,6 +1,5 @@
 
-exports.postSingleForm = (req, res) => {
-    const inputs = req.body;
-    res.send(inputs);
-    console.log(inputs)
+exports.postSingleClass = (req, res) => {
+    res.send(req.body);
+    // console.log(req.body)
 }

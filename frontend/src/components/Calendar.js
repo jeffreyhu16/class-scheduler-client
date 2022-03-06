@@ -6,6 +6,21 @@ import CalendarDay from './CalendarDay'
 export default function Calendar() {
 
     const [weekData, setWeekData] = React.useState({});
+    const [classData, setClassData] = React.useState([{ 
+        startTime: {
+            day: 5,
+            hour: 6,
+            minute: 0,
+        }, 
+        endTime: {
+            day: 2,
+            hour: 7,
+            minute: 0,
+        }, 
+        studentName: 'Jeff', 
+        coachName: 'Tim', 
+        location: 'Camberwell' 
+    }]);
     const [isGlow, setIsGlow] = React.useState({
         day: [...Array(7)].fill(false),
         hour: [...Array(18)].fill(false)
@@ -21,7 +36,12 @@ export default function Calendar() {
     let calendarDayArr = [...Array(7)].map(() => {
         return (
             <div className={`calendar-day day-${++i}`}>
-                <CalendarDay weekData={weekData} setIsGlow={setIsGlow} day={i}/>
+                <CalendarDay 
+                    weekData={weekData} 
+                    classData={classData} 
+                    setIsGlow={setIsGlow} 
+                    day={i}
+                />
             </div>
         )
     });

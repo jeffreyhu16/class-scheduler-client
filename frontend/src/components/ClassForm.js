@@ -1,38 +1,54 @@
 import React from 'react'
 import { DateTime } from 'luxon'
+import { faMinus } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export default function ClassForm(props) {
     const { weekData, day, halfHour, isShow, toggleForm } = props;
-    const [inputs, setInputs] = React.useState({});
-    // const [isShow, setIsShow] = React.useState(isShow);
-    let weekArr, date, hour, min, startTime, endTime, startTimeString, endTimeString
-    // console.log(isShow)
+    const [inputs, setInputs] = React.useState({
+        startTime: '.',
+        endTime: '.',
+        studentName: '.',
+        coachName: '.',
+        location: '.',
+        note: '.'
+    });
+    const { startTime, endTime, studentName, coachName, location } = inputs;
+    let dayDate, dateObj, startDateTime, endDateTime, startTimeString, endTimeString
+
     if (weekData.mon) {
-        weekArr = Object.entries(weekData);
-        date = weekArr[day - 1][1];
-        hour = Math.floor((halfHour - 1) / 2 + 3);
-        min = (halfHour - 1) % 2 * 30;
+        const dayDate = Object.entries(weekData)[day - 1][1];
+        const hour = Math.floor((halfHour - 1) / 2 + 3);
+        const min = (halfHour - 1) % 2 * 30;
 
-        startTime =
-            DateTime.fromObject(date)
-                .setZone('Australia/Melbourne')
-                .plus({ hours: hour, minutes: min });
-        endTime =
-            DateTime.fromObject(date)
-                .setZone('Australia/Melbourne')
-                .plus({ hours: hour + 1, minutes: min });
+        dateObj = DateTime.fromObject(dayDate).setZone('Australia/Melbourne');
+        startDateTime = dateObj.plus({ hours: hour, minutes: min });
+        endDateTime = dateObj.plus({ hours: hour + 1, minutes: min });
 
-        startTimeString = startTime.toLocaleString(DateTime.TIME_SIMPLE);
-        endTimeString = endTime.toLocaleString(DateTime.TIME_SIMPLE);
+        startTimeString = startDateTime.toLocaleString(DateTime.TIME_SIMPLE);
+        endTimeString = endDateTime.toLocaleString(DateTime.TIME_SIMPLE);
     }
 
+    React.useEffect(() => {
+        setInputs(prevInputs => ({
+            ...prevInputs,
+            startTime: startDateTime.toObject(),
+            endTime: endDateTime.toObject()
+        }));
+    }, [weekData]); // check why using startDateTime will cause infinite re-render //
+
     function handleChange(e) {
-        setInputs(prevInputs => {
-            return {
-                ...prevInputs,
-                [e.target.name]: e.target.value
-            }
-        });
+        let { name, value } = e.target;
+        if (name === 'startTime' || name === 'endTime') {
+            const hour = value.length === 4 ? parseInt(value[0]) : parseInt(value.slice(0,2));
+            const min = parseInt(value.slice(value.length - 2));
+            value = dateObj.set({ hour: hour, minute: min }).toObject();
+            console.log(hour, min, value)
+        }
+        setInputs(prevInputs => ({
+            ...prevInputs,
+            [name]: value
+        }));
     }
 
     function handleCancel(e) {
@@ -42,18 +58,22 @@ export default function ClassForm(props) {
 
     function handleSubmit(e) {
         e.preventDefault();
+        for (let key in inputs) { 
+            if (!inputs[key]) return
+        }
         fetch('/class/singleClass', {
             method: 'POST',
-            body: JSON.stringify({ inputs: inputs })
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(inputs)
         })
-        // .then(res => res.json())
-        // .then(data => console.log(data))
-        // .catch(err => console.log(err));        
+        .then(res => res.json())
+        .then(data => console.log(data))
+        .catch(err => console.log(err));        
     }
 
     return isShow && (
-        <div className="class-form">
-            <form onSubmit={handleSubmit}>
+        <div className="form-container">
+            <form className="class-form" onSubmit={handleSubmit}>
                 <div className="form-time">
                     <label htmlFor="startTime"></label>
                     <input
@@ -61,20 +81,21 @@ export default function ClassForm(props) {
                         id="startTime"
                         name="startTime"
                         className="startTime"
-                        // value={startTime}
                         placeholder={startTimeString}
                         onChange={handleChange}
+                        style={{ outline: startTime ? 'none' : 'red auto 1px' }}
                     >
                     </input>
+                    <FontAwesomeIcon icon={faMinus} />
                     <label htmlFor="endTime"></label>
                     <input
                         type="text"
                         id="endTime"
                         name="endTime"
                         className="endTime"
-                        // value={endTime}
                         placeholder={endTimeString}
                         onChange={handleChange}
+                        style={{ outline: endTime ? 'none' : 'red auto 1px' }}
                     >
                     </input>
                 </div>
@@ -86,6 +107,7 @@ export default function ClassForm(props) {
                     className="studentName"
                     placeholder="Student Name"
                     onChange={handleChange}
+                    style={{ outline: studentName ? 'none' : 'red auto 1px' }}
                 >
                 </input>
                 <label htmlFor="coachName"></label>
@@ -96,6 +118,7 @@ export default function ClassForm(props) {
                     className="coachName"
                     placeholder="Coach Name"
                     onChange={handleChange}
+                    style={{ outline: coachName ? 'none' : 'red auto 1px' }}
                 >
                 </input>
                 <label htmlFor="location"></label>
@@ -106,6 +129,7 @@ export default function ClassForm(props) {
                     className="location"
                     placeholder="Location"
                     onChange={handleChange}
+                    style={{ outline: location ? 'none' : 'red auto 1px' }}
                 >
                 </input>
                 <label htmlFor="note"></label>
@@ -115,7 +139,6 @@ export default function ClassForm(props) {
                     className="note"
                     placeholder="Notes"
                     onChange={handleChange}
-                    // onClick={handleCancel}
                 >
                 </textarea>
                 <div className="form-button-group">

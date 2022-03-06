@@ -4,6 +4,7 @@
   "main": "App.js",
   "scripts": {
     "start": "node ./App.js",
+    "dev": "nodemon App.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -12,6 +13,7 @@
   "dependencies": {
     "express": "^4.17.3",
     "luxon": "^2.3.1",
-    "node-schedule": "^2.1.0"
+    "node-schedule": "^2.1.0",
+    "nodemon": "^2.0.15"
   }
 }
