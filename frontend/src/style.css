@@ -80,7 +80,6 @@ h1 {
 .calendar-head-day,
 .calendar-head-date {
     text-align: center;
-    /* text-shadow: 0 0 0.5rem #ffffff; */
 }
 
 .calendar-head-day {
@@ -111,27 +110,27 @@ h1 {
 
 .calendar-half-hour {
     height: calc(100%/36);
-    border: 1px solid rgba(225, 225, 225, 0.2);
 }
 
 .calendar-half-hour:hover {
-    background: #c9e5ff;
+    background: #c9e5ff !important;
+    border: 1px solid #00407b !important;
 }
 
 .half-hour-1 {
-    border-top: none;    
+    border-top: none !important;    
 }
 
 .half-hour-36 {
-    border-bottom: none;
+    border-bottom: none !important;
 }
 
 .day-1 {
-    border-left: none;
+    border-left: none !important;
 }
 
 .day-7 {
-    border-right: none;
+    border-right: none !important;
 }
 
 /* .calendar-half-hour:nth-of-type(3),

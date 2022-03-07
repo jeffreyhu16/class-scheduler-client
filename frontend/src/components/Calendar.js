@@ -8,12 +8,12 @@ export default function Calendar() {
     const [weekData, setWeekData] = React.useState({});
     const [classData, setClassData] = React.useState([{ 
         startTime: {
-            day: 5,
+            day: 8,
             hour: 6,
             minute: 0,
         }, 
         endTime: {
-            day: 2,
+            day: 8,
             hour: 7,
             minute: 0,
         }, 
