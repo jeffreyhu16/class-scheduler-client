@@ -11,24 +11,47 @@ export default function CalendarHalfHour(props) {
         isEndTime: false 
     });
     const { isStartTime, isMidTime, isEndTime } = isClassTime;
+    const startTimeTarget = React.useRef();
     const hourIndex = Math.ceil(halfHour / 2);
 
     React.useEffect(() => {
-        if (weekData.mon && dayTargetArr[0]) {
-            const startTimeTarget = dayTargetArr.filter(dayTarget => {
+        if (dayTargetArr) {
+            // filter startTime //
+            startTimeTarget.current = dayTargetArr.filter(dayTarget => {
                 const { startTime } = dayTarget;
                 const halfInterval = startTime.minute === 30 ? 1 : 0;
-                return (startTime.hour - 6) * 2 + halfInterval === halfHour - 1;
+                const startTimeHalfHour = (startTime.hour - 6) * 2 + halfInterval;
+                return startTimeHalfHour === halfHour - 1
             });
-            const endTimeTarget = dayTargetArr.filter(dayTarget => {
+            if (startTimeTarget.current[0]) setIsClassTime(prevIsClassTime => ({ ...prevIsClassTime, isStartTime: true }));
+            // filter midTime //
+            dayTargetArr.forEach(dayTarget => {
+                const { startTime, endTime } = dayTarget;
+                const halfInterval = startTime.minute === 30 ? 1 : 0;
+                const startTimeHalfHour = (startTime.hour - 6) * 2 + halfInterval;
+                const startDateTime = DateTime.fromObject(startTime);
+                const endDateTime = DateTime.fromObject(endTime);
+                const duration = endDateTime.diff(startDateTime, 'hours').hours;
+                if (duration > 1) {
+                    const midTimeHalfHours = (duration - 1) * 2;
+                    for (let i = 1; i <= midTimeHalfHours; i++) {
+                        if (startTimeHalfHour + i === halfHour - 1) {
+                            setIsClassTime(prevIsClassTime => ({ ...prevIsClassTime, isMidTime : true }));
+                        }
+                    }
+                }
+            });
+            // filter endTime //
+            dayTargetArr.forEach(dayTarget => {
                 const { endTime } = dayTarget;
                 const halfInterval = endTime.minute === 30 ? 1 : 0;
-                return (endTime.hour - 6) * 2 + halfInterval === halfHour;
+                const endTimeHalfHour = (endTime.hour - 6) * 2 + halfInterval;
+                if (endTimeHalfHour === halfHour) {
+                    setIsClassTime(prevIsClassTime => ({ ...prevIsClassTime, isEndTime: true }));
+                }
             });
-            if (startTimeTarget[0]) setIsClassTime(prevIsClassTime => ({ ...prevIsClassTime, isStartTime: true }));
-            if (endTimeTarget[0]) setIsClassTime(prevIsClassTime => ({ ...prevIsClassTime, isEndTime: true }));
         }
-    }, [weekData]);
+    }, [dayTargetArr]);
 
     function toggleForm() {
         setIsShow(prevIsShow => !prevIsShow);
@@ -43,13 +66,16 @@ export default function CalendarHalfHour(props) {
         })
     }
     const borderDefault = '1px solid rgba(250, 250, 250, 0.2)';
+    const borderActive = '1px solid #00407b';
+    const borderJoin = '1px solid #c9e5ff'
     const styles = {
-        background: isStartTime ? '#c9e5ff' : (isEndTime ? '#c9e5ff' : '#00407b'),
-        border: isStartTime ? '1px solid #00407b' : (isEndTime ? '1px solid #00407b' : borderDefault),
-        'margin-bottom': isStartTime ? '-1px' : '0',
-        'border-bottom': isStartTime ? '#c9e5ff' : borderDefault,
-        'margin-top': isEndTime ? '-1px' : '0',
-        'border-top': isEndTime ? '#c9e5ff' : borderDefault
+        background: isStartTime ? '#c9e5ff' : (isEndTime ? '#c9e5ff' : (isMidTime ? '#c9e5ff' : '#00407b')),
+        borderTop: isStartTime ? borderActive : (isEndTime ? borderJoin : (isMidTime ? borderJoin : borderDefault)),
+        borderBottom: isStartTime ? borderJoin : (isMidTime ? borderJoin : (isEndTime ? borderActive : borderDefault)),
+        borderLeft: isStartTime ? borderActive : (isEndTime ? borderActive : (isMidTime ? borderActive : borderDefault)),
+        borderRight: isStartTime ? borderActive : (isEndTime ? borderActive : (isMidTime ? borderActive : borderDefault)),
+        marginBottom: isStartTime ? '-1px' : (isMidTime ? '-1px' : (isEndTime ? '3px' : '0'))
+        // add logic for adjusting the amount of marginBottom given the midTime duration //
     }
 
     return (
@@ -61,6 +87,13 @@ export default function CalendarHalfHour(props) {
                 onClick={toggleForm}
                 style={styles}
             >
+                {isStartTime && 
+                    <div className="calendar-class-info">
+                        <div>{startTimeTarget.current[0].studentName}</div>
+                        <div>{startTimeTarget.current[0].coachName}</div>
+                        <div>{startTimeTarget.current[0].location}</div>
+                    </div>
+                }
             </div>
             {isShow &&
                 <ClassForm

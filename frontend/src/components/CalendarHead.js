@@ -5,7 +5,7 @@ export default function CalendarHead(props) {
     let i = 0;
     let weekDataArr, calendarHeads
     
-    if (props.weekData.mon) {
+    if (props.weekData) {
         weekDataArr = Object.entries(props.weekData);
         calendarHeads = weekDataArr.map(weekDay => {
             const styles = {

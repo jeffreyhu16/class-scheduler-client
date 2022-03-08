@@ -14,9 +14,9 @@ export default function ClassForm(props) {
         note: '.'
     });
     const { startTime, endTime, studentName, coachName, location } = inputs;
-    let dayDate, dateObj, startDateTime, endDateTime, startTimeString, endTimeString
+    let dateObj, startDateTime, endDateTime, startTimeString, endTimeString
 
-    if (weekData.mon) {
+    if (weekData) {
         const dayDate = Object.entries(weekData)[day - 1][1];
         const hour = Math.floor((halfHour - 1) / 2 + 3);
         const min = (halfHour - 1) % 2 * 30;

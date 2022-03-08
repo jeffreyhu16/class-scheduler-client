@@ -5,22 +5,26 @@ import CalendarDay from './CalendarDay'
 
 export default function Calendar() {
 
-    const [weekData, setWeekData] = React.useState({});
-    const [classData, setClassData] = React.useState([{ 
+    const [weekData, setWeekData] = React.useState();
+    const [classData, setClassData] = React.useState([
+        { 
         startTime: {
+            month: 3,
             day: 8,
-            hour: 6,
+            hour: 9,
             minute: 0,
         }, 
         endTime: {
+            month: 3,
             day: 8,
-            hour: 7,
+            hour: 11,
             minute: 0,
         }, 
         studentName: 'Jeff', 
         coachName: 'Tim', 
         location: 'Camberwell' 
-    }]);
+        }
+    ]);
     const [isGlow, setIsGlow] = React.useState({
         day: [...Array(7)].fill(false),
         hour: [...Array(18)].fill(false)

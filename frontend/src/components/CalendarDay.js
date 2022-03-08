@@ -5,7 +5,7 @@ export default function CalendarDay(props) {
     const { weekData, classData, day, setIsGlow } = props;
     let dayTargetArr;
     let i = 0;
-    if (weekData.mon) { 
+    if (weekData && classData) { 
         const dayDate = Object.entries(weekData)[day - 1][1];
         dayTargetArr = classData.filter(data => data.startTime.day === dayDate.day);
     }
