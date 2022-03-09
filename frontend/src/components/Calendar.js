@@ -30,7 +30,8 @@ export default function Calendar() {
                 <CalendarDay 
                     weekData={weekData} 
                     classData={classData} 
-                    setIsGlow={setIsGlow} 
+                    setIsGlow={setIsGlow}
+                    setClassData={setClassData} 
                     day={i}
                 />
             </div>

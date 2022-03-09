@@ -138,29 +138,16 @@ h1 {
     border-right: none !important;
 }
 
-/* .calendar-half-hour:nth-of-type(3),
-.calendar-half-hour:nth-of-type(4) {
-    background: #c9e5ff;
-    border: 1px solid #00407b;
+.calendar-class-info {
+    font-size: 0.875rem;
+    /* padding-top: 1em; */
 }
 
-.calendar-half-hour:nth-of-type(3) {
-    margin-bottom: -1px;
-    border-bottom: #c9e5ff;
-}
-
-.calendar-half-hour:nth-of-type(4) {
-    margin-top: -1px;
-    border-top: #c9e5ff;
-} */
-
-.overlay {
-    position: fixed;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: rgba(0, 0, 0, 0.3);
+.calendar-class-info-student-name,
+.calendar-class-info-coach-name,
+.calendar-class-info-location,
+.calendar-class-info-class-period {
+    margin-bottom: 0.2em;
 }
 
 .form-container {
@@ -271,3 +258,11 @@ button {
     cursor: pointer;
 }
 
+.overlay {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.3);
+}

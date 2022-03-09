@@ -10,7 +10,7 @@ export default function CalendarHead(props) {
         calendarHeads = weekDataArr.map(weekDay => {
             const styles = {
                 textShadow: isGlow.day[++i] ? '0 0 0.5rem #fff' : 'none'
-            } // tue keeps glowing after closing class form //
+            } // tue/thu keeps glowing after closing class form //
             return (
                 <div className={`calendar-head`} style={styles}>
                     <div className="calendar-head-day">

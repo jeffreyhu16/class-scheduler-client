@@ -3,14 +3,14 @@ import { DateTime } from 'luxon'
 import ClassForm from './ClassForm'
 
 export default function CalendarHalfHour(props) {
-    const { weekData, dayTargetArr, day, halfHour, setIsGlow } = props;
+    const { weekData, dayTargetArr, setClassData, day, halfHour, setIsGlow } = props;
     const [isShow, setIsShow] = React.useState(false);
-    const [isClassTime, setIsClassTime] = React.useState({ 
-        isStartTime: false, 
-        isMidTime: false, 
-        isEndTime: false 
+    const [isClassTime, setIsClassTime] = React.useState({
+        isStartTime: false,
+        isMidTime: false,
+        isEndTime: false
     });
-    const { isStartTime, isMidTime, isEndTime } = isClassTime;
+    const { isStartTime, isEndTime } = isClassTime;
     const startTimeTarget = React.useRef();
     const hourIndex = Math.ceil(halfHour / 2);
 
@@ -21,9 +21,11 @@ export default function CalendarHalfHour(props) {
                 const { startTime } = dayTarget;
                 const halfInterval = startTime.minute === 30 ? 1 : 0;
                 const startTimeHalfHour = (startTime.hour - 6) * 2 + halfInterval;
-                return startTimeHalfHour === halfHour - 1
+                return startTimeHalfHour === halfHour - 1;
             });
-            if (startTimeTarget.current[0]) setIsClassTime(prevIsClassTime => ({ ...prevIsClassTime, isStartTime: true }));
+            if (startTimeTarget.current[0]) {
+                setIsClassTime(prevIsClassTime => ({ ...prevIsClassTime, isStartTime: true }))
+            }
             // filter midTime //
             dayTargetArr.forEach(dayTarget => {
                 const { startTime, endTime } = dayTarget;
@@ -36,7 +38,7 @@ export default function CalendarHalfHour(props) {
                     const midTimeHalfHours = (duration - 1) * 2;
                     for (let i = 1; i <= midTimeHalfHours; i++) {
                         if (startTimeHalfHour + i === halfHour - 1) {
-                            setIsClassTime(prevIsClassTime => ({ ...prevIsClassTime, isMidTime : true }));
+                            setIsClassTime(prevIsClassTime => ({ ...prevIsClassTime, isMidTime: true }));
                         }
                     }
                 }
@@ -65,18 +67,31 @@ export default function CalendarHalfHour(props) {
             return newIsGlow;
         })
     }
-    const borderDefault = '1px solid rgba(250, 250, 250, 0.2)';
-    const borderActive = '1px solid #00407b';
-    const borderJoin = '1px solid #c9e5ff'
-    const styles = {
-        background: isStartTime ? '#c9e5ff' : (isEndTime ? '#c9e5ff' : (isMidTime ? '#c9e5ff' : '#00407b')),
-        borderTop: isStartTime ? borderActive : (isEndTime ? borderJoin : (isMidTime ? borderJoin : borderDefault)),
-        borderBottom: isStartTime ? borderJoin : (isMidTime ? borderJoin : (isEndTime ? borderActive : borderDefault)),
-        borderLeft: isStartTime ? borderActive : (isEndTime ? borderActive : (isMidTime ? borderActive : borderDefault)),
-        borderRight: isStartTime ? borderActive : (isEndTime ? borderActive : (isMidTime ? borderActive : borderDefault)),
-        marginBottom: isStartTime ? '-1px' : (isMidTime ? '-1px' : (isEndTime ? '3px' : '0'))
-        // add logic for adjusting the amount of marginBottom given the midTime duration //
+
+    let isFree = true;
+    for (let key in isClassTime) {
+        if (isClassTime[key]) isFree = false
     }
+
+    const borderDefault = '1px solid rgba(201, 229, 255, 0.2)';
+    const borderActive = '1px solid #00407b';
+    const styles = {
+        backgroundColor: isFree ? '#00407b' : '#c9e5ff',
+        borderTop: isStartTime ? borderActive : borderDefault,
+        borderBottom: isEndTime ? borderActive : borderDefault,
+        borderLeft: isFree ? borderDefault : borderActive,
+        borderRight: isFree ? borderDefault : borderActive
+    }
+
+    let startTimeObj, startTimeHour, startTimeMinute, endTimeHour, endTimeMinute;
+    if (isStartTime) {
+        startTimeObj = startTimeTarget.current[0];
+        startTimeHour = startTimeObj.startTime.hour;
+        startTimeMinute = startTimeObj.startTime.minute;
+        endTimeHour = startTimeObj.endTime.hour;
+        endTimeMinute = startTimeObj.endTime.minute;
+    }
+
 
     return (
         <>
@@ -87,11 +102,25 @@ export default function CalendarHalfHour(props) {
                 onClick={toggleForm}
                 style={styles}
             >
-                {isStartTime && 
+                {isStartTime &&
                     <div className="calendar-class-info">
-                        <div>{startTimeTarget.current[0].studentName}</div>
-                        <div>{startTimeTarget.current[0].coachName}</div>
-                        <div>{startTimeTarget.current[0].location}</div>
+                        <div className="calendar-class-info-student-name">
+                            {startTimeObj.studentName}
+                        </div>
+                        <div className="calendar-class-info-coach-name">
+                            {startTimeObj.coachName}
+                        </div  >
+                        <div className="calendar-class-info-location">
+                            {startTimeObj.location}
+                        </div>
+                        <div className="calendar-class-info-class-period">
+                            {startTimeHour}
+                            {startTimeMinute === 0 ? '' : ':30'}
+                            {startTimeHour > 11 ? 'pm' : 'am'}-
+                            {endTimeHour}
+                            {endTimeMinute === 0 ? '' : ':30'}
+                            {endTimeHour > 11 ? 'pm' : 'am'}
+                        </div>
                     </div>
                 }
             </div>
@@ -102,6 +131,7 @@ export default function CalendarHalfHour(props) {
                     halfHour={halfHour}
                     isShow={isShow}
                     toggleForm={toggleForm}
+                    setClassData={setClassData}
                 />}
             {isShow && <div className="overlay"></div>}
         </>

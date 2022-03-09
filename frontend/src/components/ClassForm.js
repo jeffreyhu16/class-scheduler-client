@@ -4,7 +4,7 @@ import { faMinus } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export default function ClassForm(props) {
-    const { weekData, day, halfHour, isShow, toggleForm } = props;
+    const { weekData, day, halfHour, toggleForm, setClassData } = props;
     const [inputs, setInputs] = React.useState({
         startTime: '.',
         endTime: '.',
@@ -67,11 +67,17 @@ export default function ClassForm(props) {
             body: JSON.stringify(inputs)
         })
         .then(res => res.json())
-        .then(data => console.log(data))
+        .then(data => {
+            setClassData(prevClassData => ([
+                ...prevClassData,
+                data
+            ]));
+        })
+        .then(() => toggleForm())
         .catch(err => console.log(err));        
     }
 
-    return isShow && (
+    return (
         <div className="form-container">
             <form className="class-form" onSubmit={handleSubmit}>
                 <div className="form-time">
