@@ -3,6 +3,7 @@ const router = require('../IndexRouter');
 const classController = require('./ClassController');
 
 router.use(express.json());
-router.post('/singleClass', classController.postSingleClass);
+router.get('/', classController.getClasses);
+router.post('/singleClass', classController.setSingleClass);
 
 module.exports = router;

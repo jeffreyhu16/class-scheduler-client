@@ -1,6 +1,9 @@
 const express = require('express');
 const app = express();
+const dotenv = require('dotenv').config();
+const db = require('./config/db');
 
+db.connectDB();
 const dateRouter = require('./Date/DateRouter')
 const classRouter = require('./Class/ClassRouter')
 app.use('/date', dateRouter);
@@ -12,4 +15,4 @@ app.use(express.static(path.join(__dirname,'../frontend/build')));
 
 app.listen(5000, () => console.log('Listening on port 5000'));
 
-module.exports = app;   
+module.exports = app;

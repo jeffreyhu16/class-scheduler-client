@@ -11,8 +11,8 @@ export default function ClassForm(props) {
         studentName: '.',
         coachName: '.',
         location: '.',
-        note: '.'
-    });
+        note: ''
+    }); // still an uncontrolled component //
     const { startTime, endTime, studentName, coachName, location } = inputs;
     let dateObj, startDateTime, endDateTime, startTimeString, endTimeString
 
@@ -58,8 +58,8 @@ export default function ClassForm(props) {
 
     function handleSubmit(e) {
         e.preventDefault();
-        for (let key in inputs) { 
-            if (!inputs[key]) return
+        for (let value in inputs) { 
+            if (value === '.') return
         }
         fetch('/class/singleClass', {
             method: 'POST',
@@ -139,8 +139,7 @@ export default function ClassForm(props) {
                     className="note"
                     placeholder="Notes"
                     onChange={handleChange}
-                >
-                </textarea>
+                />
                 <div className="form-button-group">
                     <button
                         onClick={handleCancel}

@@ -3,17 +3,20 @@
   "version": "1.0.0",
   "main": "App.js",
   "scripts": {
-    "start": "node ./App.js",
-    "dev": "nodemon App.js",
+    "start": "nodemon App.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "dotenv": "^16.0.0",
     "express": "^4.17.3",
     "luxon": "^2.3.1",
-    "node-schedule": "^2.1.0",
+    "mongoose": "^6.2.4",
+    "node-schedule": "^2.1.0"
+  },
+  "devDependencies": {
     "nodemon": "^2.0.15"
   }
 }
