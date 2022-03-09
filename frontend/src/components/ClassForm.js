@@ -4,7 +4,7 @@ import { faMinus } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export default function ClassForm(props) {
-    const { weekData, day, halfHour, toggleForm, setClassData } = props;
+    const { weekData, day, halfHour, toggleForm, setClassData, classTimeTarget } = props;
     const [inputs, setInputs] = React.useState({
         startTime: '.',
         endTime: '.',
@@ -29,6 +29,14 @@ export default function ClassForm(props) {
         endTimeString = endDateTime.toLocaleString(DateTime.TIME_SIMPLE);
     }
 
+    if (classTimeTarget) {
+        startDateTime = DateTime.fromObject(classTimeTarget.startTime);
+        endDateTime = DateTime.fromObject(classTimeTarget.endTime);
+
+        startTimeString = startDateTime.toLocaleString(DateTime.TIME_SIMPLE);
+        endTimeString = endDateTime.toLocaleString(DateTime.TIME_SIMPLE);
+    }
+
     React.useEffect(() => {
         setInputs(prevInputs => ({
             ...prevInputs,
@@ -40,7 +48,7 @@ export default function ClassForm(props) {
     function handleChange(e) {
         let { name, value } = e.target;
         if (name === 'startTime' || name === 'endTime') {
-            const hour = value.length === 4 ? parseInt(value[0]) : parseInt(value.slice(0,2));
+            const hour = value.length === 4 ? parseInt(value[0]) : parseInt(value.slice(0, 2));
             const min = parseInt(value.slice(value.length - 2));
             value = dateObj.set({ hour: hour, minute: min }).toObject();
             console.log(hour, min, value)
@@ -56,25 +64,47 @@ export default function ClassForm(props) {
         toggleForm();
     }
 
+    function handleDelete(e) {
+        e.preventDefault();
+        fetch('/class/singleClass',{
+            method: 'delete',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                _id: classTimeTarget._id
+            })
+        })
+        .then(()=> setClassData(prevClassData => prevClassData))
+        .then(() => toggleForm())
+        .catch(err => console.log(err));
+    }
+
     function handleSubmit(e) {
         e.preventDefault();
-        for (let value in inputs) { 
+        for (let value in inputs) {
             if (value === '.') return
         }
-        fetch('/class/singleClass', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(inputs)
-        })
-        .then(res => res.json())
-        .then(data => {
-            setClassData(prevClassData => ([
-                ...prevClassData,
-                data
-            ]));
-        })
-        .then(() => toggleForm())
-        .catch(err => console.log(err));        
+        if (classTimeTarget) {
+            fetch('/class/singleClass', {
+                method: 'put',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    ...inputs,
+                    _id: classTimeTarget._id
+                })
+            })
+            .then(()=> setClassData(prevClassData => prevClassData))
+            .then(() => toggleForm())
+            .catch(err => console.log(err));
+        } else {
+            fetch('/class/singleClass', {
+                method: 'post',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(inputs)
+            })
+            .then(()=> setClassData(prevClassData => prevClassData))
+            .then(() => toggleForm())
+            .catch(err => console.log(err));
+        }
     }
 
     return (
@@ -111,7 +141,7 @@ export default function ClassForm(props) {
                     id="studentName"
                     name="studentName"
                     className="studentName"
-                    placeholder="Student Name"
+                    placeholder={classTimeTarget ? classTimeTarget.studentName : "Student Name"}
                     onChange={handleChange}
                     style={{ outline: studentName ? 'none' : 'red auto 1px' }}
                 >
@@ -122,7 +152,7 @@ export default function ClassForm(props) {
                     id="coachName"
                     name="coachName"
                     className="coachName"
-                    placeholder="Coach Name"
+                    placeholder={classTimeTarget ? classTimeTarget.coachName : "Coach Name"}
                     onChange={handleChange}
                     style={{ outline: coachName ? 'none' : 'red auto 1px' }}
                 >
@@ -133,7 +163,7 @@ export default function ClassForm(props) {
                     id="location"
                     name="location"
                     className="location"
-                    placeholder="Location"
+                    placeholder={classTimeTarget ? classTimeTarget.location : "Location"}
                     onChange={handleChange}
                     style={{ outline: location ? 'none' : 'red auto 1px' }}
                 >
@@ -147,14 +177,17 @@ export default function ClassForm(props) {
                     onChange={handleChange}
                 />
                 <div className="form-button-group">
-                    <button
-                        onClick={handleCancel}
-                        className="form-cancel-button">
+                    <button className="form-cancel-button" onClick={handleCancel}>
                         Cancel
                     </button>
-                    <button
-                        type="submit" className="form-submit-button">
-                        Save
+                    {
+                        classTimeTarget &&
+                        <button className="form-delete-button" onClick={handleDelete}>
+                            Delete
+                        </button>
+                    }
+                    <button type="submit" className="form-submit-button">
+                        {classTimeTarget ? 'Update' : 'Save'}
                     </button>
                 </div>
             </form>

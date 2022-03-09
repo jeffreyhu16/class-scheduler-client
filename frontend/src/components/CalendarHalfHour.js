@@ -10,8 +10,10 @@ export default function CalendarHalfHour(props) {
         isMidTime: false,
         isEndTime: false
     });
-    const { isStartTime, isEndTime } = isClassTime;
+    const { isStartTime, isMidTime, isEndTime } = isClassTime;
     const startTimeTarget = React.useRef();
+    const midTimeTarget = React.useRef();
+    const endTimeTarget = React.useRef();
     const hourIndex = Math.ceil(halfHour / 2);
 
     React.useEffect(() => {
@@ -24,34 +26,40 @@ export default function CalendarHalfHour(props) {
                 return startTimeHalfHour === halfHour - 1;
             });
             if (startTimeTarget.current[0]) {
-                setIsClassTime(prevIsClassTime => ({ ...prevIsClassTime, isStartTime: true }))
+                setIsClassTime(prevIsClassTime => ({ ...prevIsClassTime, isStartTime: true }));
             }
             // filter midTime //
-            dayTargetArr.forEach(dayTarget => {
+            midTimeTarget.current = dayTargetArr.filter(dayTarget => {
                 const { startTime, endTime } = dayTarget;
                 const halfInterval = startTime.minute === 30 ? 1 : 0;
                 const startTimeHalfHour = (startTime.hour - 6) * 2 + halfInterval;
                 const startDateTime = DateTime.fromObject(startTime);
                 const endDateTime = DateTime.fromObject(endTime);
                 const duration = endDateTime.diff(startDateTime, 'hours').hours;
+                let isMidTime = false;
                 if (duration > 1) {
                     const midTimeHalfHours = (duration - 1) * 2;
                     for (let i = 1; i <= midTimeHalfHours; i++) {
                         if (startTimeHalfHour + i === halfHour - 1) {
-                            setIsClassTime(prevIsClassTime => ({ ...prevIsClassTime, isMidTime: true }));
+                            isMidTime = true;
                         }
                     }
                 }
+                return isMidTime;
             });
+            if (midTimeTarget.current[0]) {
+                setIsClassTime(prevIsClassTime => ({ ...prevIsClassTime, isMidTime: true }));
+            }
             // filter endTime //
-            dayTargetArr.forEach(dayTarget => {
+            endTimeTarget.current = dayTargetArr.filter(dayTarget => {
                 const { endTime } = dayTarget;
                 const halfInterval = endTime.minute === 30 ? 1 : 0;
                 const endTimeHalfHour = (endTime.hour - 6) * 2 + halfInterval;
-                if (endTimeHalfHour === halfHour) {
-                    setIsClassTime(prevIsClassTime => ({ ...prevIsClassTime, isEndTime: true }));
-                }
+                return endTimeHalfHour === halfHour;
             });
+            if (endTimeTarget.current[0]) {
+                setIsClassTime(prevIsClassTime => ({ ...prevIsClassTime, isEndTime: true }));
+            }
         }
     }, [dayTargetArr]);
 
@@ -91,7 +99,10 @@ export default function CalendarHalfHour(props) {
         endTimeHour = startTimeObj.endTime.hour;
         endTimeMinute = startTimeObj.endTime.minute;
     }
-
+    const classTimeTarget = 
+        isStartTime ? startTimeTarget.current[0] : 
+        isMidTime ? midTimeTarget.current[0] : 
+        isEndTime ? endTimeTarget.current[0] : '';
 
     return (
         <>
@@ -129,9 +140,9 @@ export default function CalendarHalfHour(props) {
                     weekData={weekData}
                     day={day}
                     halfHour={halfHour}
-                    isShow={isShow}
                     toggleForm={toggleForm}
                     setClassData={setClassData}
+                    classTimeTarget={classTimeTarget}
                 />}
             {isShow && <div className="overlay"></div>}
         </>

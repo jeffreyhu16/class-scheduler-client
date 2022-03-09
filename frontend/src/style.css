@@ -248,13 +248,18 @@ button {
     height: 2rem;
 }
 
-.form-submit-button {
-    
-}
-
 .form-submit-button:hover,
 .form-cancel-button:hover {
     background: #0055a4;
+    cursor: pointer;
+}
+
+.form-delete-button {
+    width: 20%;
+    background: #a40003;
+}
+
+.form-delete-button:hover {
     cursor: pointer;
 }
 
