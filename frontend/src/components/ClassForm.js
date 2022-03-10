@@ -85,8 +85,10 @@ export default function ClassForm(props) {
                 id: classTimeTarget._id
             })
         })
-        .then(()=> setClassData(prevClassData => prevClassData))
-        .then(() => toggleForm())
+        .then(() => {
+            initiateFetch();
+            toggleForm()
+        })
         .catch(err => console.log(err));
     }
 
@@ -115,8 +117,10 @@ export default function ClassForm(props) {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(inputs)
             })
-            .then(()=> setClassData(prevClassData => prevClassData))
-            .then(() => toggleForm())
+            .then(() => {
+                initiateFetch();
+                toggleForm()
+            })
             .catch(err => console.log(err));
         }
     }

@@ -26,3 +26,12 @@ exports.updateClass = (req, res) => {
     })
     .catch(err => console.log(err));
 }
+
+exports.deleteClass = (req, res) => {
+    Class.findByIdAndDelete(req.body.id)
+    .then(result => {
+        console.log(result);
+        res.send(result);
+    })
+    .catch(err => console.log(err));
+}
