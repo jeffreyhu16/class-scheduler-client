@@ -7,22 +7,28 @@ export default function Calendar() {
 
     const [weekData, setWeekData] = React.useState();
     const [classData, setClassData] = React.useState();
+    const [initFetch, setInitFetch] = React.useState({ render: true });
     const [isGlow, setIsGlow] = React.useState({
         day: [...Array(7)].fill(false),
         hour: [...Array(18)].fill(false)
     });
- 
+
     React.useEffect(() => {
         fetch('/class')
             .then(res => res.json())
-            .then(data => setClassData(data))
+            .then(data => {
+                console.log('fetching classData')
+                setClassData(data);
+            })
             .catch(err => console.log(err));
         fetch('/date/getFullWeek')
             .then(res => res.json())
             .then(data => setWeekData(data))
             .catch(err => console.log(err));
-    }, []);
-
+    }, [initFetch]); 
+    function initiateFetch() {
+        setInitFetch(prevInitFetch => ({ ...prevInitFetch }));
+    }
     let i = 0;
     let calendarDayArr = [...Array(7)].map(() => {
         return (
@@ -31,7 +37,8 @@ export default function Calendar() {
                     weekData={weekData} 
                     classData={classData} 
                     setIsGlow={setIsGlow}
-                    setClassData={setClassData} 
+                    setClassData={setClassData}
+                    initiateFetch={initiateFetch} 
                     day={i}
                 />
             </div>

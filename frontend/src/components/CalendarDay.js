@@ -2,7 +2,7 @@ import React from 'react'
 import CalendarHalfHour from './CalendarHalfHour'
 
 export default function CalendarDay(props) {
-    const { weekData, classData, setClassData, day, setIsGlow } = props;
+    const { weekData, classData, setClassData, initiateFetch, day, setIsGlow } = props;
     let dayTargetArr;
     let i = 0;
     if (weekData && classData) { 
@@ -16,6 +16,7 @@ export default function CalendarDay(props) {
                 dayTargetArr={dayTargetArr}
                 setIsGlow={setIsGlow}
                 setClassData={setClassData}
+                initiateFetch={initiateFetch}
                 day={day} 
                 halfHour={++i}
             />

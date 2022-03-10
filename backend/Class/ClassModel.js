@@ -23,7 +23,6 @@ const classSchema = mongoose.Schema({
     },
     note: {
         type: String,
-        
     }
 },
 {

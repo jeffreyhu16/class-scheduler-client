@@ -4,7 +4,7 @@ import { faMinus } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export default function ClassForm(props) {
-    const { weekData, day, halfHour, toggleForm, setClassData, classTimeTarget } = props;
+    const { weekData, day, halfHour, toggleForm, setClassData, initiateFetch, classTimeTarget } = props;
     const [inputs, setInputs] = React.useState({
         startTime: '.',
         endTime: '.',
@@ -45,13 +45,25 @@ export default function ClassForm(props) {
         }));
     }, [weekData]); // check why using startDateTime will cause infinite re-render //
 
+    React.useEffect(() => {
+        if (classTimeTarget) {
+            setInputs({
+            startTime: classTimeTarget.startTime,
+            endTime: classTimeTarget.endTime,
+            studentName: classTimeTarget.studentName,
+            coachName: classTimeTarget.coachName,
+            location: classTimeTarget.location,
+            note: classTimeTarget.note  
+            });
+        }
+    }, [classTimeTarget]);
+
     function handleChange(e) {
         let { name, value } = e.target;
         if (name === 'startTime' || name === 'endTime') {
             const hour = value.length === 4 ? parseInt(value[0]) : parseInt(value.slice(0, 2));
             const min = parseInt(value.slice(value.length - 2));
             value = dateObj.set({ hour: hour, minute: min }).toObject();
-            console.log(hour, min, value)
         }
         setInputs(prevInputs => ({
             ...prevInputs,
@@ -70,7 +82,7 @@ export default function ClassForm(props) {
             method: 'delete',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                _id: classTimeTarget._id
+                id: classTimeTarget._id
             })
         })
         .then(()=> setClassData(prevClassData => prevClassData))
@@ -89,11 +101,13 @@ export default function ClassForm(props) {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     ...inputs,
-                    _id: classTimeTarget._id
+                    id: classTimeTarget._id
                 })
+            })// toggle rerender dependency //
+            .then(() => {
+                initiateFetch();
+                toggleForm()
             })
-            .then(()=> setClassData(prevClassData => prevClassData))
-            .then(() => toggleForm())
             .catch(err => console.log(err));
         } else {
             fetch('/class/singleClass', {
