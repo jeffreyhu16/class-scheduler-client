@@ -1,6 +1,7 @@
 const router = require('../IndexRouter');
 const dateController = require('./DateController');
 
+router.get('/getStartOfWeek', dateController.getStartOfWeek);
 router.get('/getFullWeek', dateController.getFullWeek);
 
 module.exports = router;

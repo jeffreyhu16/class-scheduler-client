@@ -1,12 +1,26 @@
 import React from 'react'
+import { DateTime } from 'luxon'
+import { weekContext } from './contexts/weekContext'
 
 export default function CalendarHead(props) {
+
+    const [weekData, setWeekData] = React.useState();
+    const { startOfWeek } = React.useContext(weekContext);
     const { isGlow } = props;
     let i = 0;
     let weekDataArr, calendarHeads
     
-    if (props.weekData) {
-        weekDataArr = Object.entries(props.weekData);
+    if (startOfWeek) {
+        const isoDate = DateTime.fromObject(startOfWeek).toISO();
+        const uri = encodeURIComponent(isoDate)
+        fetch(`/date/getFullWeek?startOfWeek=${uri}`)
+        .then(res => res.json())
+        .then(data => setWeekData(data))
+        .catch(err => console.log(err));
+    }
+
+    if (weekData) {
+        weekDataArr = Object.entries(weekData);
         calendarHeads = weekDataArr.map(weekDay => {
             const styles = {
                 textShadow: isGlow.day[++i] ? '0 0 0.5rem #fff' : 'none'

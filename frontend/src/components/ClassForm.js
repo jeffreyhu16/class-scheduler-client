@@ -1,10 +1,12 @@
 import React from 'react'
 import { DateTime } from 'luxon'
+import { weekContext } from './contexts/weekContext'
 import { faMinus } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export default function ClassForm(props) {
-    const { weekData, day, halfHour, toggleForm, setClassData, initiateFetch, classTimeTarget } = props;
+    const { day, halfHour, toggleForm, fetchClasses, classTimeTarget } = props;
+    const { startOfWeek } = React.useContext(weekContext);
     const [inputs, setInputs] = React.useState({
         startTime: '.',
         endTime: '.',
@@ -16,15 +18,14 @@ export default function ClassForm(props) {
     const { startTime, endTime, studentName, coachName, location } = inputs;
     let dateObj, startDateTime, endDateTime, startTimeString, endTimeString
 
-    if (weekData) {
-        const dayDate = Object.entries(weekData)[day - 1][1];
-        const hour = Math.floor((halfHour - 1) / 2 + 3);
+    if (startOfWeek) {
+        const hour = Math.floor((halfHour - 1) / 2 + 6);
         const min = (halfHour - 1) % 2 * 30;
 
-        dateObj = DateTime.fromObject(dayDate).setZone('Australia/Melbourne');
-        startDateTime = dateObj.plus({ hours: hour, minutes: min });
-        endDateTime = dateObj.plus({ hours: hour + 1, minutes: min });
-
+        dateObj = DateTime.fromObject(startOfWeek);
+        startDateTime = dateObj.plus({ days: day - 1, hours: hour, minutes: min });
+        endDateTime = dateObj.plus({ days: day - 1, hours: hour + 1, minutes: min });
+        console.log(startDateTime);
         startTimeString = startDateTime.toLocaleString(DateTime.TIME_SIMPLE);
         endTimeString = endDateTime.toLocaleString(DateTime.TIME_SIMPLE);
     }
@@ -38,12 +39,14 @@ export default function ClassForm(props) {
     }
 
     React.useEffect(() => {
-        setInputs(prevInputs => ({
+        if (startOfWeek) {
+            setInputs(prevInputs => ({
             ...prevInputs,
             startTime: startDateTime.toObject(),
             endTime: endDateTime.toObject()
-        }));
-    }, [weekData]); // check why using startDateTime will cause infinite re-render //
+            }));
+        }
+    }, [startOfWeek]); // check why using startDateTime will cause infinite re-render //
 
     React.useEffect(() => {
         if (classTimeTarget) {
@@ -86,7 +89,7 @@ export default function ClassForm(props) {
             })
         })
         .then(() => {
-            initiateFetch();
+            fetchClasses(startOfWeek, day);
             toggleForm()
         })
         .catch(err => console.log(err));
@@ -107,7 +110,7 @@ export default function ClassForm(props) {
                 })
             })// toggle rerender dependency //
             .then(() => {
-                initiateFetch();
+                fetchClasses(startOfWeek, day);
                 toggleForm()
             })
             .catch(err => console.log(err));
@@ -118,7 +121,7 @@ export default function ClassForm(props) {
                 body: JSON.stringify(inputs)
             })
             .then(() => {
-                initiateFetch();
+                fetchClasses(startOfWeek, day);
                 toggleForm()
             })
             .catch(err => console.log(err));

@@ -1,8 +1,14 @@
 const { DateTime } = require('luxon')
 
-exports.getFullWeek = (req, res) => {
+exports.getStartOfWeek = (req, res) => {
     const currentDate = DateTime.local({ zone: 'Australia/Melbourne' });
     const monday = currentDate.startOf('week');
+    res.send(monday.toObject());
+}
+
+exports.getFullWeek = (req, res) => {
+    const { startOfWeek } = req.query;
+    const monday = DateTime.fromISO(startOfWeek);
 
     res.send({
         mon: monday.toObject(),

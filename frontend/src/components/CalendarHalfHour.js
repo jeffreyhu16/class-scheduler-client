@@ -3,7 +3,7 @@ import { DateTime } from 'luxon'
 import ClassForm from './ClassForm'
 
 export default function CalendarHalfHour(props) {
-    const { weekData, dayTargetArr, setClassData, initiateFetch, day, halfHour, setIsGlow } = props;
+    const { classData, day, halfHour, setIsGlow, fetchClasses } = props;
     const [isShow, setIsShow] = React.useState(false);
     const [isClassTime, setIsClassTime] = React.useState({
         isStartTime: false,
@@ -17,9 +17,9 @@ export default function CalendarHalfHour(props) {
     const hourIndex = Math.ceil(halfHour / 2);
     
     React.useEffect(() => {
-        if (dayTargetArr) {
+        if (classData) {
             // filter startTime //
-            startTimeTarget.current = dayTargetArr.filter(dayTarget => {
+            startTimeTarget.current = classData.filter(dayTarget => {
                 const { startTime } = dayTarget;
                 const halfInterval = startTime.minute === 30 ? 1 : 0;
                 const startTimeHalfHour = (startTime.hour - 6) * 2 + halfInterval;
@@ -29,7 +29,7 @@ export default function CalendarHalfHour(props) {
                 setIsClassTime(prevIsClassTime => ({ ...prevIsClassTime, isStartTime: true }));
             } else setIsClassTime(prevIsClassTime => ({ ...prevIsClassTime, isStartTime: false }));
             // filter midTime //
-            midTimeTarget.current = dayTargetArr.filter(dayTarget => {
+            midTimeTarget.current = classData.filter(dayTarget => {
                 const { startTime, endTime } = dayTarget;
                 const halfInterval = startTime.minute === 30 ? 1 : 0;
                 const startTimeHalfHour = (startTime.hour - 6) * 2 + halfInterval;
@@ -51,7 +51,7 @@ export default function CalendarHalfHour(props) {
                 setIsClassTime(prevIsClassTime => ({ ...prevIsClassTime, isMidTime: true }));
             } else setIsClassTime(prevIsClassTime => ({ ...prevIsClassTime, isMidTime: false }));
             // filter endTime //
-            endTimeTarget.current = dayTargetArr.filter(dayTarget => {
+            endTimeTarget.current = classData.filter(dayTarget => {
                 const { endTime } = dayTarget;
                 const halfInterval = endTime.minute === 30 ? 1 : 0;
                 const endTimeHalfHour = (endTime.hour - 6) * 2 + halfInterval;
@@ -62,7 +62,7 @@ export default function CalendarHalfHour(props) {
                 setIsClassTime(prevIsClassTime => ({ ...prevIsClassTime, isEndTime: true }));
             } else setIsClassTime(prevIsClassTime => ({ ...prevIsClassTime, isEndTime: false }));
         }
-    }, [dayTargetArr]);
+    }, [classData]);
 
     function toggleForm() {
         setIsShow(prevIsShow => !prevIsShow);
@@ -138,12 +138,10 @@ export default function CalendarHalfHour(props) {
             </div>
             {isShow &&
                 <ClassForm
-                    weekData={weekData}
                     day={day}
                     halfHour={halfHour}
                     toggleForm={toggleForm}
-                    setClassData={setClassData}
-                    initiateFetch={initiateFetch}
+                    fetchClasses={fetchClasses}
                     classTimeTarget={classTimeTarget}
                 />}
             {isShow && <div className="overlay"></div>}

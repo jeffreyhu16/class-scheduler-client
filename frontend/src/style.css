@@ -43,13 +43,13 @@ h1 {
 .header-nav,
 .navbar, 
 .calendar {
-    padding: 1rem;
     background: #00407b;
     box-shadow: 0 0 2rem 0.5rem rgba(0, 0, 0, 0.2);
 }
 
 .header-title,
 .navbar {
+    padding: 1rem;
     width: 20%;
 }
 
@@ -57,7 +57,46 @@ h1 {
     text-align: center;
 }
 
-.header-nav,
+.header-nav {
+    width: 79%;
+    font-size: 1.25rem;
+    padding: 1em 2em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-toggle-group,
+.header-date-group,
+.header-date {
+    display: flex;
+}
+
+.header-toggle-day,
+.header-toggle-week {
+    margin: 0 0.5em;
+}
+
+.header-date {
+    
+}
+
+.header-date-day,
+.header-date-month,
+.header-date-year {
+    margin-left: 0.5em;
+}
+
+.icon-angle-left,
+.icon-angle-right {
+    margin: 0 0.8em;
+}
+
+.icon-angle-left:hover,
+.icon-angle-right:hover {
+    cursor: pointer;
+}
+
 .calendar {
     width: 79%;
     padding: 2em 3em 2em 0;

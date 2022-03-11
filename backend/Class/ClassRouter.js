@@ -3,7 +3,8 @@ const router = require('../IndexRouter');
 const classController = require('./ClassController');
 
 router.use(express.json());
-router.get('/', classController.getClasses);
+router.use(express.urlencoded({ extended: false }));
+router.get('/classes', classController.getClasses);
 router.post('/singleClass', classController.setSingleClass);
 router.put('/singleClass', classController.updateClass);
 router.delete('/singleClass', classController.deleteClass);
