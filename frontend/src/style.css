@@ -27,7 +27,51 @@ h1 {
     margin-bottom: 0;
 }
 
-.header-container,
+/* dropdown menu */
+
+.dropdown-menu {
+    position: relative;
+    cursor: default;
+}
+
+.dropdown-menu-list {
+    position: absolute;
+    left: 0;
+    top: 2.5em;
+    min-width: 6.5rem;
+    border-radius: 0.5rem;
+    background: #004b8f;
+    box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.5);
+    z-index: 0;
+    opacity: 0;
+    transform: translateY(-0.4rem);
+    transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.dropdown-menu-list::after   {
+    position: absolute;
+    content: '';
+    height: 0.6rem;
+    width: 0.6rem;
+    left: 75%;
+    top: -0.3rem;
+    transform: rotate(45deg);
+    background-color: #004b8f;
+    z-index: -1;
+}
+
+.dropdown-menu-list-item {
+    padding: 0.3em 0.65em;
+    border-radius: 0.5rem;
+    margin: 0.2em;
+}
+
+.dropdown-menu-list-item:nth-of-type(1) {
+    background-color: #c9e5ff;
+    color: #00182f;
+}
+
+.header-flex,
 .main-page-container {
     display: flex;
     justify-content: space-between;
@@ -36,7 +80,8 @@ h1 {
 }
 
 .header-container {
-    
+    position: sticky;
+    top: 0px;
 }
 
 .header-title,
@@ -66,18 +111,23 @@ h1 {
     align-items: center;
 }
 
+.header-filter-group {
+    font-size: 1.2rem;
+    width: 27rem;
+}
+
+.header-filter-group,
 .header-toggle-group,
+.header-dropdown-group,
+.dropdown-menu,
 .header-date-group,
 .header-date {
     display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
-.header-toggle-day,
-.header-toggle-week {
-    margin-right: 0.7em;
-    font-size: 1.2rem;
-}
-
+.dropdown-menu,
 .header-toggle-day,
 .header-toggle-week,
 .header-date {
@@ -93,7 +143,20 @@ h1 {
     box-shadow: 0 0 1rem 0 rgba(255, 255, 255, 0.4);
 }
 
+.header-toggle-group {
+    width: 36%;
+}
+
+.header-dropdown-group {
+    width: 55%;
+}
+
+.icon-caret-down {
+    margin-left: 0.4em;
+}
+
 .header-date-group {
+    
 }
 
 .header-date-month {
@@ -137,6 +200,9 @@ h1 {
 
 .calendar-head-group {
     height: 4rem;
+    /* position: sticky;
+    top: 5.3rem; */
+    /* z-index: 0; */
 }
 
 .calendar-head {
