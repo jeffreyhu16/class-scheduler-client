@@ -60,7 +60,7 @@ h1 {
 .header-nav {
     width: 79%;
     font-size: 1.25rem;
-    padding: 1em 2em;
+    padding: 0.5em 1.7em;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -74,32 +74,59 @@ h1 {
 
 .header-toggle-day,
 .header-toggle-week {
-    margin: 0 0.5em;
+    margin-right: 0.7em;
+    font-size: 1.2rem;
 }
 
+.header-toggle-day,
+.header-toggle-week,
 .header-date {
-    
+    padding: 0.3em 0.8em;
+    border-radius: 2rem;
+    background: #004b8f;
+    box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.3);
 }
 
-.header-date-day,
-.header-date-month,
-.header-date-year {
-    margin-left: 0.5em;
+.header-toggle-week {
+    background: #c9e5ff;
+    color: #00182f;
+    box-shadow: 0 0 1rem 0 rgba(255, 255, 255, 0.4);
+}
+
+.header-date-group {
+}
+
+.header-date-month {
+    margin: 0 0.6em;
+}
+
+.toggle-period {
+    margin-left: 0.8em;
+    display: flex;
+    align-items: center;
+}
+
+.icon-angle-left-container,
+.icon-angle-right-container {
+    padding: 0.3em 0;
+
+}
+
+.icon-angle-left-container:hover,
+.icon-angle-right-container:hover {
+    cursor: pointer;
+    border-radius: 100%;
+    background-color: rgb(255, 255, 255, 0.1);
 }
 
 .icon-angle-left,
 .icon-angle-right {
-    margin: 0 0.8em;
-}
-
-.icon-angle-left:hover,
-.icon-angle-right:hover {
-    cursor: pointer;
+    margin: 0 0.7em;
 }
 
 .calendar {
     width: 79%;
-    padding: 2em 3em 2em 0;
+    padding: 2em;
 }
 
 .calendar-head-group,
@@ -113,7 +140,7 @@ h1 {
 }
 
 .calendar-head {
-    width: calc(92%/7);
+    width: calc(94.5%/7);
 }
 
 .calendar-head-day,
@@ -132,7 +159,7 @@ h1 {
 
 .calendar-head-empty,
 .calendar-time {
-    width: 8%;
+    width: 3.75rem;
     letter-spacing: 0.02rem;
 }
 
@@ -144,7 +171,7 @@ h1 {
 
 .calendar-day {
     height: 100rem;
-    width: calc(92%/7);
+    width: calc(94.5%/7);
 }
 
 .calendar-half-hour {

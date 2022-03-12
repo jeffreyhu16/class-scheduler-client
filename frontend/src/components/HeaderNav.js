@@ -36,22 +36,24 @@ export default function HeaderNav() {
                 <div className="header-toggle-week">Week</div>
             </div>
             <div className="header-date-group">
-                <div className="toggle-period">
-                    <FontAwesomeIcon 
-                        icon={faAngleLeft} 
-                        onClick={() => shiftWeek('prev')}
-                        className="icon-angle-left"
-                    />
-                    <FontAwesomeIcon 
-                        icon={faAngleRight} 
-                        onClick={() => shiftWeek('next')}
-                        className="icon-angle-right" 
-                    />
-                </div>
                 <div className="header-date">
                     <div className="header-date-day">{day1} - {day7}</div>
                     <div className="header-date-month">{month}</div>
                     <div className="header-date-year">{year}</div>
+                </div>
+                <div className="toggle-period">
+                    <div className="icon-angle-left-container" onClick={() => shiftWeek('prev')}>
+                        <FontAwesomeIcon
+                            icon={faAngleLeft}
+                            className="icon-angle-left"
+                        />
+                    </div>
+                    <div className="icon-angle-right-container" onClick={() => shiftWeek('next')}>
+                        <FontAwesomeIcon
+                            icon={faAngleRight}
+                            className="icon-angle-right"
+                        />
+                    </div>
                 </div>
             </div>
         </div>

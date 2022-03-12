@@ -10,15 +10,17 @@ export default function CalendarHead(props) {
     let i = 0;
     let weekDataArr, calendarHeads
     
-    if (startOfWeek) {
-        const isoDate = DateTime.fromObject(startOfWeek).toISO();
-        const uri = encodeURIComponent(isoDate)
-        fetch(`/date/getFullWeek?startOfWeek=${uri}`)
-        .then(res => res.json())
-        .then(data => setWeekData(data))
-        .catch(err => console.log(err));
-    }
-
+    React.useEffect(() => {
+        if (startOfWeek) {
+            const isoDate = DateTime.fromObject(startOfWeek).toISO();
+            const uri = encodeURIComponent(isoDate)
+            fetch(`/date/getFullWeek?startOfWeek=${uri}`)
+            .then(res => res.json())
+            .then(data => setWeekData(data))
+            .catch(err => console.log(err));
+        }
+    }, [startOfWeek]);
+    
     if (weekData) {
         weekDataArr = Object.entries(weekData);
         calendarHeads = weekDataArr.map(weekDay => {
