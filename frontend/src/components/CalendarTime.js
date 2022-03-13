@@ -1,18 +1,24 @@
 import React from 'react'
+import { DateTime } from 'luxon'
 import { glowContext } from './contexts/glowContext';
 
 export default function CalendarTime() {
     let i = 0
-    let hourCount = 6;
     const { isGlow } = React.useContext(glowContext);
-    const calendarTimes = [...Array(18)].map(() => {
+    const time = DateTime.local().set({ hour: 6, minute: 0 });
+
+    const calendarTimes = [...Array(72)].map(() => {
+
+        const newTime = time.plus({ minutes: 15 * i });
+
         const styles = {
-            textShadow: isGlow.hour[++i] ? '0 0 0.5rem #fff' : 'none'
+            textShadow: isGlow.halfHour[++i] ? '0 0 0.5rem #fff' : 'none'
         }
+
         return (
-            <div className={`calendar-hour`} style={styles}>
-                {hourCount > 12 ? hourCount - 12 : hourCount}
-                {hourCount++ > 11 ? ' pm' : ' am'}
+            <div className={`calendar-time-quarter`} style={styles}>
+                {newTime.hour > 12 ? newTime.hour - 12 : newTime.hour}:
+                {newTime.minute === 0 ? '00' : newTime.minute}
             </div>
         )
     });

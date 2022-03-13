@@ -5,7 +5,7 @@ import { faMinus } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export default function ClassForm(props) {
-    const { day, halfHour, toggleForm, fetchClasses, classTimeTarget } = props;
+    const { day, quarterHour, toggleForm, fetchClasses, classTimeTarget } = props;
     const { startOfWeek } = React.useContext(weekContext);
     const [ inputs, setInputs ] = React.useState({
         startTime: '.',
@@ -19,8 +19,8 @@ export default function ClassForm(props) {
     let dateObj, startDateTime, endDateTime, startTimeString, endTimeString
 
     if (startOfWeek) {
-        const hour = Math.floor((halfHour - 1) / 2 + 6);
-        const min = (halfHour - 1) % 2 * 30;
+        const hour = Math.floor((quarterHour - 1) / 4 + 6);
+        const min = (quarterHour - 1) % 4 * 15;
 
         dateObj = DateTime.fromObject(startOfWeek);
         startDateTime = dateObj.plus({ days: day - 1, hours: hour, minutes: min });
@@ -65,7 +65,7 @@ export default function ClassForm(props) {
         if (name === 'startTime' || name === 'endTime') {
             const hour = value.length === 4 ? parseInt(value[0]) : parseInt(value.slice(0, 2));
             const min = parseInt(value.slice(value.length - 2));
-            value = dateObj.set({ hour: hour, minute: min }).toObject();
+            value = startDateTime.set({ hour: hour, minute: min }).toObject();
         }
         setInputs(prevInputs => ({
             ...prevInputs,
@@ -107,7 +107,7 @@ export default function ClassForm(props) {
                     ...inputs,
                     id: classTimeTarget._id
                 })
-            })// toggle rerender dependency //
+            })
             .then(() => {
                 fetchClasses(startOfWeek, day);
                 toggleForm()
@@ -126,7 +126,7 @@ export default function ClassForm(props) {
             .catch(err => console.log(err));
         }
     }
-
+    // add courtNo to form //
     return (
         <div className="form-container">
             <form className="class-form" onSubmit={handleSubmit}>

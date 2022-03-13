@@ -230,22 +230,22 @@ h1 {
     letter-spacing: 0.02rem;
 }
 
-.calendar-hour {
-    height: calc(100%/18);
+.calendar-time-quarter {
+    height: calc(100%/72);
     text-align: right;
     padding: 0.4em 0.8em 0 0;
 }
 
 .calendar-day {
-    height: 100rem;
+    height: 130rem;
     width: calc(94.5%/7);
 }
 
-.calendar-half-hour {
-    height: calc(100%/36);
+.calendar-quarter-hour {
+    height: calc(100%/72);
 }
 
-.calendar-half-hour:hover {
+.calendar-quarter-hour:hover {
     background: #c9e5ff !important;
     border: 1px solid #00407b;  /* losing specificity, apply this to react logic */
 }
@@ -255,11 +255,11 @@ h1 {
     color: #00182f;
 }
 
-.half-hour-1 {
+.quarter-hour-1 {
     border-top: none !important;    
 }
 
-.half-hour-36 {
+.quarter-hour-72 {
     border-bottom: none !important;
 }
 

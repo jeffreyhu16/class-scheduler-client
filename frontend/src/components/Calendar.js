@@ -6,7 +6,7 @@ import CalendarDay from './CalendarDay'
 
 export default function Calendar() {
     
-    const [ isGlow, setIsGlow ] = React.useState({ day: [], hour: [] });
+    const [ isGlow, setIsGlow ] = React.useState({ day: [], halfHour: [] });
 
     let i = 0;
     let calendarDayArr = [...Array(7)].map(() => {

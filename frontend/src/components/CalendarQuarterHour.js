@@ -3,8 +3,8 @@ import { DateTime } from 'luxon'
 import ClassForm from './ClassForm'
 import { glowContext } from './contexts/glowContext';
 
-export default function CalendarHalfHour(props) {
-    const { classData, day, halfHour, fetchClasses } = props;
+export default function CalendarQuarterHour(props) {
+    const { classData, day, quarterHour, fetchClasses } = props;
     const { isGlow, setIsGlow } = React.useContext(glowContext);
     const [ isShow, setIsShow ] = React.useState(false);
     const [ isClassTime, setIsClassTime ] = React.useState({
@@ -16,16 +16,16 @@ export default function CalendarHalfHour(props) {
     const startTimeTarget = React.useRef();
     const midTimeTarget = React.useRef();
     const endTimeTarget = React.useRef();
-    const hourIndex = Math.ceil(halfHour / 2);
+    const halfHourIndex = Math.ceil(quarterHour / 2);
     
     React.useEffect(() => {
         if (classData) {
             // filter startTime //
             startTimeTarget.current = classData.filter(dayTarget => {
                 const { startTime } = dayTarget;
-                const halfInterval = startTime.minute === 30 ? 1 : 0;
-                const startTimeHalfHour = (startTime.hour - 6) * 2 + halfInterval;
-                return startTimeHalfHour === halfHour - 1;
+                const quarterInterval = startTime.minute / 15;
+                const startTimeQuarterHour = (startTime.hour - 6) * 4 + quarterInterval;
+                return startTimeQuarterHour === quarterHour - 1;
             });
             if (startTimeTarget.current[0]) {
                 setIsClassTime(prevIsClassTime => ({ ...prevIsClassTime, isStartTime: true }));
@@ -33,16 +33,17 @@ export default function CalendarHalfHour(props) {
             // filter midTime //
             midTimeTarget.current = classData.filter(dayTarget => {
                 const { startTime, endTime } = dayTarget;
-                const halfInterval = startTime.minute === 30 ? 1 : 0;
-                const startTimeHalfHour = (startTime.hour - 6) * 2 + halfInterval;
+                const quarterInterval = startTime.minute / 15;
+                const startTimeQuarterHour = (startTime.hour - 6) * 4 + quarterInterval;
                 const startDateTime = DateTime.fromObject(startTime);
                 const endDateTime = DateTime.fromObject(endTime);
-                const duration = endDateTime.diff(startDateTime, 'hours').hours;
+                const duration = endDateTime.diff(startDateTime, 'minutes').toObject().minutes;
                 let isMidTime = false;
-                if (duration > 1) {
-                    const midTimeHalfHours = (duration - 1) * 2;
-                    for (let i = 1; i <= midTimeHalfHours; i++) {
-                        if (startTimeHalfHour + i === halfHour - 1) {
+                if (duration > 30) {
+                    
+                    const midTimeQuarterHours = (duration - 30) / 15;
+                    for (let i = 1; i <= midTimeQuarterHours; i++) {
+                        if (startTimeQuarterHour + i === quarterHour - 1) {
                             isMidTime = true;
                         }
                     }
@@ -55,27 +56,26 @@ export default function CalendarHalfHour(props) {
             // filter endTime //
             endTimeTarget.current = classData.filter(dayTarget => {
                 const { endTime } = dayTarget;
-                const halfInterval = endTime.minute === 30 ? 1 : 0;
-                const endTimeHalfHour = (endTime.hour - 6) * 2 + halfInterval;
-                return endTimeHalfHour === halfHour;
+                const quarterInterval = endTime.minute / 15;
+                const endTimeQuarterHour = (endTime.hour - 6) * 4 + quarterInterval;
+                return endTimeQuarterHour === quarterHour;
             });
             if (endTimeTarget.current[0]) {
                 // console.log(endTimeTarget.current[0])
                 setIsClassTime(prevIsClassTime => ({ ...prevIsClassTime, isEndTime: true }));
             } else setIsClassTime(prevIsClassTime => ({ ...prevIsClassTime, isEndTime: false }));
         }
-    }, [classData]);
+    }, [classData]); 
 
     function toggleForm() {
         setIsShow(prevIsShow => !prevIsShow);
-        console.log(isGlow.hour)
     }
 
-    function handleOnMouse(dayIndex, hourIndex, boolean) {
+    function handleOnMouse(dayIndex, halfHourIndex, boolean) {
         setIsGlow(prevIsGlow => {
             const newIsGlow = { ...prevIsGlow }
             newIsGlow.day[dayIndex] = boolean;
-            newIsGlow.hour[hourIndex] = boolean;
+            newIsGlow.halfHour[halfHourIndex] = boolean;
             return newIsGlow;
         })
     }
@@ -95,14 +95,15 @@ export default function CalendarHalfHour(props) {
         borderRight: isFree ? borderDefault : borderActive
     }
 
-    let classTimeObj, startTimeHour, startTimeMinute, endTimeHour, endTimeMinute;
+    let classTimeObj, startHour, startMin, endHour, endMin;
     if (isStartTime) {
         classTimeObj = startTimeTarget.current[0];
-        startTimeHour = classTimeObj.startTime.hour;
-        startTimeMinute = classTimeObj.startTime.minute;
-        endTimeHour = classTimeObj.endTime.hour;
-        endTimeMinute = classTimeObj.endTime.minute;
+        startHour = classTimeObj.startTime.hour;
+        startMin = classTimeObj.startTime.minute;
+        endHour = classTimeObj.endTime.hour;
+        endMin = classTimeObj.endTime.minute;
     }
+ 
     const classTimeTarget = 
         isStartTime ? startTimeTarget.current[0] : 
         isMidTime ? midTimeTarget.current[0] : 
@@ -111,9 +112,9 @@ export default function CalendarHalfHour(props) {
     return (
         <>
             <div
-                onMouseEnter={() => handleOnMouse(day, hourIndex, true)}
-                onMouseLeave={() => handleOnMouse(day, hourIndex, false)}
-                className={`calendar-half-hour day-${day} half-hour-${halfHour}`}
+                // onMouseEnter={() => handleOnMouse(day, halfHourIndex, true)}
+                // onMouseLeave={() => handleOnMouse(day, halfHourIndex, false)}
+                className={`calendar-quarter-hour day-${day} quarter-hour-${quarterHour}`}
                 onClick={toggleForm}
                 style={styles}
             >
@@ -129,12 +130,10 @@ export default function CalendarHalfHour(props) {
                             {classTimeObj.location}
                         </div>
                         <div className="calendar-class-info-class-period">
-                            {startTimeHour}
-                            {startTimeMinute === 0 ? '' : ':30'}
-                            {startTimeHour > 11 ? 'pm' : 'am'}-
-                            {endTimeHour}
-                            {endTimeMinute === 0 ? '' : ':30'}
-                            {endTimeHour > 11 ? 'pm' : 'am'}
+                            {startHour > 12 ? startHour - 12 : startHour}:
+                            {startMin === 0 ? '00' : startMin}-
+                            {endHour > 12 ? endHour - 12 : endHour}:
+                            {endMin === 0 ? '00' : endMin}
                         </div>
                     </div>
                 }
@@ -142,7 +141,7 @@ export default function CalendarHalfHour(props) {
             {isShow &&
                 <ClassForm
                     day={day}
-                    halfHour={halfHour}
+                    quarterHour={quarterHour}
                     toggleForm={toggleForm}
                     fetchClasses={fetchClasses}
                     classTimeTarget={classTimeTarget}
