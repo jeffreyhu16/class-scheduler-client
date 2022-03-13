@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 export default function Dropdown(props) {
 
     const { label, data } = props;
-    const [on, setOn] = React.useState(false);
+    const [ on, setOn ] = React.useState(false);
 
     const listItems = data.map(data => {
         return (
@@ -17,14 +17,14 @@ export default function Dropdown(props) {
 
     const styles = {
         opacity: on ? '1' : '0',
-        transform: on ? 'translateY(0)' : ''
+        transform: on ? 'translateY(0)' : '',
+        pointerEvents: on ? 'auto' : 'none'
     }
 
     return (
         <div 
             className="dropdown-menu" 
-            onMouseEnter={() => setOn(prevOn => !prevOn)}
-            onMouseLeave={() => setOn(prevOn => !prevOn)}
+            onClick={() => setOn(prevOn => !prevOn)}
         >
             <div>{label}</div>
             <FontAwesomeIcon icon={faCaretDown} className="icon-caret-down" />

@@ -1,6 +1,6 @@
 import React from 'react'
 import { DateTime } from 'luxon'
-import { faAngleLeft, faAngleRight, faCaretDown } from '@fortawesome/free-solid-svg-icons'
+import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { weekContext } from './contexts/weekContext'
 import Dropdown from './Dropdown'

@@ -5,7 +5,7 @@ import { weekContext } from './contexts/weekContext';
 
 export default function App() {
 
-    const [startOfWeek, setStartOfWeek] = React.useState();
+    const [ startOfWeek, setStartOfWeek ] = React.useState();
 
     React.useEffect(() => {
         fetch('/date/getStartOfWeek')

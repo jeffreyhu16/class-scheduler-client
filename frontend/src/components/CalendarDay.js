@@ -5,9 +5,9 @@ import { weekContext } from './contexts/weekContext'
 
 export default function CalendarDay(props) {
 
-    const { day, setIsGlow } = props;
+    const { day } = props;
     const { startOfWeek } = React.useContext(weekContext);
-    const [classData, setClassData] = React.useState();
+    const [ classData, setClassData ] = React.useState();
 
     React.useEffect(() => {
         if (startOfWeek) fetchClasses(startOfWeek, day);
@@ -28,7 +28,6 @@ export default function CalendarDay(props) {
             <CalendarHalfHour 
                 day={day} 
                 halfHour={++i}
-                setIsGlow={setIsGlow}
                 classData={classData}
                 fetchClasses={fetchClasses}
             />

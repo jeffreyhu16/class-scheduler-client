@@ -1,12 +1,13 @@
 import React from 'react'
 import { DateTime } from 'luxon'
 import { weekContext } from './contexts/weekContext'
+import { glowContext } from './contexts/glowContext';
 
-export default function CalendarHead(props) {
+export default function CalendarHead() {
 
-    const [weekData, setWeekData] = React.useState();
+    const { isGlow } = React.useContext(glowContext);
+    const [ weekData, setWeekData ] = React.useState();
     const { startOfWeek } = React.useContext(weekContext);
-    const { isGlow } = props;
     let i = 0;
     let weekDataArr, calendarHeads
     
@@ -26,7 +27,7 @@ export default function CalendarHead(props) {
         calendarHeads = weekDataArr.map(weekDay => {
             const styles = {
                 textShadow: isGlow.day[++i] ? '0 0 0.5rem #fff' : 'none'
-            } // tue/thu keeps glowing after closing class form //
+            } 
             return (
                 <div className={`calendar-head`} style={styles}>
                     <div className="calendar-head-day">

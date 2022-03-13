@@ -1,9 +1,10 @@
 import React from 'react'
+import { glowContext } from './contexts/glowContext';
 
-export default function CalendarTime(props) {
+export default function CalendarTime() {
     let i = 0
     let hourCount = 6;
-    const { isGlow } = props;
+    const { isGlow } = React.useContext(glowContext);
     const calendarTimes = [...Array(18)].map(() => {
         const styles = {
             textShadow: isGlow.hour[++i] ? '0 0 0.5rem #fff' : 'none'

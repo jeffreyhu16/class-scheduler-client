@@ -32,6 +32,7 @@ h1 {
 .dropdown-menu {
     position: relative;
     cursor: default;
+    cursor: pointer;
 }
 
 .dropdown-menu-list {
@@ -48,7 +49,7 @@ h1 {
     transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
 }
 
-.dropdown-menu-list::after   {
+.dropdown-menu-list::after {
     position: absolute;
     content: '';
     height: 0.6rem;
@@ -61,7 +62,7 @@ h1 {
 }
 
 .dropdown-menu-list-item {
-    padding: 0.3em 0.65em;
+    padding: 0.3em 0.6em;
     border-radius: 0.5rem;
     margin: 0.2em;
 }
@@ -113,7 +114,7 @@ h1 {
 
 .header-filter-group {
     font-size: 1.2rem;
-    width: 27rem;
+    width: 26rem;
 }
 
 .header-filter-group,
@@ -144,11 +145,11 @@ h1 {
 }
 
 .header-toggle-group {
-    width: 36%;
+    width: 37.5%;
 }
 
 .header-dropdown-group {
-    width: 55%;
+    width: 57%;
 }
 
 .icon-caret-down {
@@ -200,8 +201,8 @@ h1 {
 
 .calendar-head-group {
     height: 4rem;
-    /* position: sticky;
-    top: 5.3rem; */
+    position: sticky;
+    top: 5.3rem;
     /* z-index: 0; */
 }
 

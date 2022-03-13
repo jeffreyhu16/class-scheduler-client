@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 export default function ClassForm(props) {
     const { day, halfHour, toggleForm, fetchClasses, classTimeTarget } = props;
     const { startOfWeek } = React.useContext(weekContext);
-    const [inputs, setInputs] = React.useState({
+    const [ inputs, setInputs ] = React.useState({
         startTime: '.',
         endTime: '.',
         studentName: '.',
@@ -25,7 +25,6 @@ export default function ClassForm(props) {
         dateObj = DateTime.fromObject(startOfWeek);
         startDateTime = dateObj.plus({ days: day - 1, hours: hour, minutes: min });
         endDateTime = dateObj.plus({ days: day - 1, hours: hour + 1, minutes: min });
-        console.log(startDateTime);
         startTimeString = startDateTime.toLocaleString(DateTime.TIME_SIMPLE);
         endTimeString = endDateTime.toLocaleString(DateTime.TIME_SIMPLE);
     }
