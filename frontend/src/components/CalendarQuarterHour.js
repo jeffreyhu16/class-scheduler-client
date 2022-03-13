@@ -5,7 +5,7 @@ import { glowContext } from './contexts/glowContext';
 
 export default function CalendarQuarterHour(props) {
     const { classData, day, quarterHour, fetchClasses } = props;
-    const { isGlow, setIsGlow } = React.useContext(glowContext);
+    const { setIsGlow } = React.useContext(glowContext);
     const [ isShow, setIsShow ] = React.useState(false);
     const [ isClassTime, setIsClassTime ] = React.useState({
         isStartTime: false,
@@ -112,8 +112,8 @@ export default function CalendarQuarterHour(props) {
     return (
         <>
             <div
-                // onMouseEnter={() => handleOnMouse(day, halfHourIndex, true)}
-                // onMouseLeave={() => handleOnMouse(day, halfHourIndex, false)}
+                onMouseEnter={() => handleOnMouse(day, quarterHour, true)}
+                onMouseLeave={() => handleOnMouse(day, quarterHour, false)}
                 className={`calendar-quarter-hour day-${day} quarter-hour-${quarterHour}`}
                 onClick={toggleForm}
                 style={styles}

@@ -226,14 +226,26 @@ h1 {
 
 .calendar-head-empty,
 .calendar-time {
-    width: 3.75rem;
+    width: 4rem;
     letter-spacing: 0.02rem;
 }
 
 .calendar-time-quarter {
     height: calc(100%/72);
     text-align: right;
-    padding: 0.4em 0.8em 0 0;
+    padding: 0em 0.8rem 0 0;
+}
+
+.calendar-time-quarter:nth-of-type(2n),
+.calendar-time-quarter:nth-of-type(4n + 3) {
+    /* text-shadow: 0 0 0.5rem #fff; */
+    opacity: 0;
+}
+
+
+.calendar-time-quarter:nth-of-type(4n + 1) {
+    font-size: 1.2rem;
+    opacity: 1 !important;
 }
 
 .calendar-day {
