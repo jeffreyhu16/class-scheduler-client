@@ -1,7 +1,8 @@
-const router = require('../IndexRouter');
+const express = require('express');
+const router = express.Router();
 const dateController = require('./DateController');
 
-router.get('/getStartOfWeek', dateController.getStartOfWeek);
-router.get('/getFullWeek', dateController.getFullWeek);
+router.get('/startOfWeek', dateController.getStartOfWeek);
+router.get('/fullWeek', dateController.getFullWeek);
 
 module.exports = router;

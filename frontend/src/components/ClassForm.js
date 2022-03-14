@@ -1,12 +1,12 @@
 import React from 'react'
 import { DateTime } from 'luxon'
-import { weekContext } from './contexts/weekContext'
+import { dataContext } from './contexts/dataContext'
 import { faMinus } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export default function ClassForm(props) {
     const { day, quarterHour, toggleForm, fetchClasses, classTimeTarget } = props;
-    const { startOfWeek } = React.useContext(weekContext);
+    const { startOfWeek } = React.useContext(dataContext);
     const [ inputs, setInputs ] = React.useState({
         startTime: '.',
         endTime: '.',
@@ -80,7 +80,7 @@ export default function ClassForm(props) {
 
     function handleDelete(e) {
         e.preventDefault();
-        fetch('/class/singleClass',{
+        fetch('/class',{
             method: 'delete',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -100,7 +100,7 @@ export default function ClassForm(props) {
             if (value === '.') return
         }
         if (classTimeTarget) {
-            fetch('/class/singleClass', {
+            fetch('/class', {
                 method: 'put',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -114,7 +114,7 @@ export default function ClassForm(props) {
             })
             .catch(err => console.log(err));
         } else {
-            fetch('/class/singleClass', {
+            fetch('/class', {
                 method: 'post',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(inputs)

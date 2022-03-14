@@ -1,13 +1,13 @@
 import React from 'react'
 import { DateTime } from 'luxon'
-import { weekContext } from './contexts/weekContext'
+import { dataContext } from './contexts/dataContext'
 import { glowContext } from './contexts/glowContext';
 
 export default function CalendarHead() {
 
     const { isGlow } = React.useContext(glowContext);
     const [ weekData, setWeekData ] = React.useState();
-    const { startOfWeek } = React.useContext(weekContext);
+    const { startOfWeek } = React.useContext(dataContext);
     let i = 0;
     let weekDataArr, calendarHeads
     
@@ -15,7 +15,7 @@ export default function CalendarHead() {
         if (startOfWeek) {
             const isoDate = DateTime.fromObject(startOfWeek).toISO();
             const uri = encodeURIComponent(isoDate)
-            fetch(`/date/getFullWeek?startOfWeek=${uri}`)
+            fetch(`/date/fullWeek?startOfWeek=${uri}`)
             .then(res => res.json())
             .then(data => setWeekData(data))
             .catch(err => console.log(err));

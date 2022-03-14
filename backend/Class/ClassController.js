@@ -2,18 +2,23 @@ const Class = require('./ClassModel');
 const { DateTime } = require('luxon');
 
 exports.getClasses = (req, res) => {
-    const { startOfWeek, day } = req.query;
+    const { startOfWeek, day, location, coach } = req.query;
     const targetDay = DateTime.fromISO(startOfWeek).plus({ days: day - 1 });
-    Class.find({
+    
+    const dbQuery = {
         'startTime.year': targetDay.year,
         'startTime.month': targetDay.month, 
-        'startTime.day': targetDay.day
-    })
+        'startTime.day': targetDay.day,
+    }
+    if (location) dbQuery.location = location;
+    if (coach) dbQuery.coach = coach;
+
+    Class.find(dbQuery)
     .then(data => res.send(data))
     .catch(err => console.log(err));
 }
 
-exports.setSingleClass = (req, res) => {
+exports.setClass = (req, res) => {
     Class.create(req.body)
     .then(result => {
         console.log(result);

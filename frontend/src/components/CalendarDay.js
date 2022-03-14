@@ -1,22 +1,22 @@
 import React from 'react'
 import { DateTime } from 'luxon'
+import { dataContext } from './contexts/dataContext'
 import CalendarQuarterHour from './CalendarQuarterHour'
-import { weekContext } from './contexts/weekContext'
 
 export default function CalendarDay(props) {
 
     const { day } = props;
-    const { startOfWeek } = React.useContext(weekContext);
+    const { startOfWeek, location, coach } = React.useContext(dataContext);
     const [ classData, setClassData ] = React.useState();
     // create state for CourtNo //
     React.useEffect(() => {
-        if (startOfWeek) fetchClasses(startOfWeek, day);
-    }, [startOfWeek]);
+        if (startOfWeek) fetchClasses(startOfWeek, day, location, coach);
+    }, [startOfWeek, location, coach]);
 
-    function fetchClasses(startOfWeek, day) {
+    function fetchClasses(startOfWeek, day, location, coach) {
         const isoDate = DateTime.fromObject(startOfWeek).toISO();
         const uri = encodeURIComponent(isoDate);
-        fetch(`/class/classes?startOfWeek=${uri}&day=${day}`)
+        fetch(`/class/classes?startOfWeek=${uri}&day=${day}&location=${location}&coach=${coach}`)
         .then(res => res.json())
         .then(data => setClassData(data))
         .catch(err => console.log(err));

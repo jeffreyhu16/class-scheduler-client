@@ -1,12 +1,10 @@
 const express = require('express');
-const router = require('../IndexRouter');
+const router = express.Router();
 const classController = require('./ClassController');
 
-router.use(express.json());
-router.use(express.urlencoded({ extended: false }));
 router.get('/classes', classController.getClasses);
-router.post('/singleClass', classController.setSingleClass);
-router.put('/singleClass', classController.updateClass);
-router.delete('/singleClass', classController.deleteClass);
+router.post('/', classController.setClass);
+router.put('/', classController.updateClass);
+router.delete('/', classController.deleteClass);
 
 module.exports = router;

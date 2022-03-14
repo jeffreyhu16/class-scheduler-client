@@ -2,12 +2,12 @@ import React from 'react'
 import { DateTime } from 'luxon'
 import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { weekContext } from './contexts/weekContext'
+import { dataContext } from './contexts/dataContext'
 import Dropdown from './Dropdown'
 
 export default function HeaderNav() {
 
-    const { startOfWeek, setStartOfWeek } = React.useContext(weekContext);
+    const { startOfWeek, setStartOfWeek } = React.useContext(dataContext);
     let day1, day7, month, year, nextWeek, lastWeek;
 
     if (startOfWeek) {
@@ -30,9 +30,6 @@ export default function HeaderNav() {
         }
     }
 
-    const locationData = [{ name: 'Camberwell' }, { name: 'Caulfield' }];
-    const coachData = [{ name: 'Tim' }, { name: 'Larry' }];
-
     return (
         <div className="header-nav">
             <div className="header-filter-group">
@@ -41,8 +38,8 @@ export default function HeaderNav() {
                     <div className="header-toggle-week">Week</div>
                 </div>
                 <div className="header-dropdown-group">
-                    <Dropdown label="Location" data={locationData}/>
-                    <Dropdown label="Coach" data={coachData}/>
+                    <Dropdown label="location" />
+                    <Dropdown label="coach" />
                 </div>
             </div>
             <div className="header-date-group">

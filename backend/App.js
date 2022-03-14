@@ -2,13 +2,10 @@ const express = require('express');
 const app = express();
 const dotenv = require('dotenv').config();
 const db = require('./config/db');
+const IndexRouter = require('./IndexRouter');
 
 db.connectDB();
-const dateRouter = require('./Date/DateRouter')
-const classRouter = require('./Class/ClassRouter')
-app.use('/date', dateRouter);
-app.use('/class', classRouter);
-
+IndexRouter.combinedRoute(app);
 
 const path = require('path');
 app.use(express.static(path.join(__dirname,'../frontend/build')));
