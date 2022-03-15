@@ -4,6 +4,10 @@
     box-sizing: border-box;
 }
 
+::-webkit-scrollbar {
+    display: none;
+}
+
 body {
     margin: 0;
     font-family: 'Lato', sans-serif;
@@ -30,9 +34,9 @@ h1 {
 /* dropdown menu */
 
 .dropdown-menu {
-    position: relative;
     cursor: default;
     cursor: pointer;
+    position: relative;
 }
 
 .dropdown-menu-list-item,
@@ -78,14 +82,14 @@ h1 {
 }
 
 .header-flex,
-.main-page-container {
+.main-flex {
     display: flex;
     justify-content: space-between;
     margin: 1em auto;
-    width: min(90%, 120rem);
+    width: min(95%, 120rem);
 }
 
-.header-container {
+.header-flex {
     position: sticky;
     top: 0px;
     z-index: 2;
@@ -93,20 +97,22 @@ h1 {
 
 .header-title,
 .header-nav,
-.navbar, 
+.sidebar, 
 .calendar {
     background: #00407b;
     box-shadow: 0 0 2rem 0.5rem rgba(0, 0, 0, 0.2);
 }
 
 .header-title,
-.navbar {
+.sidebar {
     padding: 1rem;
     width: 20%;
 }
 
 .header-title {
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .header-nav {
@@ -194,26 +200,37 @@ h1 {
     margin: 0 0.7em;
 }
 
-.calendar {
-    width: 79%;
-    padding: 2em;
+.calendar { 
+    height: 100%;
+    padding: 1em;
+    position: relative;
 }
 
-.calendar-head-group,
-.calendar-body {
-    margin: auto;
+.calendar-head-flex,
+.calendar-body-flex {
+    overflow: auto;
     display: flex;
 }
 
-.calendar-head-group {
-    height: 4rem;
+.calendar-head-sticky {
     position: sticky;
-    top: 5.3rem;
-    z-index: 1;
+    top: 5rem;
+    /* z-index: 2; */
+}
+
+.calendar-head-scroll {
+    height: 3rem;
+    overflow: auto;
+    /* overflow-x: hidden; */
+}
+
+.calendar-head-flex {
+    /* overflow: auto; */
+    width: 150em;
 }
 
 .calendar-head {
-    width: calc(94.5%/7);
+    width: 21rem;
 }
 
 .calendar-head-day,
@@ -226,8 +243,13 @@ h1 {
     margin-bottom: 0.2em;
 }
 
-.calendar-body {
-    /* position: relative; */
+.calendar-body-scroll {
+    overflow: auto;
+}
+
+.calendar-body-flex {
+    height: 130em;
+    width: 150em;
 }
 
 .calendar-head-empty,
@@ -256,7 +278,7 @@ h1 {
 
 .calendar-day {
     height: 130rem;
-    width: calc(94.5%/7);
+    width: 21rem;;
 }
 
 .calendar-quarter-hour {

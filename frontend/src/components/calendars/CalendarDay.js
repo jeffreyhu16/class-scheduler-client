@@ -1,6 +1,6 @@
 import React from 'react'
 import { DateTime } from 'luxon'
-import { dataContext } from '../contexts/dataContext'
+import { dataContext } from '../contexts/DataContext'
 import CalendarQuarterHour from './CalendarQuarterHour'
 
 export default function CalendarDay(props) {

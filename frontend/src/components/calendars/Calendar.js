@@ -1,11 +1,14 @@
 import React from 'react'
-import { glowContext } from '../contexts/glowContext'
+import { glowContext } from '../contexts/GlowContext'
+import { dataContext } from '../contexts/DataContext'
 import CalendarHead from './CalendarHead'
 import CalendarTime from './CalendarTime'
 import CalendarDay from './CalendarDay'
+import { ScrollSync, ScrollSyncPane } from 'react-scroll-sync'
 
 export default function Calendar() {
     
+    const { location, coach } = React.useContext(dataContext);
     const [ isGlow, setIsGlow ] = React.useState({ day: [], halfHour: [] });
 
     let i = 0;
@@ -17,20 +20,36 @@ export default function Calendar() {
         )
     });
 
+    const styles = {
+        width: coach === 'all' ? '100%' : '79%'
+    }
+
     return (
         <glowContext.Provider value={{ isGlow, setIsGlow }}>
-            <div className="calendar">
-                <div className="calendar-head-group">
-                    <div className="calendar-head-empty"></div>
-                    <CalendarHead />
-                </div>
-                <div className="calendar-body">
-                    <div className="calendar-time">
-                        <CalendarTime />
+            <ScrollSync>
+                <div className="calendar" style={styles}>
+                    <div className="calendar-head-sticky">
+                        <ScrollSyncPane>
+                            <div className="calendar-head-scroll">
+                                <div className="calendar-head-flex">
+                                    <div className="calendar-head-empty"></div>
+                                    <CalendarHead />
+                                </div>
+                            </div>
+                        </ScrollSyncPane>
                     </div>
-                    {calendarDays}
+                    <ScrollSyncPane>
+                        <div className="calendar-body-scroll">
+                            <div className="calendar-body-flex">
+                                <div className="calendar-time">
+                                    <CalendarTime />
+                                </div>
+                                {calendarDays}
+                            </div>
+                        </div>
+                    </ScrollSyncPane>
                 </div>
-            </div>
+            </ScrollSync>
         </glowContext.Provider>
     )
 }

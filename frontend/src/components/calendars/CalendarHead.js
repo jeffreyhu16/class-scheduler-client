@@ -1,7 +1,7 @@
 import React from 'react'
 import { DateTime } from 'luxon'
-import { dataContext } from '../contexts/dataContext'
-import { glowContext } from '../contexts/glowContext';
+import { dataContext } from '../contexts/DataContext'
+import { glowContext } from '../contexts/GlowContext';
 
 export default function CalendarHead() {
 

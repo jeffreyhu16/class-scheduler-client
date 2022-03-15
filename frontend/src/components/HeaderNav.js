@@ -2,7 +2,7 @@ import React from 'react'
 import { DateTime } from 'luxon'
 import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { dataContext } from './contexts/dataContext'
+import { dataContext } from './contexts/DataContext'
 import Dropdown from './Dropdown'
 
 export default function HeaderNav() {

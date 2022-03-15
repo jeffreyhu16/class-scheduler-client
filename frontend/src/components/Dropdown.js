@@ -9,7 +9,7 @@ export default function Dropdown(props) {
     const [ on, setOn ] = React.useState(false);
     const [ listItemData, setListItemData ] = React.useState();
     const [ activeArr, setActiveArr ] = React.useState([ false, true ]);
-
+    // change default location from all to camberwell //
     React.useEffect(() => {
         fetch(`/${label}`)
             .then(res => res.json())

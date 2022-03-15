@@ -1,15 +1,15 @@
 import React from 'react'
 import Calendar from './calendars/Calendar'
-import Navbar from './Navbar'
+import { dataContext } from './contexts/DataContext'
+import Sidebar from './Sidebar'
 
 export default function Main() {
 
+    const { location, coach } = React.useContext(dataContext);
     return (
-        <main>
-            <div className="main-page-container">
-                <Navbar/>
-                <Calendar/>
-            </div>
+        <main className="main-flex">
+            {coach !== 'all' && <Sidebar />}
+            <Calendar />
         </main>
     )
 }

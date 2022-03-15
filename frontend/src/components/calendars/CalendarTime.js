@@ -1,6 +1,6 @@
 import React from 'react'
 import { DateTime } from 'luxon'
-import { glowContext } from '../contexts/glowContext';
+import { glowContext } from '../contexts/GlowContext';
 
 export default function CalendarTime() {
     let i = 0

@@ -10,8 +10,8 @@ exports.getClasses = (req, res) => {
         'startTime.month': targetDay.month, 
         'startTime.day': targetDay.day,
     }
-    if (location !== 'undefined' && location !== 'all') dbQuery.location = location;
-    if (coach !== 'undefined' && coach !== 'all') dbQuery.coachName = coach;
+    if (location !== 'all') dbQuery.location = location;
+    if (coach !== 'all') dbQuery.coachName = coach;
 
     Class.find(dbQuery)
     .then(data => res.send(data))

@@ -1,10 +1,10 @@
 import React from 'react'
-import { dataContext } from './contexts/dataContext'
+import { dataContext } from './contexts/DataContext'
 
 export default function DropdownItem(props) {
     const { label, itemName, activeArr, setActiveArr, index } = props;
     const { setLocation, setCoach } = React.useContext(dataContext);
-
+    // location All is only available in Daily view //
     const itemStyles = {
         backgroundColor: activeArr[index] ? '#c9e5ff' : '#004b8f',
         color: activeArr[index] ? '#00182f' : '#fff'

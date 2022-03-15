@@ -1,13 +1,13 @@
 import React from 'react'
 import Header from './Header'
 import Main from './Main'
-import { dataContext } from './contexts/dataContext';
+import { dataContext } from './contexts/DataContext';
 
 export default function App() {
 
     const [ startOfWeek, setStartOfWeek ] = React.useState();
-    const [ location, setLocation ] = React.useState();
-    const [ coach, setCoach ] = React.useState();
+    const [ location, setLocation ] = React.useState('Camberwell');
+    const [ coach, setCoach ] = React.useState('all');
 
     React.useEffect(() => {
         fetch('/date/startOfWeek')
