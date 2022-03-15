@@ -35,6 +35,7 @@ h1 {
     cursor: pointer;
 }
 
+.dropdown-menu-list-item,
 .dropdown-menu-label {
     text-transform: capitalize;
 }

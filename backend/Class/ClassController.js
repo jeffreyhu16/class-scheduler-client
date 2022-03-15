@@ -4,14 +4,14 @@ const { DateTime } = require('luxon');
 exports.getClasses = (req, res) => {
     const { startOfWeek, day, location, coach } = req.query;
     const targetDay = DateTime.fromISO(startOfWeek).plus({ days: day - 1 });
-    
+
     const dbQuery = {
         'startTime.year': targetDay.year,
         'startTime.month': targetDay.month, 
         'startTime.day': targetDay.day,
     }
-    if (location) dbQuery.location = location;
-    if (coach) dbQuery.coach = coach;
+    if (location !== 'undefined' && location !== 'all') dbQuery.location = location;
+    if (coach !== 'undefined' && coach !== 'all') dbQuery.coachName = coach;
 
     Class.find(dbQuery)
     .then(data => res.send(data))

@@ -1,6 +1,6 @@
 import React from 'react'
 import { DateTime } from 'luxon'
-import { dataContext } from './contexts/dataContext'
+import { dataContext } from '../contexts/dataContext'
 import CalendarQuarterHour from './CalendarQuarterHour'
 
 export default function CalendarDay(props) {
@@ -23,7 +23,7 @@ export default function CalendarDay(props) {
     }// fetch location data and setCourtNo //
   
     let i = 0;
-    const calendarQuarterHourArr = [...Array(72)].map(() => {
+    const calendarQuarterHours = [...Array(72)].map(() => {
         return ( 
             <CalendarQuarterHour 
                 day={day} 
@@ -33,5 +33,5 @@ export default function CalendarDay(props) {
             />
         )
     }); // use courtNo to map through new [...Array(courtNo)] and return calendarQuarterHourArr(72) //
-    return <>{calendarQuarterHourArr}</>
+    return <>{calendarQuarterHours}</>
 }
