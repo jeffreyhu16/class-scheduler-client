@@ -24,7 +24,7 @@ export default function Dropdown(props) {
             return (
                 <DropdownItem 
                     label={label} 
-                    itemName={item.name}
+                    item={item}
                     activeArr={activeArr}
                     setActiveArr={setActiveArr}
                     index={i}

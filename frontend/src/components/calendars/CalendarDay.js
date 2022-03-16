@@ -1,7 +1,8 @@
 import React from 'react'
 import { DateTime } from 'luxon'
 import { dataContext } from '../contexts/DataContext'
-import CalendarQuarterHour from './CalendarQuarterHour'
+import CalendarCourt from './CalendarCourt';
+import CalendarQuarterHour from './CalendarQuarterHour';
 
 export default function CalendarDay(props) {
 
@@ -11,27 +12,50 @@ export default function CalendarDay(props) {
     // create state for CourtNo //
     React.useEffect(() => {
         if (startOfWeek) fetchClasses(startOfWeek, day, location, coach);
-    }, [startOfWeek, location, coach]);
+    }, [startOfWeek, location, coach]); // possible unnecessary //
 
     function fetchClasses(startOfWeek, day, location, coach) {
         const isoDate = DateTime.fromObject(startOfWeek).toISO();
         const uri = encodeURIComponent(isoDate);
-        fetch(`/class/classes?startOfWeek=${uri}&day=${day}&location=${location}&coach=${coach}`)
+        // if (location.name) location = location.name;
+        fetch(`/class/classes?startOfWeek=${uri}&day=${day}&location=${location.name}&coach=${coach.name}`)
         .then(res => res.json())
         .then(data => setClassData(data))
         .catch(err => console.log(err));
     }// fetch location data and setCourtNo //
-  
+
+    let j = location.numOfCourts;
+    const calendarCourts = [...Array(location.numOfCourts)].map(() => {
+        return (
+            <CalendarCourt 
+                courtNo={j--}
+                day={day} 
+                classData={classData}
+                fetchClasses={fetchClasses}
+            />
+        )
+    });
+
     let i = 0;
     const calendarQuarterHours = [...Array(72)].map(() => {
-        return ( 
-            <CalendarQuarterHour 
-                day={day} 
+        return (
+            <CalendarQuarterHour
+                day={day}
                 quarterHour={++i}
                 classData={classData}
                 fetchClasses={fetchClasses}
             />
         )
-    }); // use courtNo to map through new [...Array(courtNo)] and return calendarQuarterHourArr(72) //
-    return <>{calendarQuarterHours}</>
+    });
+
+    const styles = {
+        display: coach.name === 'all' ? 'flex' : 'block'
+    }
+
+    return (
+        <div className={`calendar-day day-${day}`} style={styles}>
+            {coach.name === 'all' && calendarCourts}
+            {coach.name !== 'all' && calendarQuarterHours}
+        </div>
+    )
 }

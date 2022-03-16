@@ -8,7 +8,7 @@ export default function Main() {
     const { location, coach } = React.useContext(dataContext);
     return (
         <main className="main-flex">
-            {coach !== 'all' && <Sidebar />}
+            {coach.name !== 'all' && <Sidebar />}
             <Calendar />
         </main>
     )

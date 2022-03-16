@@ -6,8 +6,8 @@ import { dataContext } from './contexts/DataContext';
 export default function App() {
 
     const [ startOfWeek, setStartOfWeek ] = React.useState();
-    const [ location, setLocation ] = React.useState('Camberwell');
-    const [ coach, setCoach ] = React.useState('all');
+    const [ location, setLocation ] = React.useState({ name: 'Camberwell', numOfCourts: 5 });
+    const [ coach, setCoach ] = React.useState({ name: 'all' });
 
     React.useEffect(() => {
         fetch('/date/startOfWeek')

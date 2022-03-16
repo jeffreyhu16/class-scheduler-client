@@ -9,8 +9,9 @@ exports.getClasses = (req, res) => {
         'startTime.year': targetDay.year,
         'startTime.month': targetDay.month, 
         'startTime.day': targetDay.day,
+        'location.name': location
     }
-    if (location !== 'all') dbQuery.location = location;
+    // if (location !== 'all') dbQuery['location.name'] = location;
     if (coach !== 'all') dbQuery.coachName = coach;
 
     Class.find(dbQuery)

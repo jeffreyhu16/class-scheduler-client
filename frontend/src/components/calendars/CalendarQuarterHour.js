@@ -16,7 +16,6 @@ export default function CalendarQuarterHour(props) {
     const startTimeTarget = React.useRef();
     const midTimeTarget = React.useRef();
     const endTimeTarget = React.useRef();
-    const halfHourIndex = Math.ceil(quarterHour / 2);
     
     React.useEffect(() => {
         if (classData) {
@@ -127,7 +126,7 @@ export default function CalendarQuarterHour(props) {
                             {classTimeObj.coachName}
                         </div  >
                         <div className="calendar-class-info-location">
-                            {classTimeObj.location}
+                            {classTimeObj.location.name}
                         </div>
                         <div className="calendar-class-info-class-period">
                             {startHour > 12 ? startHour - 12 : startHour}:
