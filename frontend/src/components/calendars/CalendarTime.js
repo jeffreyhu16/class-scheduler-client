@@ -12,10 +12,10 @@ export default function CalendarTime() {
         const newTime = time.plus({ minutes: 15 * i });
 
         const styles = {
-            textShadow: isGlow.halfHour[++i] ? '0 0 0.5rem #fff' : 'none',
-            opacity: isGlow.halfHour[i] ? 1 : 0
+            textShadow: isGlow.quarterHour[++i] ? '0 0 0.5rem #fff' : 'none',
+            opacity: isGlow.quarterHour[i] ? 1 : 0
         }
-
+        
         return (
             <div className={`calendar-time-quarter`} style={styles}>
                 {newTime.hour > 12 ? newTime.hour - 12 : newTime.hour}:

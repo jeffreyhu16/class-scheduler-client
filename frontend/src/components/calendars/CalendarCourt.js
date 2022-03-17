@@ -18,6 +18,7 @@ export default function CalendarCourt(props) {
         return (
             <CalendarQuarterHour
                 day={day}
+                court={courtNo}
                 quarterHour={++i}
                 classData={classCourtData}
                 fetchClasses={fetchClasses}

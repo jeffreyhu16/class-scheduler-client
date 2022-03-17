@@ -118,7 +118,7 @@ h1 {
 .header-nav {
     width: 79%;
     font-size: 1.25rem;
-    padding: 0.5em 1.2em 0.5em 1.7em;   
+    padding: 0.5em 1em 0.5em 1.2em;   
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -279,15 +279,23 @@ h1 {
 .calendar-day {
     height: 130rem;
     width: calc(98% / 7);
-    /* display: flex; */
+    border-right: 1px solid rgb(201,255,227,0.6);
 }
 
 .calendar-court {
     width: 20%; /* change to conditional render */
 }
 
+.calendar-court-number {
+    text-align: center;
+    text-shadow: 0 0 0.5rem #fff;
+    /* position: sticky;
+    top: 0; */
+}
+
 .calendar-quarter-hour {
     height: calc(100%/72);
+    
 }
 
 .calendar-quarter-hour:hover {

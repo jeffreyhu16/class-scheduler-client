@@ -9,7 +9,7 @@ import { ScrollSync, ScrollSyncPane } from 'react-scroll-sync'
 export default function Calendar() {
     
     const { location, coach } = React.useContext(dataContext);
-    const [ isGlow, setIsGlow ] = React.useState({ day: [], halfHour: [] });
+    const [ isGlow, setIsGlow ] = React.useState({ day: [], court: [], quarterHour: [] });
 
     let i = 0;
     let calendarDays = [...Array(7)].map(() => {
