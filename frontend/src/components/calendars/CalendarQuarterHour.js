@@ -74,8 +74,8 @@ export default function CalendarQuarterHour(props) {
         setIsGlow(prevIsGlow => {
             const newIsGlow = { ...prevIsGlow }
             newIsGlow.day[dayIndex] = boolean;
-            newIsGlow.court[courtIndex] = boolean;
             newIsGlow.quarterHour[quarterHourIndex] = boolean;
+            if (courtIndex) newIsGlow.court[courtIndex] = boolean;
             return newIsGlow;
         })
     }
@@ -122,7 +122,7 @@ export default function CalendarQuarterHour(props) {
                 onClick={toggleForm}
                 style={styles}
             >
-                {quarterHour === 1 && 
+                {court && quarterHour === 1 && 
                     <div className="calendar-court-number" style={courtStyles}>
                         Court {court}
                     </div>

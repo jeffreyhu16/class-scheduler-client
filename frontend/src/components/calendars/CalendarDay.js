@@ -49,7 +49,8 @@ export default function CalendarDay(props) {
     });
 
     const styles = {
-        display: coach.name === 'all' ? 'flex' : 'block'
+        display: coach.name === 'all' ? 'flex' : 'block',
+        'border-right': coach.name === 'all' ? '1px solid rgb(201,255,227,0.4)' : 'none'
     }
 
     return (

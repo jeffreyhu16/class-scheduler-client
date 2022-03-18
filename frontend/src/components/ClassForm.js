@@ -67,6 +67,13 @@ export default function ClassForm(props) {
             const min = parseInt(value.slice(value.length - 2));
             value = startDateTime.set({ hour: hour, minute: min }).toObject();
         }
+        if (name === 'name' || name === 'courtNo') {
+            setInputs(prevInputs => ({
+                ...prevInputs,
+                location: { ...prevInputs.location, [name]: value }
+            }));
+            return;
+        }
         setInputs(prevInputs => ({
             ...prevInputs,
             [name]: value
@@ -177,17 +184,30 @@ export default function ClassForm(props) {
                     style={{ outline: coachName ? 'none' : 'red auto 1px' }}
                 >
                 </input>
-                <label htmlFor="location"></label>
-                <input
-                    type="text"
-                    id="location"
-                    name="location"
-                    className="location"
-                    placeholder={classTimeTarget ? classTimeTarget.location : "Location"}
-                    onChange={handleChange}
-                    style={{ outline: location ? 'none' : 'red auto 1px' }}
-                >
-                </input>
+                <div className="form-location">
+                    <label htmlFor="location"></label>
+                    <input
+                        type="text"
+                        id="location"
+                        name="name"
+                        className="location"
+                        placeholder={classTimeTarget ? classTimeTarget.location.name : "Location"}
+                        onChange={handleChange}
+                        style={{ outline: location ? 'none' : 'red auto 1px' }}
+                    >
+                    </input>
+                    <label htmlFor="courtNo"></label>
+                    <input
+                        type="Numnber"
+                        id="courtNo"
+                        name="courtNo"
+                        className="courtNo"
+                        placeholder={classTimeTarget ? classTimeTarget.location.courtNo : "Court No."}
+                        onChange={handleChange}
+                        style={{ outline: location ? 'none' : 'red auto 1px' }}
+                    >
+                    </input>
+                </div>
                 <label htmlFor="note"></label>
                 <textarea
                     id="note"

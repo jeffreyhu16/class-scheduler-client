@@ -1,5 +1,6 @@
 const Class = require('./ClassModel');
 const { DateTime } = require('luxon');
+const csv = require('csvtojson');
 
 exports.getClasses = (req, res) => {
     const { startOfWeek, day, location, coach } = req.query;
@@ -21,6 +22,15 @@ exports.getClasses = (req, res) => {
 
 exports.setClass = (req, res) => {
     Class.create(req.body)
+    .then(result => {
+        console.log(result);
+        res.send(result);
+    })
+    .catch(err => console.log(err));
+}
+
+exports.setClasses = (req, res) => {
+    Class.insertMany(res.body)
     .then(result => {
         console.log(result);
         res.send(result);
