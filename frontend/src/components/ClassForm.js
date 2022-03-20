@@ -52,13 +52,14 @@ export default function ClassForm(props) {
 
     React.useEffect(() => {
         if (classTimeTarget) {
+            const { startTime, endTime, studentName, coachName, location, note } = classTimeTarget;
             setInputs({
-            startTime: classTimeTarget.startTime,
-            endTime: classTimeTarget.endTime,
-            studentName: classTimeTarget.studentName,
-            coachName: classTimeTarget.coachName,
-            location: classTimeTarget.location,
-            note: classTimeTarget.note  
+            startTime: startTime,
+            endTime: endTime,
+            studentName: studentName,
+            coachName: coachName,
+            location: location,
+            note: note  
             });
         }
     }, [classTimeTarget]);

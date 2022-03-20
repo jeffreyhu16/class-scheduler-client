@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
-const classSchema = mongoose.Schema({
+const classSchema = new Schema({
     startTime: {
         type: Object,
         required: true
@@ -9,25 +10,31 @@ const classSchema = mongoose.Schema({
         type: Object,
         required: true
     },
-    studentName: {
-        type: String,
-        required: true
-    },
-    coachName: {
-        type: String,
-        required: true
+    student: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Student',
+    }],
+    coach: {
+        type: Schema.Types.ObjectId,
+        ref: 'Coach',
     },
     location: {
-        type: Object,
-        required: true
+        id: {
+            type: Schema.Types.ObjectId,
+            ref: 'Loction',
+        },
+        courtNo: {
+            type: String,
+            required: true
+        }
     },
     note: {
         type: String,
     }
 },
-{
-    timestamps: true,
-});
+    {
+        timestamps: true,
+    });
 
 module.exports = mongoose.model('Class', classSchema);
 
