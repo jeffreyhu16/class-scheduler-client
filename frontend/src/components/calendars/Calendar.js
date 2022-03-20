@@ -8,7 +8,7 @@ import { ScrollSync, ScrollSyncPane } from 'react-scroll-sync'
 
 export default function Calendar() {
     
-    const { location, coach } = React.useContext(dataContext);
+    const { calendarView, location, coach } = React.useContext(dataContext);
     const [ isGlow, setIsGlow ] = React.useState({ day: [], court: [], quarterHour: [] });
 
     let i = 0;
@@ -16,12 +16,14 @@ export default function Calendar() {
         return <CalendarDay day={++i} />
     });
 
+    const wideview = calendarView === 'week' && coach.name === 'all';
+
     const calendarStyles = {
-        width: coach.name === 'all' ? '100%' : '79%'
+        width: wideview ? '100%' : '79%'
     }
 
     const flexStyles = {
-        width: coach.name === 'all' ? '180em' : '99%'
+        width: wideview ? '180em' : '99%'
     }
 
     return (
@@ -44,7 +46,7 @@ export default function Calendar() {
                                 <div className="calendar-time">
                                     <CalendarTime />
                                 </div>
-                                {calendarDays}
+                                {calendarView === 'week' ? calendarDays : <CalendarDay/>}
                             </div>
                         </div>
                     </ScrollSyncPane>

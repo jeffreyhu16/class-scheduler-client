@@ -2,23 +2,31 @@ import React from 'react'
 import { dataContext } from './contexts/DataContext'
 
 export default function DropdownItem(props) {
-    const { label, item, activeArr, setActiveArr, index } = props;
-    const { setLocation, setCoach } = React.useContext(dataContext);
+    const { label, item, active, setActive, index } = props;
+    const { setCalendarView, setLocation, setCoach } = React.useContext(dataContext);
     const [ on, setOn ] = React.useState([]);
     // location All is only available in Daily view //
     const itemStyles = {
-        backgroundColor: on[index] ? '#c9e5ff' : (activeArr[index] ? '#c9e5ff' : '#004b8f'),
-        color: on[index] ? '#00182f' : (activeArr[index] ? '#00182f' : '#fff')
+        backgroundColor: on[index] ? '#c9e5ff' : (active[label][index] ? '#c9e5ff' : '#004b8f'),
+        color: on[index] ? '#00182f' : (active[label][index] ? '#00182f' : '#fff')
     }
 
-    function handleClick(name, index) {
-        if (label === 'location') setLocation(name);
-        if (label === 'coach') setCoach(name);
+    function handleClick(item, index) {
+        if (label === 'location') {
+            if (item.name === 'all') {
+                setCalendarView('day');
+                setCoach({ name: 'all' });
+            } else 
+                setCalendarView('week');
+            setLocation(item);
+        };
+        if (label === 'coach') setCoach(item);
 
-        setActiveArr(prevActiveArr => {
-            const newActiveArr = [...prevActiveArr].fill(false);
-            newActiveArr[index] = true;
-            return newActiveArr;
+        setActive(prevActive => {
+            const newActive = { ...prevActive };
+            newActive[label].fill(false);
+            newActive[label][index] = true;
+            return newActive;
         })
     }
 

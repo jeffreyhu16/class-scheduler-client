@@ -7,34 +7,58 @@ import CalendarQuarterHour from './CalendarQuarterHour';
 export default function CalendarDay(props) {
 
     const { day } = props;
-    const { startOfWeek, location, coach } = React.useContext(dataContext);
+    const { calendarView, startOfWeek, location, locationData, coach } = React.useContext(dataContext);
     const [ classData, setClassData ] = React.useState();
+    
     // create state for CourtNo //
     React.useEffect(() => {
-        if (startOfWeek) fetchClasses(startOfWeek, day, location, coach);
-    }, [startOfWeek, location, coach]); // possible unnecessary //
+        if (startOfWeek && calendarView === 'week') fetchClasses('', startOfWeek, day, location, '', coach);
+    }, [calendarView, startOfWeek, location, coach]);
 
-    function fetchClasses(startOfWeek, day, location, coach) {
-        const isoDate = DateTime.fromObject(startOfWeek).toISO();
+    async function fetchClasses(currentDate, startOfWeek, day, location, courtNo, coach) {
+        const inputDate = currentDate ? currentDate : startOfWeek;
+        const isoDate = DateTime.fromObject(inputDate).toISO();
         const uri = encodeURIComponent(isoDate);
-        // if (location.name) location = location.name;
-        fetch(`/class/classes?startOfWeek=${uri}&day=${day}&location=${location.name}&coach=${coach.name}`)
-        .then(res => res.json())
-        .then(data => setClassData(data))
-        .catch(err => console.log(err));
-    }// fetch location data and setCourtNo //
+        let res;
+        if (startOfWeek) {
+            res = await fetch(`/class/classes?startOfWeek=${uri}&day=${day}&location=${location.name}&coach=${coach.name}`)
+        } else if (currentDate) {
+            res = await fetch(`/class/classes?currentDate=${uri}&location=${location.name}&courtNo=${courtNo}&coach=${coach.name}`)
+        }
+        res.json()
+            .then(data => setClassData(data))
+            .catch(err => console.log(err));
+    }
 
-    let j = location.numOfCourts;
-    const calendarCourts = [...Array(location.numOfCourts)].map(() => {
-        return (
-            <CalendarCourt 
-                courtNo={j--}
-                day={day} 
-                classData={classData}
-                fetchClasses={fetchClasses}
-            />
-        )
-    });
+    let calendarCourts = [];
+    if (locationData && location.name === 'all') {
+        for (let i = 0; i < locationData.length; i++) {
+            for (let j = locationData[i].numOfCourts; j > 0; j--) {
+                calendarCourts.push((
+                    <CalendarCourt
+                        location={locationData[i]}
+                        courtNo={j}
+                        fetchClasses={fetchClasses}
+                    />
+                ));
+            }
+        }
+    }
+
+    if (location.name !== 'all') {
+        let j = location.numOfCourts;
+        calendarCourts = [...Array(j)].map(() => {
+            return (
+                <CalendarCourt
+                    day={day}
+                    courtNo={j--}
+                    location={location}
+                    classData={classData}
+                    fetchClasses={fetchClasses}
+                />
+            )
+        });
+    }
 
     let i = 0;
     const calendarQuarterHours = [...Array(72)].map(() => {
@@ -48,15 +72,19 @@ export default function CalendarDay(props) {
         )
     });
 
+    const dayView = calendarView === 'day';
+    const coachAll = coach.name === 'all';
+    const locationAll = location.name === 'all';
+
     const styles = {
-        display: coach.name === 'all' ? 'flex' : 'block',
-        'border-right': coach.name === 'all' ? '1px solid rgb(201,255,227,0.4)' : 'none'
+        width: dayView ? '98%' : 'calc(98% / 7)',
+        display: dayView || coachAll ? 'flex' : 'block',
+        'border-right': !dayView && coachAll ? '1px solid rgb(201,255,227,0.4)' : 'none'
     }
 
     return (
         <div className={`calendar-day day-${day}`} style={styles}>
-            {coach.name === 'all' && calendarCourts}
-            {coach.name !== 'all' && calendarQuarterHours}
-        </div>
+            {!coachAll && !locationAll ? calendarQuarterHours : calendarCourts}
+        </div> // change logic for className //
     )
 }

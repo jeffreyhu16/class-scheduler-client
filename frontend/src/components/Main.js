@@ -5,10 +5,10 @@ import Sidebar from './Sidebar'
 
 export default function Main() {
 
-    const { location, coach } = React.useContext(dataContext);
+    const { calendarView, coach } = React.useContext(dataContext);
     return (
         <main className="main-flex">
-            {coach.name !== 'all' && <Sidebar />}
+            {(calendarView === 'day' || coach.name !== 'all') && <Sidebar />}
             <Calendar />
         </main>
     )

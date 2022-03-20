@@ -5,10 +5,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export default function Dropdown(props) {
 
-    const { label } = props;
+    const { label, active, setActive } = props;
     const [ on, setOn ] = React.useState(false);
     const [ listItemData, setListItemData ] = React.useState();
-    const [ activeArr, setActiveArr ] = React.useState([ false, true ]);
+    
     // change default location from all to camberwell //
     React.useEffect(() => {
         fetch(`/${label}`)
@@ -25,8 +25,8 @@ export default function Dropdown(props) {
                 <DropdownItem 
                     label={label} 
                     item={item}
-                    activeArr={activeArr}
-                    setActiveArr={setActiveArr}
+                    active={active}
+                    setActive={setActive}
                     index={i}
                 />
             )

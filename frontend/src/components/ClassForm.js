@@ -5,8 +5,8 @@ import { faMinus } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export default function ClassForm(props) {
-    const { day, quarterHour, toggleForm, fetchClasses, classTimeTarget } = props;
-    const { startOfWeek } = React.useContext(dataContext);
+    const { day, quarterHour, courtNo, toggleForm, fetchClasses, classTimeTarget } = props;
+    const { currentDate, startOfWeek, location, coach } = React.useContext(dataContext);
     const [ inputs, setInputs ] = React.useState({
         startTime: '.',
         endTime: '.',
@@ -15,19 +15,22 @@ export default function ClassForm(props) {
         location: '.',
         note: ''
     }); // still an uncontrolled component //
-    const { startTime, endTime, studentName, coachName, location } = inputs;
+    const { startTime, endTime, studentName, coachName } = inputs;
     let dateObj, startDateTime, endDateTime, startTimeString, endTimeString
+    const hour = Math.floor((quarterHour - 1) / 4 + 6);
+    const min = (quarterHour - 1) % 4 * 15;
 
-    if (startOfWeek) {
-        const hour = Math.floor((quarterHour - 1) / 4 + 6);
-        const min = (quarterHour - 1) % 4 * 15;
-
+    if (startOfWeek && day) {
         dateObj = DateTime.fromObject(startOfWeek);
         startDateTime = dateObj.plus({ days: day - 1, hours: hour, minutes: min });
         endDateTime = dateObj.plus({ days: day - 1, hours: hour + 1, minutes: min });
-        startTimeString = startDateTime.toLocaleString(DateTime.TIME_SIMPLE);
-        endTimeString = endDateTime.toLocaleString(DateTime.TIME_SIMPLE);
+    } else if (currentDate && !day) {
+        dateObj = DateTime.fromObject(currentDate);
+        startDateTime = dateObj.set({ hour: hour, minute: min });
+        endDateTime = dateObj.set({ hour: hour + 1, minute: min });
     }
+    startTimeString = startDateTime.toLocaleString(DateTime.TIME_SIMPLE);
+    endTimeString = endDateTime.toLocaleString(DateTime.TIME_SIMPLE);
 
     if (classTimeTarget) {
         startDateTime = DateTime.fromObject(classTimeTarget.startTime);
@@ -95,7 +98,8 @@ export default function ClassForm(props) {
             })
         })
         .then(() => {
-            fetchClasses(startOfWeek, day);
+            if (day) fetchClasses('', startOfWeek, day, location, '', coach);
+            else fetchClasses(currentDate, '', '', location, courtNo, coach);
             toggleForm()
         })
         .catch(err => console.log(err));
@@ -116,7 +120,8 @@ export default function ClassForm(props) {
                 })
             })
             .then(() => {
-                fetchClasses(startOfWeek, day);
+                if (day) fetchClasses('', startOfWeek, day, location, '', coach);
+                else fetchClasses(currentDate, '', '', location, courtNo, coach);
                 toggleForm()
             })
             .catch(err => console.log(err));
@@ -127,7 +132,8 @@ export default function ClassForm(props) {
                 body: JSON.stringify(inputs)
             })
             .then(() => {
-                fetchClasses(startOfWeek, day);
+                if (day) fetchClasses('', startOfWeek, day, location, '', coach);
+                else fetchClasses(currentDate, '', '', location, courtNo, coach);
                 toggleForm()
             })
             .catch(err => console.log(err));
@@ -193,7 +199,7 @@ export default function ClassForm(props) {
                         className="location"
                         placeholder={classTimeTarget ? classTimeTarget.location.name : "Location"}
                         onChange={handleChange}
-                        style={{ outline: location ? 'none' : 'red auto 1px' }}
+                        style={{ outline: inputs.location ? 'none' : 'red auto 1px' }}
                     >
                     </input>
                     <label htmlFor="courtNo"></label>
@@ -204,7 +210,7 @@ export default function ClassForm(props) {
                         className="courtNo"
                         placeholder={classTimeTarget ? classTimeTarget.location.courtNo : "Court No."}
                         onChange={handleChange}
-                        style={{ outline: location ? 'none' : 'red auto 1px' }}
+                        style={{ outline: inputs.location ? 'none' : 'red auto 1px' }}
                     >
                     </input>
                 </div>

@@ -7,26 +7,46 @@ import Dropdown from './Dropdown'
 
 export default function HeaderNav() {
 
-    const { startOfWeek, setStartOfWeek } = React.useContext(dataContext);
-    let day1, day7, month, year, nextWeek, lastWeek;
+    const { calendarView, setCalendarView, currentDate,setCurrentDate, startOfWeek, setStartOfWeek, setLocation, setCoach } = React.useContext(dataContext);
+    const [ active, setActive ] = React.useState({ location: [ , , true ], coach: [ , , true ] });
+    let currentDay, day1, day7, month, year, nextDay, prevDay, nextWeek, prevWeek;
 
-    if (startOfWeek) {
+    if (currentDate && startOfWeek) {
+        const currentDateTime = DateTime.fromObject(currentDate);
         const mon = DateTime.fromObject(startOfWeek);
         const sun = mon.plus({ days: 6 });
+        currentDay = currentDateTime.day;
         day1 = mon.day;
         day7 = sun.day;
         month = mon.monthLong;
         year = mon.year;
 
+        nextDay = currentDateTime.plus({ days: 1 }).toObject();
+        prevDay = currentDateTime.minus({ days: 1 }).toObject();
         nextWeek = mon.plus({ days: 7 }).toObject();
-        lastWeek = mon.minus({ days: 7 }).toObject();
+        prevWeek = mon.minus({ days: 7 }).toObject();
     }
 
-    function shiftWeek(direction) {
-        if (direction === 'next') {
-            setStartOfWeek(nextWeek);
+    function toggleView(view) {
+        setCalendarView(view);
+        setCoach({ name: 'all' });
+        if (view === 'week') {
+            setLocation({ name: 'Camberwell', numOfCourts: 5 });
+            setActive({ location: [ false, false, true ], coach: [ false, true ] });
+        }
+        else {
+            setLocation({ name: 'all' });
+            setActive({ location: [ false, true ], coach: [ false, true ] });
+        }
+    }
+
+    function shiftTime(direction) {
+        if (calendarView === 'week') {
+            if (direction === 'next') setStartOfWeek(nextWeek);
+            else setStartOfWeek(prevWeek);
         } else {
-            setStartOfWeek(lastWeek);
+            if (direction === 'next') setCurrentDate(nextDay);
+            else setCurrentDate(prevDay);
         }
     }
 
@@ -34,28 +54,38 @@ export default function HeaderNav() {
         <div className="header-nav">
             <div className="header-filter-group">
                 <div className="header-toggle-group">
-                    <div className="header-toggle-day">Day</div>
-                    <div className="header-toggle-week">Week</div>
+                    <div className="header-toggle-day" onClick={() => toggleView('day')}>Day</div>
+                    <div className="header-toggle-week" onClick={() => toggleView('week')}>Week</div>
                 </div>
                 <div className="header-dropdown-group">
-                    <Dropdown label="location" />
-                    <Dropdown label="coach" />
+                    <Dropdown
+                        label="location"
+                        active={active}
+                        setActive={setActive}
+                    />
+                    <Dropdown
+                        label="coach"
+                        active={active}
+                        setActive={setActive}
+                    />
                 </div>
             </div>
             <div className="header-date-group">
                 <div className="header-date">
-                    <div className="header-date-day">{day1} - {day7}</div>
+                    <div className="header-date-day">
+                        {calendarView === 'week' ? `${day1} - ${day7}` : currentDay}
+                    </div>
                     <div className="header-date-month">{month}</div>
                     <div className="header-date-year">{year}</div>
                 </div>
                 <div className="toggle-period">
-                    <div className="icon-angle-left-container" onClick={() => shiftWeek('prev')}>
+                    <div className="icon-angle-left-container" onClick={() => shiftTime('prev')}>
                         <FontAwesomeIcon
                             icon={faAngleLeft}
                             className="icon-angle-left"
                         />
                     </div>
-                    <div className="icon-angle-right-container" onClick={() => shiftWeek('next')}>
+                    <div className="icon-angle-right-container" onClick={() => shiftTime('next')}>
                         <FontAwesomeIcon
                             icon={faAngleRight}
                             className="icon-angle-right"

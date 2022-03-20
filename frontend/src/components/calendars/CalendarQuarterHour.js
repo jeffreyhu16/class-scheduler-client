@@ -4,7 +4,7 @@ import ClassForm from '../ClassForm'
 import { glowContext } from '../contexts/GlowContext';
 
 export default function CalendarQuarterHour(props) {
-    const { classData, day, court, quarterHour, fetchClasses } = props;
+    const { classData, day, location, courtNo, quarterHour, fetchClasses } = props;
     const { isGlow, setIsGlow } = React.useContext(glowContext);
     const [ isShow, setIsShow ] = React.useState(false);
     const [ isClassTime, setIsClassTime ] = React.useState({
@@ -73,11 +73,11 @@ export default function CalendarQuarterHour(props) {
     function handleOnMouse(dayIndex, courtIndex, quarterHourIndex, boolean) {
         setIsGlow(prevIsGlow => {
             const newIsGlow = { ...prevIsGlow }
-            newIsGlow.day[dayIndex] = boolean;
-            newIsGlow.quarterHour[quarterHourIndex] = boolean;
+            if (dayIndex) newIsGlow.day[dayIndex] = boolean;
             if (courtIndex) newIsGlow.court[courtIndex] = boolean;
+            newIsGlow.quarterHour[quarterHourIndex] = boolean;
             return newIsGlow;
-        })
+        }) // fix for daily view //
     }
 
     let isFree = true;
@@ -95,9 +95,7 @@ export default function CalendarQuarterHour(props) {
         borderRight: isFree ? borderDefault : borderActive
     }
 
-    const courtStyles = {
-        opacity: isGlow.day[day] && isGlow.court[court] ? '1' : '0'
-    }
+    
 
     let classTimeObj, startHour, startMin, endHour, endMin;
     if (isStartTime) {
@@ -116,17 +114,16 @@ export default function CalendarQuarterHour(props) {
     return (
         <>
             <div
-                onMouseEnter={() => handleOnMouse(day, court, quarterHour, true)}
-                onMouseLeave={() => handleOnMouse(day, court, quarterHour, false)}
-                className={`calendar-quarter-hour day-${day} quarter-hour-${quarterHour}`}
+                onMouseEnter={() => handleOnMouse(day, courtNo, quarterHour, true)}
+                onMouseLeave={() => handleOnMouse(day, courtNo, quarterHour, false)}
+                className={
+                    day ? 
+                    `calendar-quarter-hour day-${day} quarter-hour-${quarterHour}`:
+                    `calendar-quarter-hour quarter-hour-${quarterHour}` 
+                }
                 onClick={toggleForm}
                 style={styles}
             >
-                {court && quarterHour === 1 && 
-                    <div className="calendar-court-number" style={courtStyles}>
-                        Court {court}
-                    </div>
-                }
                 {isStartTime &&
                     <div className="calendar-class-info">
                         <div className="calendar-class-info-student-name">
@@ -151,6 +148,7 @@ export default function CalendarQuarterHour(props) {
                 <ClassForm
                     day={day}
                     quarterHour={quarterHour}
+                    courtNo={courtNo}
                     toggleForm={toggleForm}
                     fetchClasses={fetchClasses}
                     classTimeTarget={classTimeTarget}

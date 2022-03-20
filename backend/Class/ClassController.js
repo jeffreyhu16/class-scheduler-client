@@ -3,16 +3,20 @@ const { DateTime } = require('luxon');
 const csv = require('csvtojson');
 
 exports.getClasses = (req, res) => {
-    const { startOfWeek, day, location, coach } = req.query;
-    const targetDay = DateTime.fromISO(startOfWeek).plus({ days: day - 1 });
-
+    const { currentDate, startOfWeek, day, location, courtNo, coach } = req.query;
+    let targetDay;
+    if (currentDate) 
+        targetDay = DateTime.fromISO(currentDate);
+    else 
+        targetDay = DateTime.fromISO(startOfWeek).plus({ days: day - 1 });
+    
     const dbQuery = {
         'startTime.year': targetDay.year,
         'startTime.month': targetDay.month, 
         'startTime.day': targetDay.day,
-        'location.name': location
     }
-    // if (location !== 'all') dbQuery['location.name'] = location;
+    if (location !== 'all') dbQuery['location.name'] = location;
+    if (courtNo) dbQuery['location.courtNo'] = courtNo;
     if (coach !== 'all') dbQuery.coachName = coach;
 
     Class.find(dbQuery)
