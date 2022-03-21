@@ -6,9 +6,12 @@ import Sidebar from './Sidebar'
 export default function Main() {
 
     const { calendarView, coach } = React.useContext(dataContext);
+
+    const dayView = calendarView === 'day';
+    const coachAll = coach.name === 'all';
     return (
         <main className="main-flex">
-            {(calendarView === 'day' || coach.name !== 'all') && <Sidebar />}
+            {(dayView || !coachAll) && <Sidebar />}
             <Calendar />
         </main>
     )

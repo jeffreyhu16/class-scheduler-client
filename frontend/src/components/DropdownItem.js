@@ -7,8 +7,8 @@ export default function DropdownItem(props) {
     const [ on, setOn ] = React.useState([]);
     // location All is only available in Daily view //
     const itemStyles = {
-        backgroundColor: on[index] ? '#c9e5ff' : (active[label][index] ? '#c9e5ff' : '#004b8f'),
-        color: on[index] ? '#00182f' : (active[label][index] ? '#00182f' : '#fff')
+        backgroundColor: on[index] ? '#c9e5ff' : ( active[label][index] ? '#c9e5ff' : '#004b8f' ),
+        color: on[index] ? '#00182f' : ( active[label][index] ? '#00182f' : '#fff' )
     }
 
     function handleClick(item, index) {

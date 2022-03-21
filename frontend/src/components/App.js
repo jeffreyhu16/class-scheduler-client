@@ -9,6 +9,7 @@ export default function App() {
     const [ startOfWeek, setStartOfWeek ] = React.useState();
     const [ currentDate, setCurrentDate ] = React.useState();
     const [ locationData, setLocationData ] = React.useState();
+    const [ coachData, setCoachData ] = React.useState();
     const [ location, setLocation ] = React.useState({ name: 'Camberwell', numOfCourts: 5 });
     const [ coach, setCoach ] = React.useState({ name: 'Tim' });
 
@@ -16,12 +17,20 @@ export default function App() {
         Promise.all([
             fetch('/date/currentDate'),
             fetch('/date/startOfWeek'),
-            fetch('/location')
+            fetch('/location'),
+            fetch('/coach')
         ])
-        .then(([ res1, res2, res3 ]) => {
+        .then(([ res1, res2, res3, res4 ]) => {
             res1.json().then(data => setCurrentDate(data));
             res2.json().then(data => setStartOfWeek(data));
-            res3.json().then(data => setLocationData(data));
+            res3.json().then(data => {
+                setLocationData([{ name: 'all' }, ...data ]);
+                setLocation(data[0]);
+            });
+            res4.json().then(data => {
+                setCoachData([{ name: 'all' }, ...data ]);
+                setCoach(data[0]);
+            });
         })
         .catch(err => console.log(err));
     }, []); 
@@ -33,7 +42,7 @@ export default function App() {
             currentDate,
             setCurrentDate,
             locationData,
-            setLocationData, 
+            coachData,
             startOfWeek, 
             setStartOfWeek,
             location,

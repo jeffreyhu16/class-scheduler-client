@@ -41,14 +41,14 @@ export default function ClassForm(props) {
     }
 
     React.useEffect(() => {
-        if (startOfWeek) {
+        if (startOfWeek || currentDate) {
             setInputs(prevInputs => ({
             ...prevInputs,
             startTime: startDateTime.toObject(),
             endTime: endDateTime.toObject()
             }));
         }
-    }, [startOfWeek]); // check why using startDateTime will cause infinite re-render //
+    }, [startOfWeek, currentDate]); // check why using startDateTime will cause infinite re-render //
 
     React.useEffect(() => {
         if (classTimeTarget) {

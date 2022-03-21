@@ -22,12 +22,16 @@ export default function CalendarDay(props) {
         let res;
         if (startOfWeek) {
             res = await fetch(`/class/classes?startOfWeek=${uri}&day=${day}&location=${location.name}&coach=${coach.name}`)
+            await res.json()
+            .then(data => {setClassData(data); console.log(data)})
+            .catch(err => console.log(err));
         } else if (currentDate) {
             res = await fetch(`/class/classes?currentDate=${uri}&location=${location.name}&courtNo=${courtNo}&coach=${coach.name}`)
-        }
-        res.json()
+            await res.json()
             .then(data => setClassData(data))
             .catch(err => console.log(err));
+        }
+        
     }
 
     let calendarCourts = [];
@@ -79,7 +83,7 @@ export default function CalendarDay(props) {
     const styles = {
         width: dayView ? '98%' : 'calc(98% / 7)',
         display: dayView || coachAll ? 'flex' : 'block',
-        'border-right': !dayView && coachAll ? '1px solid rgb(201,255,227,0.4)' : 'none'
+        borderRight: !dayView && coachAll ? '1px solid rgb(201,255,227,0.4)' : 'none'
     }
 
     return (

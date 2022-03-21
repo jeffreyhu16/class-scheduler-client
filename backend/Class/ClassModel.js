@@ -21,7 +21,7 @@ const classSchema = new Schema({
     location: {
         id: {
             type: Schema.Types.ObjectId,
-            ref: 'Loction',
+            ref: 'Location',
         },
         courtNo: {
             type: String,

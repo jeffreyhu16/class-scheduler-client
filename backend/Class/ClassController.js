@@ -3,26 +3,30 @@ const Student = require('../Student/StudentModel');
 const Coach = require('../Coach/CoachModel');
 const Location = require('../Location/LocationModel');
 const { DateTime } = require('luxon');
-const csv = require('csvtojson');
 
-exports.getClasses = (req, res) => {
+exports.getClasses = async (req, res) => {
     const { currentDate, startOfWeek, day, location, courtNo, coach } = req.query;
+    const locationDoc = await Location.findOne({ name: location });
+    const coachDoc = await Coach.findOne({ name: coach });
     let targetDay;
     if (currentDate)
         targetDay = DateTime.fromISO(currentDate);
     else
         targetDay = DateTime.fromISO(startOfWeek).plus({ days: day - 1 });
-
+    
     const dbQuery = {
         'startTime.year': targetDay.year,
         'startTime.month': targetDay.month,
         'startTime.day': targetDay.day,
     }
-    if (location !== 'all') dbQuery['location.name'] = location;
+    if (location !== 'all') dbQuery['location.id'] = locationDoc;
     if (courtNo) dbQuery['location.courtNo'] = courtNo;
-    if (coach !== 'all') dbQuery.coachName = coach;
+    if (coach !== 'all') dbQuery.coach = coachDoc;
 
     Class.find(dbQuery)
+        .populate('student', 'name')
+        .populate('coach', 'name')
+        .populate('location.id', 'name')
         .then(data => res.send(data))
         .catch(err => console.log(err));
 }
@@ -39,11 +43,11 @@ exports.setClass = async (req, res) => {
         location: { courtNo: location.courtNo },
         note
     }).then(lesson => {
-        lesson.student.push(student.id);
-        lesson.coach = coach.id;
-        lesson.location.id = court.id;
+        lesson.student.push(student);
+        lesson.coach = coach;
+        lesson.location.id = court;
         lesson.save().catch(err => console.log(err));
-    })
+    }).then(() => res.send('ok'));
 }
 
 exports.setClasses = (req, res) => {

@@ -7,7 +7,7 @@ import Dropdown from './Dropdown'
 
 export default function HeaderNav() {
 
-    const { calendarView, setCalendarView, currentDate,setCurrentDate, startOfWeek, setStartOfWeek, setLocation, setCoach } = React.useContext(dataContext);
+    const { calendarView, setCalendarView, currentDate,setCurrentDate, startOfWeek, setStartOfWeek, locationData,setLocation, coachData, setCoach } = React.useContext(dataContext);
     const [ active, setActive ] = React.useState({ location: [ , , true ], coach: [ , , true ] });
     let currentDay, day1, day7, month, year, nextDay, prevDay, nextWeek, prevWeek;
 
@@ -60,11 +60,13 @@ export default function HeaderNav() {
                 <div className="header-dropdown-group">
                     <Dropdown
                         label="location"
+                        listData={locationData}
                         active={active}
                         setActive={setActive}
                     />
                     <Dropdown
                         label="coach"
+                        listData={coachData}
                         active={active}
                         setActive={setActive}
                     />
