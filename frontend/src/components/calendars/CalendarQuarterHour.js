@@ -4,7 +4,7 @@ import ClassForm from '../ClassForm'
 import { glowContext } from '../contexts/GlowContext';
 
 export default function CalendarQuarterHour(props) {
-    const { classData, day, location, courtNo, quarterHour, fetchClasses } = props;
+    const { classData, day, courtNo, quarterHour, fetchClasses } = props;
     const { isGlow, setIsGlow } = React.useContext(glowContext);
     const [ isShow, setIsShow ] = React.useState(false);
     const [ isClassTime, setIsClassTime ] = React.useState({
@@ -133,7 +133,7 @@ export default function CalendarQuarterHour(props) {
                             {classTimeObj.coach.name}
                         </div  >
                         <div className="calendar-class-info-location">
-                            {classTimeObj.location.id.name}
+                            {classTimeObj.location._id.name}
                         </div>
                         <div className="calendar-class-info-class-period">
                             {startHour > 12 ? startHour - 12 : startHour}:

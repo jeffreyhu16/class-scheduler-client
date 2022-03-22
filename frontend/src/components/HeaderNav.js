@@ -8,7 +8,7 @@ import Dropdown from './Dropdown'
 export default function HeaderNav() {
 
     const { calendarView, setCalendarView, currentDate,setCurrentDate, startOfWeek, setStartOfWeek, locationData,setLocation, coachData, setCoach } = React.useContext(dataContext);
-    const [ active, setActive ] = React.useState({ location: [ , , true ], coach: [ , , true ] });
+    const [ active, setActive ] = React.useState({ view: [ , true], location: [ , , true ], coach: [ , , true ] });
     let currentDay, day1, day7, month, year, nextDay, prevDay, nextWeek, prevWeek;
 
     if (currentDate && startOfWeek) {
@@ -32,11 +32,11 @@ export default function HeaderNav() {
         setCoach({ name: 'all' });
         if (view === 'week') {
             setLocation({ name: 'Camberwell', numOfCourts: 5 });
-            setActive({ location: [ false, false, true ], coach: [ false, true ] });
+            setActive({ view: [ false, true ], location: [ false, false, true ], coach: [ false, true ] });
         }
         else {
             setLocation({ name: 'all' });
-            setActive({ location: [ false, true ], coach: [ false, true ] });
+            setActive({ view: [ true, false ], location: [ false, true ], coach: [ false, true ] });
         }
     }
 
@@ -50,12 +50,37 @@ export default function HeaderNav() {
         }
     }
 
+    const activeShadow = '0 0 1rem 0 rgba(255, 255, 255, 0.4)';
+    const defaultShadow = '0 0 1rem 0 rgba(0, 0, 0, 0.3)';
+    const dayStyles = {
+        backgroundColor: active.view[0] ? '#c9e5ff' : '#004b8f',
+        color: active.view[0] ? '#00182f' : '#fff',
+        boxShadow: active.view[0] ? activeShadow : defaultShadow
+    }
+    const weekStyles = {
+        backgroundColor: active.view[1] ? '#c9e5ff' : '#004b8f',
+        color: active.view[1] ? '#00182f' : '#fff',
+        boxShadow: active.view[1] ? activeShadow : defaultShadow
+    }
+
     return (
         <div className="header-nav">
             <div className="header-filter-group">
                 <div className="header-toggle-group">
-                    <div className="header-toggle-day" onClick={() => toggleView('day')}>Day</div>
-                    <div className="header-toggle-week" onClick={() => toggleView('week')}>Week</div>
+                    <div 
+                        className="header-toggle-day" 
+                        onClick={() => toggleView('day')}
+                        style={dayStyles}
+                    >
+                        Day
+                    </div>
+                    <div 
+                        className="header-toggle-week" 
+                        onClick={() => toggleView('week')}
+                        style={weekStyles}
+                    >
+                        Week
+                    </div>
                 </div>
                 <div className="header-dropdown-group">
                     <Dropdown

@@ -19,7 +19,7 @@ const classSchema = new Schema({
         ref: 'Coach',
     },
     location: {
-        id: {
+        _id: {
             type: Schema.Types.ObjectId,
             ref: 'Location',
         },

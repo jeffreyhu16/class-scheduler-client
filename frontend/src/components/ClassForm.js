@@ -52,13 +52,13 @@ export default function ClassForm(props) {
 
     React.useEffect(() => {
         if (classTimeTarget) {
-            const { startTime, endTime, studentName, coachName, location, note } = classTimeTarget;
+            const { startTime, endTime, student, coach, location, note } = classTimeTarget;
             setInputs({
             startTime: startTime,
             endTime: endTime,
-            studentName: studentName,
-            coachName: coachName,
-            location: location,
+            studentName: student[0].name,
+            coachName: coach.name,
+            location: { name: location._id.name, courtNo: location.courtNo },
             note: note  
             });
         }
@@ -95,12 +95,12 @@ export default function ClassForm(props) {
             method: 'delete',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                id: classTimeTarget._id
+                _id: classTimeTarget._id
             })
         })
         .then(() => {
-            if (day) fetchClasses('', startOfWeek, day, location, '', coach);
-            else fetchClasses(currentDate, '', '', location, courtNo, coach);
+            if (day) fetchClasses(null, startOfWeek, day, location, null, coach);
+            else fetchClasses(currentDate, null, null, location, courtNo, coach);
             toggleForm()
         })
         .catch(err => console.log(err));
@@ -112,29 +112,38 @@ export default function ClassForm(props) {
             if (value === '.') return
         }
         if (classTimeTarget) {
+            console.log('classTimeTarget', classTimeTarget)
             fetch('/class', {
                 method: 'put',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     ...inputs,
-                    id: classTimeTarget._id
+                    _id: classTimeTarget._id
                 })
             })
-            .then(() => {
-                if (day) fetchClasses('', startOfWeek, day, location, '', coach);
-                else fetchClasses(currentDate, '', '', location, courtNo, coach);
+            .then(res => {
+                // if (day) fetchClasses(null, startOfWeek, day, location, null, coach);
+                // else fetchClasses(currentDate, null, null, location, courtNo, coach);
+                res.json();
                 toggleForm()
             })
             .catch(err => console.log(err));
+            console.log('after put...')
         } else {
             fetch('/class', {
                 method: 'post',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(inputs)
             })
-            .then(() => {
-                if (day) fetchClasses('', startOfWeek, day, location, '', coach);
-                else fetchClasses(currentDate, '', '', location, courtNo, coach);
+            .then(res => {
+                res.json(); //cannot receive //
+                // if (day) 
+                //     fetchClasses('', startOfWeek, day, location, '', coach);
+                // else 
+                //     fetchClasses(currentDate, '', '', location, courtNo, coach);  
+            })
+            .then(data => {
+                console.log(data)
                 toggleForm()
             })
             .catch(err => console.log(err));
@@ -175,7 +184,7 @@ export default function ClassForm(props) {
                     id="studentName"
                     name="studentName"
                     className="studentName"
-                    placeholder={classTimeTarget ? classTimeTarget.studentName : "Student Name"}
+                    placeholder={classTimeTarget ? classTimeTarget.student[0].name : "Student Name"}
                     onChange={handleChange}
                     style={{ outline: studentName ? 'none' : 'red auto 1px' }}
                 >
@@ -186,7 +195,7 @@ export default function ClassForm(props) {
                     id="coachName"
                     name="coachName"
                     className="coachName"
-                    placeholder={classTimeTarget ? classTimeTarget.coachName : "Coach Name"}
+                    placeholder={classTimeTarget ? classTimeTarget.coach.name : "Coach Name"}
                     onChange={handleChange}
                     style={{ outline: coachName ? 'none' : 'red auto 1px' }}
                 >
@@ -198,7 +207,7 @@ export default function ClassForm(props) {
                         id="location"
                         name="name"
                         className="location"
-                        placeholder={classTimeTarget ? classTimeTarget.location.name : "Location"}
+                        placeholder={classTimeTarget ? classTimeTarget.location._id.name : "Location"}
                         onChange={handleChange}
                         style={{ outline: inputs.location ? 'none' : 'red auto 1px' }}
                     >

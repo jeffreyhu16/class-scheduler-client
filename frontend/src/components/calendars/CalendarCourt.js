@@ -15,7 +15,7 @@ export default function CalendarCourt(props) {
     
     React.useEffect(() => {
         if (currentDate && !day) {
-            fetchClasses(currentDate, '', '', location, courtNo, coach);
+            fetchClasses(currentDate, null, null, location, courtNo, coach);
         }
     }, [calendarView, currentDate, location, coach]); // double check and limit rerenders //
 
