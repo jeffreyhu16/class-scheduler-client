@@ -7,18 +7,17 @@ export default function CalendarCourt(props) {
     const { calendarView, currentDate, coach } = React.useContext(dataContext);
 
     let classCourtData;
-    if (classData && day) {
+    if (day) {
         classCourtData = classData.filter(data => {
-            return data.location.courtNo === courtNo
+            return data.location.courtNo == courtNo; // not sure why int data types are different //
+        });
+        console.log(classCourtData);
+    } else {
+        classCourtData = classData.filter(data => {
+            return data.location.name === location.name && data.location.courtNo == courtNo;
         });
     }
     
-    React.useEffect(() => {
-        if (currentDate && !day) {
-            fetchClasses(currentDate, null, null, location, courtNo, coach);
-        }
-    }, [calendarView, currentDate, location, coach]); // double check and limit rerenders //
-
     let i = 0;
     const calendarQuarterHours = [...Array(72)].map(() => {
         return (
@@ -27,7 +26,7 @@ export default function CalendarCourt(props) {
                 location={location}
                 courtNo={courtNo}
                 quarterHour={++i}
-                classData={classData && day ? classCourtData : classData}
+                classData={classCourtData}
                 fetchClasses={fetchClasses}
             />
         )

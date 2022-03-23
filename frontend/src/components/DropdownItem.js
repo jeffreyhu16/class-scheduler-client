@@ -16,8 +16,12 @@ export default function DropdownItem(props) {
             if (item.name === 'all') {
                 setCalendarView('day');
                 setCoach({ name: 'all' });
+                setActive(prevActive => ({
+                    ...prevActive, 
+                    view: [ true, false ]
+                }));
             } else 
-                setCalendarView('week');
+                setCalendarView('week'); 
             setLocation(item);
         };
         if (label === 'coach') setCoach(item);

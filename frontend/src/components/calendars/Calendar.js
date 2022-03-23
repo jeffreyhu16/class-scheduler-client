@@ -17,20 +17,26 @@ export default function Calendar() {
     });
 
     const wideview = calendarView === 'week' && coach.name === 'all';
+    const camberwell = location.name === 'Camberwell';
 
     const calendarStyles = {
         width: wideview ? '100%' : '79%'
     }
 
     const flexStyles = {
-        width: wideview ? '180em' : '99%'
+        width: wideview && camberwell ? '180em' : '99%'
     }
+
+    // function transformScroll(e) {
+    //     e.currentTarget.scrollLeft += e.deltaY;
+    //     e.preventDefault();
+    // }
 
     return (
         <glowContext.Provider value={{ isGlow, setIsGlow }}>
             <ScrollSync>
                 <div className="calendar" style={calendarStyles}>
-                    <div className="calendar-head-sticky">
+                    <div className="calendar-head-sticky" >
                         <ScrollSyncPane>
                             <div className="calendar-head-scroll">
                                 <div className="calendar-head-flex" style={flexStyles}>
@@ -41,7 +47,7 @@ export default function Calendar() {
                         </ScrollSyncPane>
                     </div>
                     <ScrollSyncPane>
-                        <div className="calendar-body-scroll">
+                        <div className="calendar-body-scroll" >
                             <div className="calendar-body-flex" style={flexStyles}>
                                 <div className="calendar-time">
                                     <CalendarTime />

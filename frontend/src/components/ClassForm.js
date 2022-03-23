@@ -5,7 +5,7 @@ import { faMinus } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export default function ClassForm(props) {
-    const { day, quarterHour, courtNo, toggleForm, fetchClasses, classTimeTarget } = props;
+    const { day, quarterHour, toggleForm, fetchClasses, classTimeTarget } = props;
     const { currentDate, startOfWeek, location, coach } = React.useContext(dataContext);
     const [ inputs, setInputs ] = React.useState({
         startTime: '.',
@@ -99,8 +99,8 @@ export default function ClassForm(props) {
             })
         })
         .then(() => {
-            if (day) fetchClasses(null, startOfWeek, day, location, null, coach);
-            else fetchClasses(currentDate, null, null, location, courtNo, coach);
+            if (day) fetchClasses(null, startOfWeek, day, location, coach);
+            else fetchClasses(currentDate, null, null, location, coach);
             toggleForm()
         })
         .catch(err => console.log(err));
@@ -122,8 +122,8 @@ export default function ClassForm(props) {
                 })
             })
             .then(res => {
-                // if (day) fetchClasses(null, startOfWeek, day, location, null, coach);
-                // else fetchClasses(currentDate, null, null, location, courtNo, coach);
+                // if (day) fetchClasses(null, startOfWeek, day, location, coach);
+                // else fetchClasses(currentDate, null, null, location, coach);
                 res.json();
                 toggleForm()
             })
@@ -138,9 +138,9 @@ export default function ClassForm(props) {
             .then(res => {
                 res.json(); //cannot receive //
                 // if (day) 
-                //     fetchClasses('', startOfWeek, day, location, '', coach);
+                //     fetchClasses('', startOfWeek, day, location, coach);
                 // else 
-                //     fetchClasses(currentDate, '', '', location, courtNo, coach);  
+                //     fetchClasses(currentDate, '', '', location, coach);  
             })
             .then(data => {
                 console.log(data)

@@ -1,0 +1,32 @@
+.react-calendar__navigation {
+    display: flex;
+    height: 32px;
+    margin-bottom: 1em;
+}
+
+.react-calendar__navigation__arrow {
+    width: 44px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.react-calendar__navigation__label {
+
+}
+
+.react-calendar__month-view__weekdays {
+    text-align: center;
+    margin-bottom: 1em;
+    font-size: 1rem;
+}
+
+.react-calendar__month-view__weekdays__weekday abbr {
+    text-decoration: none;
+}
+
+.react-calendar__tile {
+    margin-bottom: 1em;
+    height: 2em;
+    font-size: 1rem;
+    cursor: pointer;
+}

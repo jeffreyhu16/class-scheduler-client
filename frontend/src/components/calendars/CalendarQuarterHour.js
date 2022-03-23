@@ -4,7 +4,7 @@ import ClassForm from '../ClassForm'
 import { glowContext } from '../contexts/GlowContext';
 
 export default function CalendarQuarterHour(props) {
-    const { classData, day, courtNo, quarterHour, fetchClasses } = props;
+    const { classData, day, location, courtNo, quarterHour, fetchClasses } = props;
     const { isGlow, setIsGlow } = React.useContext(glowContext);
     const [ isShow, setIsShow ] = React.useState(false);
     const [ isClassTime, setIsClassTime ] = React.useState({
@@ -18,7 +18,8 @@ export default function CalendarQuarterHour(props) {
     const endTimeTarget = React.useRef();
     
     React.useEffect(() => {
-        if (classData) {
+        if (classData.length > 0) {
+            console.log(classData);
             // filter startTime //
             startTimeTarget.current = classData.filter(dayTarget => {
                 const { startTime } = dayTarget;
@@ -39,7 +40,6 @@ export default function CalendarQuarterHour(props) {
                 const duration = endDateTime.diff(startDateTime, 'minutes').toObject().minutes;
                 let isMidTime = false;
                 if (duration > 30) {
-                    
                     const midTimeQuarterHours = (duration - 30) / 15;
                     for (let i = 1; i <= midTimeQuarterHours; i++) {
                         if (startTimeQuarterHour + i === quarterHour - 1) {
@@ -119,7 +119,7 @@ export default function CalendarQuarterHour(props) {
                 className={
                     day ? 
                     `calendar-quarter-hour day-${day} quarter-hour-${quarterHour}`:
-                    `calendar-quarter-hour quarter-hour-${quarterHour}` 
+                    `calendar-quarter-hour ${location.name}-${courtNo} quarter-hour-${quarterHour}` 
                 }
                 onClick={toggleForm}
                 style={styles}

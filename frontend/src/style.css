@@ -1,4 +1,4 @@
-@import './main.css';
+@import './calendar.css'; 
 
 *, ::before, ::after {
     box-sizing: border-box;
@@ -237,6 +237,7 @@ h1 {
 
 .calendar-head {
     width: calc(98% / 7);
+    margin-bottom: 0.8em;
 }
 
 .calendar-head-day,
@@ -251,8 +252,11 @@ h1 {
 }
 
 .calendar-head-court {
-    width: 20%;
-    padding: 0.2em 0;
+    margin-bottom: 0.8em;
+}
+
+.calendar-head-court-name {
+    margin-bottom: 0.2em;
 }
 
 .calendar-head-court-day {
@@ -329,7 +333,8 @@ h1 {
     border-left: none !important;
 }
 
-.day-7 {
+.day-7,
+.Roch\'s-1 {
     border-right: none !important;
 }
 

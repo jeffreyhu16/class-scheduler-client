@@ -28,16 +28,18 @@ export default function CalendarHead() {
 
         const dayCourtHeads = [...Array(j)].map(() => {
             const weekStyles = {
-                opacity: isGlow.day[day] && isGlow.court[j] ? '1' : '0'
+                opacity: isGlow.day[day] && isGlow.court[j] ? '1' : '0',
+                width: `calc(100% / ${location.numOfCourts})`,
+                marginBottom: '0'
             }
             const dayStyles = {
                 opacity: '1',
-                width: `calc(98% / 7)`
+                width: `calc(98% / 7)` // change logic when new courts added //
             }
             return (
                 <div className="calendar-head-court" style={weekView ? weekStyles : dayStyles}>
-                    <div>{!weekView && location.name}</div>
-                    <div>{`Court ${j--}`}</div>
+                    <div className="calendar-head-court-name">{!weekView && location.name}</div>
+                    <div>{weekView ? `Court ${j--}` : `# ${j--}`}</div>
                 </div>
             )
         });
@@ -53,7 +55,7 @@ export default function CalendarHead() {
         calendarHeads = weekDataArr.map(weekDay => {
             const styles = {
                 textShadow: isGlow.day[++i] ? '0 0 0.5rem #fff' : 'none',
-                marginBottom: !coachAll && !locationAll ? '0.8em' : '0'
+                // marginBottom: !coachAll && !locationAll ? '0.8em' : '0'
             }
             return (
                 <div className={`calendar-head`} style={styles}>
@@ -75,11 +77,11 @@ export default function CalendarHead() {
     }
 
     if (currentDate && !weekView) {
-        locationData.forEach(location => {
+        for (let i = 1; i < locationData.length; i++) {
             calendarHeads.push((
-                <CalendarHeadCourt location={location} />
+                <CalendarHeadCourt location={locationData[i]} />
             ));
-        })
+        }
     }
     return <>{calendarHeads}</>
 }

@@ -29,12 +29,13 @@ export default function HeaderNav() {
 
     function toggleView(view) {
         setCalendarView(view);
-        setCoach({ name: 'all' });
         if (view === 'week') {
+            setCoach({ name: 'Tim' });
             setLocation({ name: 'Camberwell', numOfCourts: 5 });
-            setActive({ view: [ false, true ], location: [ false, false, true ], coach: [ false, true ] });
+            setActive({ view: [ false, true ], location: [ false, false, true ], coach: [ false, false, true ] });
         }
         else {
+            setCoach({ name: 'all' });
             setLocation({ name: 'all' });
             setActive({ view: [ true, false ], location: [ false, true ], coach: [ false, true ] });
         }
