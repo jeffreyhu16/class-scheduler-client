@@ -3,7 +3,7 @@ import { dataContext } from './contexts/DataContext'
 
 export default function DropdownItem(props) {
     const { label, item, active, setActive, index } = props;
-    const { setCalendarView, setLocation, setCoach } = React.useContext(dataContext);
+    const { calendarView, setCalendarView, setLocation, setCoach } = React.useContext(dataContext);
     const [ on, setOn ] = React.useState([]);
     // location All is only available in Daily view //
     const itemStyles = {
@@ -20,11 +20,20 @@ export default function DropdownItem(props) {
                     ...prevActive, 
                     view: [ true, false ]
                 }));
-            } else 
-                setCalendarView('week'); 
+            } else {
+                setCalendarView('week');
+                setCoach({ name: 'Tim' });
+                setActive(prevActive => {
+                    const newActive = { ...prevActive };
+                    newActive.coach.fill(false);
+                    newActive.coach[2] = true;
+                    newActive.view = [ false, true ];
+                    return newActive;
+                }); 
+            }
             setLocation(item);
         };
-        if (label === 'coach') setCoach(item);
+        if (label === 'coach') setCoach(item); 
 
         setActive(prevActive => {
             const newActive = { ...prevActive };

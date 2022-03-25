@@ -6,7 +6,6 @@ import { DateTime } from 'luxon'
 export default function Sidebar() {
 
     const [ date, setDate ] = React.useState(new Date());
-    // console.log(date.toISOString())
     const testDate = DateTime.fromISO(date.toISOString());
 
     return (

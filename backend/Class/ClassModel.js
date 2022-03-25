@@ -24,7 +24,7 @@ const classSchema = new Schema({
             ref: 'Location',
         },
         courtNo: {
-            type: String,
+            type: Number,
             required: true
         }
     },

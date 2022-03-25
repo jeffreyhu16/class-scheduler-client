@@ -75,6 +75,7 @@ export default function CalendarDay(props) {
 
     if (classData && !coachAll && !locationAll) {
         let i = 0;
+        // console.log(classData)
         calendarQuarterHours = [...Array(72)].map(() => {
             return (
                 <CalendarQuarterHour

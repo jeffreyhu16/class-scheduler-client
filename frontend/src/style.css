@@ -92,7 +92,7 @@ h1 {
 .header-flex {
     /* position: sticky; 
     top: 0px; */
-    z-index: 2;
+    /* z-index: 2; */
 }
 
 .header-title,
@@ -193,6 +193,7 @@ h1 {
 
 }
 
+.icon-copy:hover,
 .icon-angle-left-container:hover,
 .icon-angle-right-container:hover {
     cursor: pointer;
@@ -213,21 +214,17 @@ h1 {
 
 .calendar-head-flex,
 .calendar-body-flex {
-    overflow: auto;
     display: flex;
-    /* width: 99%; */
 }
 
 .calendar-head-sticky {
     position: sticky;
     top: 1em;
-    /* z-index: 2; */
 }
 
 .calendar-head-scroll {
-    /* height: 3em; */
     overflow: auto;
-    /* overflow-x: hidden; */
+    
 }
 
 .calendar-head-flex {
@@ -265,16 +262,55 @@ h1 {
 
 .calendar-body-scroll {
     overflow: auto;
+    
 }
 
 .calendar-body-flex {
     height: 130em;
 }
 
-.calendar-head-empty,
+.calendar-copy,
 .calendar-time {
     width: 4rem;
     letter-spacing: 0.02rem;
+}
+
+.calendar-copy {
+    text-align: center;  /* why did removing position relative fix the stacking context issue */
+}
+
+.calendar-copy-popup {
+    position: absolute;
+    left: 5em;
+    top: 0em;
+    width: 15em;
+    padding: 1em;
+    border-radius: 0.5rem;
+    background-color: #004b8f;
+    box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.2);
+}
+
+.calendar-copy-msg {
+    margin-bottom: 1.2em;
+}
+
+.calendar-copy-popup span {
+    margin: 0 0.3em;
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
+}
+
+.calendar-copy-confirm {
+    display: inline-block;
+    background-color: #c9e5ff;
+    border-radius: 1rem;
+    color: #00182f;
+    padding: 0.2em 0.6em;
+    cursor: pointer;
+}
+
+.icon-copy {
+    padding: 0.7em;
 }
 
 .calendar-time-quarter {
@@ -288,7 +324,6 @@ h1 {
     /* text-shadow: 0 0 0.5rem #fff; */
     opacity: 0;
 }
-
 
 .calendar-time-quarter:nth-of-type(4n + 1) {
     font-size: 1.2rem;
@@ -306,7 +341,7 @@ h1 {
 }
 
 .calendar-quarter-hour {
-    height: calc(100%/72);
+    height: calc(100% / 72);
     /* border-left: inherit; */
 }
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import { DateTime } from 'luxon'
 import { dataContext } from '../contexts/DataContext'
-import { glowContext } from '../contexts/GlowContext';
+import { glowContext } from '../contexts/GlowContext'
 
 export default function CalendarHead() {
 
@@ -30,7 +30,7 @@ export default function CalendarHead() {
             const weekStyles = {
                 opacity: isGlow.day[day] && isGlow.court[j] ? '1' : '0',
                 width: `calc(100% / ${location.numOfCourts})`,
-                marginBottom: '0'
+                marginBottom: '0.3em'
             }
             const dayStyles = {
                 opacity: '1',
@@ -55,7 +55,7 @@ export default function CalendarHead() {
         calendarHeads = weekDataArr.map(weekDay => {
             const styles = {
                 textShadow: isGlow.day[++i] ? '0 0 0.5rem #fff' : 'none',
-                // marginBottom: !coachAll && !locationAll ? '0.8em' : '0'
+                marginBottom: !coachAll ? '1em' : '0'
             }
             return (
                 <div className={`calendar-head`} style={styles}>

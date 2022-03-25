@@ -6,65 +6,53 @@ import { glowContext } from '../contexts/GlowContext';
 export default function CalendarQuarterHour(props) {
     const { classData, day, location, courtNo, quarterHour, fetchClasses } = props;
     const { isGlow, setIsGlow } = React.useContext(glowContext);
-    const [ isShow, setIsShow ] = React.useState(false);
-    const [ isClassTime, setIsClassTime ] = React.useState({
-        isStartTime: false,
-        isMidTime: false,
-        isEndTime: false
-    });
-    const { isStartTime, isMidTime, isEndTime } = isClassTime;
-    const startTimeTarget = React.useRef();
-    const midTimeTarget = React.useRef();
-    const endTimeTarget = React.useRef();
-    
-    React.useEffect(() => {
-        if (classData.length > 0) {
-            console.log(classData);
-            // filter startTime //
-            startTimeTarget.current = classData.filter(dayTarget => {
-                const { startTime } = dayTarget;
-                const quarterInterval = startTime.minute / 15;
-                const startTimeQuarterHour = (startTime.hour - 6) * 4 + quarterInterval;
-                return startTimeQuarterHour === quarterHour - 1;
-            });
-            if (startTimeTarget.current[0]) {
-                setIsClassTime(prevIsClassTime => ({ ...prevIsClassTime, isStartTime: true }));
-            } else setIsClassTime(prevIsClassTime => ({ ...prevIsClassTime, isStartTime: false }));
-            // filter midTime //
-            midTimeTarget.current = classData.filter(dayTarget => {
-                const { startTime, endTime } = dayTarget;
-                const quarterInterval = startTime.minute / 15;
-                const startTimeQuarterHour = (startTime.hour - 6) * 4 + quarterInterval;
-                const startDateTime = DateTime.fromObject(startTime);
-                const endDateTime = DateTime.fromObject(endTime);
-                const duration = endDateTime.diff(startDateTime, 'minutes').toObject().minutes;
-                let isMidTime = false;
-                if (duration > 30) {
-                    const midTimeQuarterHours = (duration - 30) / 15;
-                    for (let i = 1; i <= midTimeQuarterHours; i++) {
-                        if (startTimeQuarterHour + i === quarterHour - 1) {
-                            isMidTime = true;
-                        }
+    const [isShow, setIsShow] = React.useState(false);
+
+    let startTimeTarget, midTimeTarget, endTimeTarget;
+    let isStartTime, isMidTime, isEndTime;
+    if (classData.length > 0) {
+        // filter startTime //
+        startTimeTarget = classData.filter(dayTarget => {
+            const { startTime } = dayTarget;
+            const quarterInterval = startTime.minute / 15;
+            const startTimeQuarterHour = (startTime.hour - 6) * 4 + quarterInterval;
+            return startTimeQuarterHour === quarterHour - 1;
+        });
+        if (startTimeTarget[0]) isStartTime = true
+        else isStartTime = false
+        
+        // filter midTime //
+        midTimeTarget = classData.filter(dayTarget => {
+            const { startTime, endTime } = dayTarget;
+            const quarterInterval = startTime.minute / 15;
+            const startTimeQuarterHour = (startTime.hour - 6) * 4 + quarterInterval;
+            const startDateTime = DateTime.fromObject(startTime);
+            const endDateTime = DateTime.fromObject(endTime);
+            const duration = endDateTime.diff(startDateTime, 'minutes').toObject().minutes;
+            let isMidTime = false;
+            if (duration > 30) {
+                const midTimeQuarterHours = (duration - 30) / 15;
+                for (let i = 1; i <= midTimeQuarterHours; i++) {
+                    if (startTimeQuarterHour + i === quarterHour - 1) {
+                        isMidTime = true;
                     }
                 }
-                return isMidTime;
-            });
-            if (midTimeTarget.current[0]) {
-                setIsClassTime(prevIsClassTime => ({ ...prevIsClassTime, isMidTime: true }));
-            } else setIsClassTime(prevIsClassTime => ({ ...prevIsClassTime, isMidTime: false }));
-            // filter endTime //
-            endTimeTarget.current = classData.filter(dayTarget => {
-                const { endTime } = dayTarget;
-                const quarterInterval = endTime.minute / 15;
-                const endTimeQuarterHour = (endTime.hour - 6) * 4 + quarterInterval;
-                return endTimeQuarterHour === quarterHour;
-            });
-            if (endTimeTarget.current[0]) {
-                // console.log(endTimeTarget.current[0])
-                setIsClassTime(prevIsClassTime => ({ ...prevIsClassTime, isEndTime: true }));
-            } else setIsClassTime(prevIsClassTime => ({ ...prevIsClassTime, isEndTime: false }));
-        }
-    }, [classData]); 
+            }
+            return isMidTime;
+        });
+        if (midTimeTarget[0]) isMidTime = true
+        else isMidTime = false
+        
+        // filter endTime //
+        endTimeTarget = classData.filter(dayTarget => {
+            const { endTime } = dayTarget;
+            const quarterInterval = endTime.minute / 15;
+            const endTimeQuarterHour = (endTime.hour - 6) * 4 + quarterInterval;
+            return endTimeQuarterHour === quarterHour;
+        });
+        if (endTimeTarget[0]) isEndTime = true
+        else isEndTime = false
+    }
 
     function toggleForm() {
         setIsShow(prevIsShow => !prevIsShow);
@@ -81,9 +69,7 @@ export default function CalendarQuarterHour(props) {
     }
 
     let isFree = true;
-    for (let key in isClassTime) {
-        if (isClassTime[key]) isFree = false
-    }
+    if (isStartTime || isMidTime || isEndTime) isFree = false
 
     const borderDefault = '1px solid rgba(201, 229, 255, 0.2)';
     const borderActive = '1px solid #00407b';
@@ -95,21 +81,20 @@ export default function CalendarQuarterHour(props) {
         borderRight: isFree ? borderDefault : borderActive
     }
 
-    
-
     let classTimeObj, startHour, startMin, endHour, endMin;
     if (isStartTime) {
-        classTimeObj = startTimeTarget.current[0];
-        startHour = classTimeObj.startTime.hour;
-        startMin = classTimeObj.startTime.minute;
-        endHour = classTimeObj.endTime.hour;
-        endMin = classTimeObj.endTime.minute;
+        classTimeObj = startTimeTarget[0];
+        const { startTime, endTime } = classTimeObj;
+        startHour = startTime.hour;
+        startMin = startTime.minute;
+        endHour = endTime.hour;
+        endMin = endTime.minute;
     }
- 
-    const classTimeTarget = 
-        isStartTime ? startTimeTarget.current[0] : 
-        isMidTime ? midTimeTarget.current[0] : 
-        isEndTime ? endTimeTarget.current[0] : '';
+    
+    const classTimeTarget =
+        isStartTime ? startTimeTarget[0] :
+            isMidTime ? midTimeTarget[0] :
+                isEndTime ? endTimeTarget[0] : '';
 
     return (
         <>
@@ -117,23 +102,23 @@ export default function CalendarQuarterHour(props) {
                 onMouseEnter={() => handleOnMouse(day, courtNo, quarterHour, true)}
                 onMouseLeave={() => handleOnMouse(day, courtNo, quarterHour, false)}
                 className={
-                    day ? 
-                    `calendar-quarter-hour day-${day} quarter-hour-${quarterHour}`:
-                    `calendar-quarter-hour ${location.name}-${courtNo} quarter-hour-${quarterHour}` 
+                    day ?
+                        `calendar-quarter-hour day-${day} quarter-hour-${quarterHour}` :
+                        `calendar-quarter-hour ${location.name}-${courtNo} quarter-hour-${quarterHour}`
                 }
                 onClick={toggleForm}
                 style={styles}
-            > 
+            >
                 {isStartTime &&
-                    <div className="calendar-class-info"> 
+                    <div className="calendar-class-info">
                         <div className="calendar-class-info-student-name">
-                            {classTimeObj.student[0].name} 
+                            {classTimeObj && classTimeObj.student[0].name}
                         </div>
                         <div className="calendar-class-info-coach-name">
-                            {classTimeObj.coach.name}
+                            {classTimeObj && classTimeObj.coach.name}
                         </div  >
                         <div className="calendar-class-info-location">
-                            {classTimeObj.location._id.name}
+                            {classTimeObj && classTimeObj.location._id.name}
                         </div>
                         <div className="calendar-class-info-class-period">
                             {startHour > 12 ? startHour - 12 : startHour}:

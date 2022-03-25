@@ -1,20 +1,17 @@
 import React from 'react'
-import { dataContext } from '../contexts/DataContext';
 import CalendarQuarterHour from './CalendarQuarterHour';
 
 export default function CalendarCourt(props) {
-    const { location, courtNo, classData, day, fetchClasses } = props;
-    const { calendarView, currentDate, coach } = React.useContext(dataContext);
 
+    const { location, courtNo, classData, day, fetchClasses } = props;
     let classCourtData;
     if (day) {
         classCourtData = classData.filter(data => {
-            return data.location.courtNo == courtNo; // not sure why int data types are different //
+            return data.location.courtNo === courtNo;
         });
-        console.log(classCourtData);
     } else {
         classCourtData = classData.filter(data => {
-            return data.location.name === location.name && data.location.courtNo == courtNo;
+            return data.location.name === location.name && data.location.courtNo === courtNo;
         });
     }
     

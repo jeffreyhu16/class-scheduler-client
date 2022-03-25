@@ -72,10 +72,14 @@ export default function ClassForm(props) {
             value = startDateTime.set({ hour: hour, minute: min }).toObject();
         }
         if (name === 'name' || name === 'courtNo') {
-            setInputs(prevInputs => ({
-                ...prevInputs,
-                location: { ...prevInputs.location, [name]: value }
-            }));
+            setInputs(prevInputs => {
+                const newInputs = { ...prevInputs };
+                newInputs.location = { 
+                    ...prevInputs.location,
+                    [name]: value.length > 1 ? value : parseInt(value) 
+                };
+                return newInputs;
+            });
             return;
         }
         setInputs(prevInputs => ({
@@ -112,7 +116,6 @@ export default function ClassForm(props) {
             if (value === '.') return
         }
         if (classTimeTarget) {
-            console.log('classTimeTarget', classTimeTarget)
             fetch('/class', {
                 method: 'put',
                 headers: { 'Content-Type': 'application/json' },
@@ -121,14 +124,12 @@ export default function ClassForm(props) {
                     _id: classTimeTarget._id
                 })
             })
-            .then(res => {
+            .then(() => {
                 // if (day) fetchClasses(null, startOfWeek, day, location, coach);
                 // else fetchClasses(currentDate, null, null, location, coach);
-                res.json();
                 toggleForm()
             })
             .catch(err => console.log(err));
-            console.log('after put...')
         } else {
             fetch('/class', {
                 method: 'post',
@@ -136,16 +137,13 @@ export default function ClassForm(props) {
                 body: JSON.stringify(inputs)
             })
             .then(res => {
-                res.json(); //cannot receive //
-                // if (day) 
-                //     fetchClasses('', startOfWeek, day, location, coach);
-                // else 
-                //     fetchClasses(currentDate, '', '', location, coach);  
+                if (res.status === 400) throw new Error('wrong student');
+                if (day) 
+                    fetchClasses('', startOfWeek, day, location, coach);
+                else 
+                    fetchClasses(currentDate, '', '', location, coach); 
             })
-            .then(data => {
-                console.log(data)
-                toggleForm()
-            })
+            .then(() => toggleForm())
             .catch(err => console.log(err));
         }
     }
@@ -214,7 +212,7 @@ export default function ClassForm(props) {
                     </input>
                     <label htmlFor="courtNo"></label>
                     <input
-                        type="Numnber"
+                        type="number"
                         id="courtNo"
                         name="courtNo"
                         className="courtNo"

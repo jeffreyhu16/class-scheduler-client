@@ -1,10 +1,11 @@
 import React from 'react'
-import { glowContext } from '../contexts/GlowContext'
-import { dataContext } from '../contexts/DataContext'
 import CalendarHead from './CalendarHead'
 import CalendarTime from './CalendarTime'
 import CalendarDay from './CalendarDay'
+import { glowContext } from '../contexts/GlowContext'
+import { dataContext } from '../contexts/DataContext'
 import { ScrollSync, ScrollSyncPane } from 'react-scroll-sync'
+import CalendarCopy from './CalendarCopy'
 
 export default function Calendar() {
     
@@ -40,7 +41,7 @@ export default function Calendar() {
                         <ScrollSyncPane>
                             <div className="calendar-head-scroll">
                                 <div className="calendar-head-flex" style={flexStyles}>
-                                    <div className="calendar-head-empty"></div>
+                                    <CalendarCopy/>
                                     <CalendarHead />
                                 </div>
                             </div>
