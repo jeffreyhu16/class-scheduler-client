@@ -53,18 +53,16 @@ h1 {
     background: #004b8f;
     box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.5);
     z-index: 2;
-    opacity: 0;
-    transform: translateY(-0.4rem);
     transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
 }
 
 .dropdown-menu-list::after {
     position: absolute;
     content: '';
-    height: 0.6rem;
-    width: 0.6rem;
+    height: 0.6em;
+    width: 0.6em;
     left: 75%;
-    top: -0.3rem;
+    top: -0.3em;
     transform: rotate(45deg);
     background-color: #004b8f;
     z-index: -1;
@@ -281,13 +279,27 @@ h1 {
 
 .calendar-copy-popup {
     position: absolute;
-    left: 5em;
+    left: 4em;
     top: 0em;
     width: 15em;
     padding: 1em;
     border-radius: 0.5rem;
     background-color: #004b8f;
-    box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transform: translateX(-0.4em);
+    transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.calendar-copy-popup::after {
+    position: absolute;
+    content: '';
+    height: 0.6em;
+    width: 0.6em;
+    left: -2%;
+    top: 1em;
+    transform: rotate(45deg);
+    background-color: #004b8f;
 }
 
 .calendar-copy-msg {
@@ -333,7 +345,7 @@ h1 {
 .calendar-day {
     height: 130rem;
     width: calc(98% / 7);
-    border-right: 1px solid rgb(201,255,227,0.4);
+    border-right: 1px solid rgb(201, 255, 227, 0.4);
 }
 
 .calendar-court {

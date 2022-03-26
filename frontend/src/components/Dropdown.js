@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 export default function Dropdown(props) {
 
     const { label, listData, active, setActive } = props;
-    const [ on, setOn ] = React.useState(false);
+    const [ isOn, setIsOn ] = React.useState(false);
     const [ listItemData, setListItemData ] = React.useState();
     
     // // change default location from all to camberwell //
@@ -33,15 +33,15 @@ export default function Dropdown(props) {
     }
 
     const listStyles = {
-        opacity: on ? '1' : '0',
-        transform: on ? 'translateY(0)' : '',
-        pointerEvents: on ? 'auto' : 'none'
+        opacity: isOn ? '1' : '0',
+        transform: isOn ? 'translateY(0)' : 'translateY(-0.4em)',
+        pointerEvents: isOn ? 'auto' : 'none'
     }
 
     return (
         <div
             className="dropdown-menu"
-            onClick={() => setOn(prevOn => !prevOn)}
+            onClick={() => setIsOn(prev => !prev)}
         >
             <div className="dropdown-menu-label">{label}</div>
             <FontAwesomeIcon icon={faCaretDown} className="icon-caret-down" />

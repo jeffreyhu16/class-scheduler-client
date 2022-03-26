@@ -10,7 +10,7 @@ exports.getClasses = async (req, res) => {
     const coachDoc = await Coach.findOne({ name: coach });
 
     let startQuery;
-    if (currentDate) startQuery = DateTime.fromISO(currentDate);
+    if (currentDate) startQuery = currentDate;
     if (startOfWeek) startQuery = DateTime.fromISO(startOfWeek).plus({ days: day - 1 }).toISO();
     const endQuery = DateTime.fromISO(startQuery).plus({ days: 1 }).toISO();
 

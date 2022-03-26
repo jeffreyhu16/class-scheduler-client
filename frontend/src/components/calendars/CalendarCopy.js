@@ -6,17 +6,10 @@ import { dataContext } from '../contexts/DataContext'
 
 export default function CalendarCopy(props) {
 
-    const [ isShow, setIsShow ] = React.useState(false);
+    const [ isOn, setIsOn ] = React.useState(false);
     const { calendarView, startOfWeek, setStartOfWeek, coach } = React.useContext(dataContext);
 
     async function copyClasses(period) {
-        // const isoDate = DateTime.fromObject(startOfWeek).toISO();
-        // const uri = encodeURIComponent(isoDate);
-        // const res = await fetch(`class/weekClasses?period=${period}&startOfWeek=${uri}`);
-        // const classData = await res.json();
-        // await console.log(classData);
-        
-
         fetch('class/copy', {
             method: 'post',
             headers: { 'Content-Type': 'application/json' },
@@ -31,16 +24,21 @@ export default function CalendarCopy(props) {
     const weekView = calendarView === 'week';
     const coachAll = coach.name === 'all';
 
-    const styles = {
+    const copyStyles = {
         paddingTop: weekView && coachAll ? '0.3em' : '0.2em'
     }
+    const popupStyles = {
+        opacity: isOn ? '1' : '0',
+        transform: isOn ? 'translateX(0)' : 'translateX(-0.4em)',
+        pointerEvents: isOn ? 'auto' : 'none'
+    }
     return (
-        <div className="calendar-copy" style={styles}>
+        <div className="calendar-copy" style={copyStyles} onClick={() => setIsOn(prev => !prev)}>
             <FontAwesomeIcon
                 icon={faCopy}
                 className="icon-copy"
             />
-            <div className="calendar-copy-popup">
+            <div className="calendar-copy-popup" style={popupStyles}>
                 <div className="calendar-copy-msg">Copy from <span>previous week</span></div>
                 <div className="calendar-copy-confirm" onClick={() => copyClasses(1)}>Confirm</div>
             </div>

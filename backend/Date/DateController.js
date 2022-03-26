@@ -1,7 +1,7 @@
 const { DateTime } = require('luxon')
 
 exports.getCurrentDate = (req, res) => {
-    const currentDate = DateTime.local();
+    const currentDate = DateTime.local().startOf('day');
     res.send(currentDate.toObject());
 }
 

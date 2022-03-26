@@ -11,8 +11,9 @@ export default function CalendarCourt(props) {
         });
     } else {
         classCourtData = classData.filter(data => {
-            return data.location.name === location.name && data.location.courtNo === courtNo;
+            return data.location._id.name === location.name && data.location.courtNo === courtNo;
         });
+        
     }
     
     let i = 0;
