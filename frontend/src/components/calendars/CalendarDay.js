@@ -28,17 +28,13 @@ export default function CalendarDay(props) {
         const uri = encodeURIComponent(isoDate);
         let res;
         if (startOfWeek) {
-            res = await fetch(`/class/classes?startOfWeek=${uri}&day=${day}&location=${location.name}&coach=${coach.name}`)
-            await res.json()
-                .then(data => setClassData(data))
-                .catch(err => console.log(err));
-            // console.log('fetch init...')
+            res = await fetch(`/class/classes?startOfWeek=${uri}&day=${day}&location=${location.name}&coach=${coach.name}`);
         } else if (currentDate) {
-            res = await fetch(`/class/classes?currentDate=${uri}&location=${location.name}&coach=${coach.name}`)
-            await res.json()
-                .then(data => setClassData(data))
-                .catch(err => console.log(err));
+            res = await fetch(`/class/classes?currentDate=${uri}&location=${location.name}&coach=${coach.name}`);
         }
+        res.json()
+            .then(data => setClassData(data))
+            .catch(err => console.log(err));
     }
 
     let calendarQuarterHours, calendarCourts = [];

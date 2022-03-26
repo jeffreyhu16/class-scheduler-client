@@ -23,6 +23,9 @@ const studentSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Class'
     }]
+},
+{
+    timestamps: true,
 });
 
 module.exports = mongoose.model('Student',studentSchema);

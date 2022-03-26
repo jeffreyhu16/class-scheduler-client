@@ -212,7 +212,7 @@ export default function ClassForm(props) {
                     </input>
                     <label htmlFor="courtNo"></label>
                     <input
-                        type="number"
+                        type="text"
                         id="courtNo"
                         name="courtNo"
                         className="courtNo"

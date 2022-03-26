@@ -7,27 +7,25 @@ import { dataContext } from '../contexts/DataContext'
 export default function CalendarCopy(props) {
 
     const [ isShow, setIsShow ] = React.useState(false);
-    const { calendarView, startOfWeek, coach } = React.useContext(dataContext);
+    const { calendarView, startOfWeek, setStartOfWeek, coach } = React.useContext(dataContext);
 
     async function copyClasses(period) {
-        // const res = await fetch(`class/weekClasses?period=${period}&startOfWeek=${startOfWeek}`);
-        // const data = await res.json();
-        // await console.log(data);
-        const isoDate = DateTime.fromObject(startOfWeek).toISO();
-        const uri = encodeURIComponent(isoDate);
-        fetch(`class/weekClasses?period=${period}&startOfWeek=${uri}`)
-        .then(res => res.json())
-        .then(data => console.log(data))
-        .catch(err => console.log(err));
-        // fetch('class/week', {
-        //     method: 'post',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify({
-        //         copy: period,
-        //         startOfWeek: startOfWeek
-        //     })
-        // })
-        // .catch(err => console.log(err));
+        // const isoDate = DateTime.fromObject(startOfWeek).toISO();
+        // const uri = encodeURIComponent(isoDate);
+        // const res = await fetch(`class/weekClasses?period=${period}&startOfWeek=${uri}`);
+        // const classData = await res.json();
+        // await console.log(classData);
+        
+
+        fetch('class/copy', {
+            method: 'post',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                period: period,
+                startOfWeek: startOfWeek
+            })
+        })
+        .then(() => setStartOfWeek(prev => ({ ...prev })));
     }
 
     const weekView = calendarView === 'week';

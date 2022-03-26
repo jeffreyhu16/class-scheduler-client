@@ -3,11 +3,11 @@ const { Schema } = mongoose;
 
 const classSchema = new Schema({
     startTime: {
-        type: Object,
+        type: String,
         required: true
     },
     endTime: {
-        type: Object,
+        type: String,
         required: true
     },
     student: [{
@@ -31,10 +31,7 @@ const classSchema = new Schema({
     note: {
         type: String,
     }
-},
-    {
-        timestamps: true,
-    });
+});
 
 module.exports = mongoose.model('Class', classSchema);
 

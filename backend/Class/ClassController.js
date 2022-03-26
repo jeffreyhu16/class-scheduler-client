@@ -9,50 +9,42 @@ exports.getClasses = async (req, res) => {
     const locationDoc = await Location.findOne({ name: location });
     const coachDoc = await Coach.findOne({ name: coach });
 
-    let targetDay;
-    if (currentDate) targetDay = DateTime.fromISO(currentDate);
-    if (startOfWeek) targetDay = DateTime.fromISO(startOfWeek).plus({ days: day - 1 });
+    let startQuery;
+    if (currentDate) startQuery = DateTime.fromISO(currentDate);
+    if (startOfWeek) startQuery = DateTime.fromISO(startOfWeek).plus({ days: day - 1 }).toISO();
+    const endQuery = DateTime.fromISO(startQuery).plus({ days: 1 }).toISO();
 
-    const dbQuery = {
-        'startTime.year': targetDay.year,
-        'startTime.month': targetDay.month,
-        'startTime.day': targetDay.day
+    const dbQuery = { 
+        startTime: { $gt: startQuery, $lt: endQuery } 
     }
     if (location !== 'all') dbQuery['location._id'] = locationDoc;
     if (coach !== 'all') dbQuery.coach = coachDoc;
     
-    Class.find(dbQuery)
+    let result = await Class.find(dbQuery)
         .populate('student', 'name')
         .populate('coach', 'name')
-        .populate('location._id', 'name')
-        .then(data => res.send(data))
-        .catch(err => console.log(err));
-}
+        .populate('location._id', 'name');
 
-exports.getWeekClasses = async (req, res) => {
-    const { period, startOfWeek } = req.query;
-    const startPeriod = DateTime.fromISO(startOfWeek).minus({ weeks: period });
-    const endPeriod = DateTime.fromISO(startOfWeek).minus({ days: 1 });
-
-    const dbQuery = {
-        'startTime.year': startPeriod.year,
-        'startTime.month': { $gte: startPeriod.month, $lte: endPeriod.month },
-        'startTime.day': { $gte: startPeriod.day, $lte: endPeriod.day }
-    }
-    console.log(period, startOfWeek)
-    Class.find(dbQuery)
-        .populate('student', 'name')
-        .populate('coach', 'name')
-        .populate('location._id', 'name')
-        .then(data => res.send(data))
-        .catch(err => console.log(err));
+    const response = result.map(data => ({
+        _id: data._id,
+        startTime: DateTime.fromISO(data.startTime).toObject(),
+        endTime: DateTime.fromISO(data.endTime).toObject(),
+        student: data.student,
+        coach: data.coach,
+        location: data.location,
+        note: data.note
+    }));
+    res.send(response);
 }
 
 exports.setClass = async (req, res) => {
-    const { startTime, endTime, studentName, coachName, location, note } = req.body;
+    let { startTime, endTime, studentName, coachName, location, note } = req.body;
     const student = await Student.findOne({ name: studentName });
     const coach = await Coach.findOne({ name: coachName });
     const court = await Location.findOne({ name: location.name });
+    startTime = DateTime.fromObject(startTime).toISO();
+    endTime = DateTime.fromObject(endTime).toISO();
+
     if (!student) {
         res.status(400).send();
         return;
@@ -61,7 +53,7 @@ exports.setClass = async (req, res) => {
         startTime,
         endTime,
         coach,
-        location: { courtNo: location.courtNo , _id: court},
+        location: { courtNo: location.courtNo , _id: court },
         note
     })
     lesson.student.push(student);
@@ -69,42 +61,49 @@ exports.setClass = async (req, res) => {
     res.send(lesson);
 }
 
-exports.setClasses = async (req, res) => {
-    const { week, startOfWeek } = req.body;
-    let targetFirstDay;
-    if (week === 'previous') targetFirstDay = DateTime.fromISO(startOfWeek).minus({ days: 7 });
-    Class.insertMany(res.body)
-        .then(result => {
-            console.log(result);
-            res.send(result);
-        })
-        .catch(err => console.log(err));
-}
-
 exports.updateClass = async (req, res) => {
     const { _id, startTime, endTime, studentName, coachName, location, note } = req.body;
     const student = await Student.findOne({ name: studentName }); // query an array //
     const coach = await Coach.findOne({ name: coachName });
     const court = await Location.findOne({ name: location.name });
+    startTime = DateTime.fromObject(startTime).toJSDate();
+    endTime = DateTime.fromObject(endTime).toJSDate();
 
     const lesson = await Class.findByIdAndUpdate(_id, {
         startTime,
         endTime,
-        location: { courtNo: location.courtNo },
+        coach,
+        location: { courtNo: location.courtNo , _id: court },
         note
     }, { new: true });
 
     lesson.student.push(student); // assign the queried array directly instead of push //
-    lesson.location._id = court;
-    lesson.coach = coach;
     await lesson.save().catch(err => console.log(err))
     res.send(lesson);
 }  // fix update function, missing ObjectId update //
 
 exports.deleteClass = (req, res) => {
-    Class.findByIdAndDelete(req.body.id)
+    Class.findByIdAndDelete(req.body._id)
         .then(result => {
             res.send(result);
         })
         .catch(err => console.log(err));
+}
+
+exports.copyClasses = async (req, res) => {
+    const { period, startOfWeek } = req.body;
+    const startPeriod = DateTime.fromObject(startOfWeek).minus({ weeks: period }).toISO();
+    const endPeriod = DateTime.fromObject(startOfWeek).toISO();
+
+    const dbQuery = {
+        startTime: { $gt: startPeriod, $lt: endPeriod }
+    }
+
+    const classData = await Class.find(dbQuery, { _id: 0 });
+    classData.forEach(data => {
+        data.startTime = DateTime.fromISO(data.startTime).plus({ weeks: period }).toISO();
+        data.endTime = DateTime.fromISO(data.endTime).plus({ weeks: period }).toISO();
+    });
+    const result = await Class.insertMany(classData);
+    res.send(result);
 }
