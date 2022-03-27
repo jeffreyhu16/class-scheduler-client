@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { dataContext } from './contexts/DataContext'
 import Dropdown from './Dropdown'
 
-export default function HeaderNav() {
+export default function HeaderNav(props) {
 
     const { calendarView, setCalendarView, currentDate,setCurrentDate, startOfWeek, setStartOfWeek, locationData,setLocation, coachData, setCoach } = React.useContext(dataContext);
     const [ active, setActive ] = React.useState({ view: [ , true], location: [ , , true ], coach: [ , , true ] });

@@ -10,7 +10,7 @@ export default function Sidebar() {
 
     return (
         <div className="sidebar">
-            <Calendar value={date} onChange={(date) => setDate(date)}/>
+            {/* <Calendar value={date} onChange={(date) => setDate(date)}/> */}
             <ul className="side-list">
             </ul>
         </div>

@@ -7,8 +7,9 @@ import { dataContext } from '../contexts/DataContext'
 import { ScrollSync, ScrollSyncPane } from 'react-scroll-sync'
 import CalendarCopy from './CalendarCopy'
 
-export default function Calendar() {
+export default function Calendar(props) {
     
+    const { breakPoint } = props;
     const { calendarView, location, coach } = React.useContext(dataContext);
     const [ isGlow, setIsGlow ] = React.useState({ day: [], court: [], quarterHour: [] });
 
@@ -21,9 +22,9 @@ export default function Calendar() {
     const camberwell = location.name === 'Camberwell';
 
     const calendarStyles = {
-        width: wideview ? '100%' : '79%'
+        width: wideview || !breakPoint ? '100%' : '79%'
     }
-
+    
     const flexStyles = {
         width: wideview && camberwell ? '180em' : '99%'
     }

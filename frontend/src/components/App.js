@@ -6,6 +6,7 @@ import { dataContext } from './contexts/DataContext';
 export default function App() {
 
     const [ calendarView, setCalendarView ] = React.useState('week');
+    const [ breakPoint, setBreakPoint ] = React.useState(window.innerWidth > 1080);
     const [ startOfWeek, setStartOfWeek ] = React.useState();
     const [ currentDate, setCurrentDate ] = React.useState();
     const [ locationData, setLocationData ] = React.useState();
@@ -33,6 +34,8 @@ export default function App() {
             });
         })
         .catch(err => console.log(err));
+
+        window.addEventListener('resize', () => setBreakPoint(window.innerWidth > 1080));
     }, []); 
 
     return (
@@ -50,8 +53,8 @@ export default function App() {
             coach,
             setCoach
         }}>
-            <Header/>
-            <Main/>
+            <Header breakPoint={breakPoint}/>
+            <Main breakPoint={breakPoint}/>
         </dataContext.Provider>
     )
 }
