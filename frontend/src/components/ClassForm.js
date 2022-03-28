@@ -5,8 +5,8 @@ import { faMinus } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export default function ClassForm(props) {
-    const { day, quarterHour, toggleForm, fetchClasses, classTimeTarget } = props;
-    const { currentDate, startOfWeek, location, coach } = React.useContext(dataContext);
+    const { day, quarterHour, toggleForm, classTimeTarget } = props;
+    const { currentDate, startOfWeek, setStartOfWeek } = React.useContext(dataContext);
     const [ inputs, setInputs ] = React.useState({
         startTime: '.',
         endTime: '.',
@@ -103,8 +103,7 @@ export default function ClassForm(props) {
             })
         })
         .then(() => {
-            if (day) fetchClasses(null, startOfWeek, day, location, coach);
-            else fetchClasses(currentDate, null, null, location, coach);
+            setStartOfWeek(prev => ({ ...prev }));
             toggleForm()
         })
         .catch(err => console.log(err));
@@ -125,8 +124,7 @@ export default function ClassForm(props) {
                 })
             })
             .then(() => {
-                // if (day) fetchClasses(null, startOfWeek, day, location, coach);
-                // else fetchClasses(currentDate, null, null, location, coach);
+                setStartOfWeek(prev => ({ ...prev }));
                 toggleForm()
             })
             .catch(err => console.log(err));
@@ -138,12 +136,9 @@ export default function ClassForm(props) {
             })
             .then(res => {
                 if (res.status === 400) throw new Error('wrong student');
-                if (day) 
-                    fetchClasses('', startOfWeek, day, location, coach);
-                else 
-                    fetchClasses(currentDate, '', '', location, coach); 
+                setStartOfWeek(prev => ({ ...prev }));
+                toggleForm();
             })
-            .then(() => toggleForm())
             .catch(err => console.log(err));
         }
     }

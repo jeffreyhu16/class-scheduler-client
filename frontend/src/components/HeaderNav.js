@@ -1,14 +1,17 @@
 import React from 'react'
+import Dropdown from './Dropdown'
 import { DateTime } from 'luxon'
-import { faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons'
+import { faBars, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { dataContext } from './contexts/DataContext'
-import Dropdown from './Dropdown'
+import { renderContext } from './contexts/RenderContext'
 
 export default function HeaderNav(props) {
 
-    const { calendarView, setCalendarView, currentDate,setCurrentDate, startOfWeek, setStartOfWeek, locationData,setLocation, coachData, setCoach } = React.useContext(dataContext);
-    const [ active, setActive ] = React.useState({ view: [ , true], location: [ , , true ], coach: [ , , true ] });
+    const { breakPoint } = props;
+    const { setCalendarView, currentDate, setCurrentDate, startOfWeek, setStartOfWeek, locationData, setLocation, coachData, setCoach } = React.useContext(dataContext);
+    const { weekView, dayView } = React.useContext(renderContext)
+    const [active, setActive] = React.useState({ view: [, true], location: [, true], coach: [, , true] });
     let currentDay, day1, day7, month, year, nextDay, prevDay, nextWeek, prevWeek;
 
     if (currentDate && startOfWeek) {
@@ -30,22 +33,23 @@ export default function HeaderNav(props) {
     function toggleView(view) {
         setCalendarView(view);
         if (view === 'week') {
-            setCoach({ name: 'Tim' });
-            setLocation({ name: 'Camberwell', numOfCourts: 5 });
-            setActive({ view: [ false, true ], location: [ false, false, true ], coach: [ false, false, true ] });
-        }
-        else {
+            setLocation(locationData[1]);
             setCoach({ name: 'all' });
+            setActive({ view: [false, true], location: [false, false, true], coach: [false, true] });
+        }
+        if (view === 'day') {
             setLocation({ name: 'all' });
-            setActive({ view: [ true, false ], location: [ false, true ], coach: [ false, true ] });
+            setCoach({ name: 'all' });
+            setActive({ view: [true, false], location: [false, true], coach: [false, true] });
         }
     }
 
     function shiftTime(direction) {
-        if (calendarView === 'week') {
+        if (weekView) {
             if (direction === 'next') setStartOfWeek(nextWeek);
             else setStartOfWeek(prevWeek);
-        } else {
+        } 
+        if (dayView) {
             if (direction === 'next') setCurrentDate(nextDay);
             else setCurrentDate(prevDay);
         }
@@ -67,41 +71,47 @@ export default function HeaderNav(props) {
     return (
         <div className="header-nav">
             <div className="header-filter-group">
-                <div className="header-toggle-group">
-                    <div 
-                        className="header-toggle-day" 
-                        onClick={() => toggleView('day')}
-                        style={dayStyles}
-                    >
-                        Day
-                    </div>
-                    <div 
-                        className="header-toggle-week" 
-                        onClick={() => toggleView('week')}
-                        style={weekStyles}
-                    >
-                        Week
-                    </div>
-                </div>
-                <div className="header-dropdown-group">
-                    <Dropdown
-                        label="location"
-                        listData={locationData}
-                        active={active}
-                        setActive={setActive}
-                    />
-                    <Dropdown
-                        label="coach"
-                        listData={coachData}
-                        active={active}
-                        setActive={setActive}
-                    />
-                </div>
+                {!breakPoint[710] &&
+                    <div className="header-nav-dropdown">
+                        <FontAwesomeIcon icon={faBars} className="icon-nav-dropdown" />
+                    </div>}
+                {breakPoint[710] &&
+                    <div className="header-toggle-group">
+                        <div
+                            className="header-toggle-day"
+                            onClick={() => toggleView('day')}
+                            style={dayStyles}
+                        >
+                            Day
+                        </div>
+                        <div
+                            className="header-toggle-week"
+                            onClick={() => toggleView('week')}
+                            style={weekStyles}
+                        >
+                            Week
+                        </div>
+                    </div>}
+                {breakPoint[540] &&
+                    <div className="header-dropdown-group">
+                        <Dropdown
+                            label="location"
+                            listData={locationData}
+                            active={active}
+                            setActive={setActive}
+                        />
+                        <Dropdown
+                            label="coach"
+                            listData={coachData}
+                            active={active}
+                            setActive={setActive}
+                        />
+                    </div>}
             </div>
             <div className="header-date-group">
                 <div className="header-date">
                     <div className="header-date-day">
-                        {calendarView === 'week' ? `${day1} - ${day7}` : currentDay}
+                        {weekView ? `${day1} - ${day7}` : currentDay}
                     </div>
                     <div className="header-date-month">{month}</div>
                     <div className="header-date-year">{year}</div>

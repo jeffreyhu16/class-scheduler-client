@@ -1,39 +1,42 @@
 import React from 'react'
 import { dataContext } from './contexts/DataContext'
+import { renderContext } from './contexts/RenderContext';
 
 export default function DropdownItem(props) {
     const { label, item, active, setActive, index } = props;
-    const { calendarView, setCalendarView, setLocation, setCoach } = React.useContext(dataContext);
-    const [ on, setOn ] = React.useState([]);
-    // location All is only available in Daily view //
+    const { setCalendarView, setLocation, setCoach } = React.useContext(dataContext);
+    const { locationAll, coachAll } = React.useContext(renderContext)
+    const [on, setOn] = React.useState([]);
+    
     const itemStyles = {
-        backgroundColor: on[index] ? '#c9e5ff' : ( active[label][index] ? '#c9e5ff' : '#004b8f' ),
-        color: on[index] ? '#00182f' : ( active[label][index] ? '#00182f' : '#fff' )
+        backgroundColor: on[index] ? '#c9e5ff' : (active[label][index] ? '#c9e5ff' : '#004b8f'),
+        color: on[index] ? '#00182f' : (active[label][index] ? '#00182f' : '#fff')
     }
 
     function handleClick(item, index) {
+
+        const itemAll = item.name === 'all';
         if (label === 'location') {
-            if (item.name === 'all') {
+            if (itemAll && coachAll) {
                 setCalendarView('day');
-                setCoach({ name: 'all' });
                 setActive(prevActive => ({
-                    ...prevActive, 
-                    view: [ true, false ]
+                    ...prevActive,
+                    view: [true, false]
                 }));
-            } else {
-                setCalendarView('week');
-                setCoach({ name: 'Tim' });
-                setActive(prevActive => {
-                    const newActive = { ...prevActive };
-                    newActive.coach.fill(false);
-                    newActive.coach[2] = true;
-                    newActive.view = [ false, true ];
-                    return newActive;
-                }); 
             }
             setLocation(item);
         };
-        if (label === 'coach') setCoach(item); 
+
+        if (label === 'coach') {
+            if (itemAll && locationAll) {   
+                setCalendarView('day');
+                setActive(prevActive => ({
+                    ...prevActive,
+                    view: [true, false]
+                }));
+            }
+            setCoach(item);
+        };
 
         setActive(prevActive => {
             const newActive = { ...prevActive };

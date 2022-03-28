@@ -2,17 +2,22 @@ import React from 'react'
 import Header from './Header'
 import Main from './Main'
 import { dataContext } from './contexts/DataContext';
+import { renderContext } from './contexts/RenderContext'
 
 export default function App() {
 
     const [ calendarView, setCalendarView ] = React.useState('week');
-    const [ breakPoint, setBreakPoint ] = React.useState(window.innerWidth > 1080);
     const [ startOfWeek, setStartOfWeek ] = React.useState();
     const [ currentDate, setCurrentDate ] = React.useState();
     const [ locationData, setLocationData ] = React.useState();
     const [ coachData, setCoachData ] = React.useState();
-    const [ location, setLocation ] = React.useState({ name: 'Camberwell', numOfCourts: 5 });
+    const [ location, setLocation ] = React.useState({ name: 'all'});
     const [ coach, setCoach ] = React.useState({ name: 'Tim' });
+    const [ breakPoint, setBreakPoint ] = React.useState({ 
+        1080: window.innerWidth > 1080, 
+        710: window.innerWidth > 710,
+        540: window.innerWidth > 540
+    });
 
     React.useEffect(() => {
         Promise.all([
@@ -26,35 +31,49 @@ export default function App() {
             res2.json().then(data => setStartOfWeek(data));
             res3.json().then(data => {
                 setLocationData([{ name: 'all' }, ...data ]);
-                setLocation(data[0]);
             });
             res4.json().then(data => {
                 setCoachData([{ name: 'all' }, ...data ]);
-                setCoach(data[0]);
             });
         })
         .catch(err => console.log(err));
 
-        window.addEventListener('resize', () => setBreakPoint(window.innerWidth > 1080));
+        window.addEventListener('resize', () => {
+            setBreakPoint({
+                1080: window.innerWidth > 1080,
+                710: window.innerWidth > 710,
+                540: window.innerWidth > 540,
+            });
+        });
     }, []); 
+    const dayView = calendarView === 'day';
+    const weekView = calendarView === 'week';
+    const coachAll = coach.name === 'all';
+    const locationAll = location.name === 'all';
 
     return (
         <dataContext.Provider value={{
-            calendarView,
             setCalendarView,
             currentDate,
             setCurrentDate,
-            locationData,
-            coachData,
             startOfWeek, 
             setStartOfWeek,
+            locationData,
             location,
             setLocation,
-            coach,
+            coachData,
+            coach, 
             setCoach
         }}>
-            <Header breakPoint={breakPoint}/>
-            <Main breakPoint={breakPoint}/>
+            <renderContext.Provider value={{
+                dayView,
+                weekView,
+                coachAll,
+                locationAll
+            }}>
+                <Header breakPoint={breakPoint}/>
+                <Main breakPoint={breakPoint}/>
+            </renderContext.Provider>
         </dataContext.Provider>
     )
 }

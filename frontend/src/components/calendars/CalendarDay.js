@@ -1,18 +1,16 @@
 import React from 'react'
 import { DateTime } from 'luxon'
 import { dataContext } from '../contexts/DataContext'
-import CalendarCourt from './CalendarCourt';
-import CalendarQuarterHour from './CalendarQuarterHour';
+import { renderContext } from '../contexts/RenderContext'
+import CalendarCourt from './CalendarCourt'
+import CalendarQuarterHour from './CalendarQuarterHour'
 
 export default function CalendarDay(props) {
 
     const { day } = props;
-    const { calendarView, currentDate, startOfWeek, location, locationData, coach } = React.useContext(dataContext);
+    const { currentDate, startOfWeek, location, locationData, coach } = React.useContext(dataContext);
+    const { dayView, coachAll, locationAll } = React.useContext(renderContext);
     const [classData, setClassData] = React.useState();
-
-    const dayView = calendarView === 'day';
-    const coachAll = coach.name === 'all';
-    const locationAll = location.name === 'all';
 
     // create state for CourtNo //
     React.useEffect(() => {
@@ -20,7 +18,7 @@ export default function CalendarDay(props) {
         if (startOfWeek && !dayView) fetchClasses(null, startOfWeek, day, location, coach);
         if (currentDate && dayView) fetchClasses(currentDate, null, null, location, coach);
 
-    }, [calendarView, currentDate, startOfWeek, location, coach]);
+    }, [dayView, currentDate, startOfWeek, location, coach]);
 
     async function fetchClasses(currentDate, startOfWeek, day, location, coach) {
         const inputDate = currentDate ? currentDate : startOfWeek;
@@ -38,50 +36,51 @@ export default function CalendarDay(props) {
     }
 
     let calendarQuarterHours, calendarCourts = [];
-    if (classData && locationAll) {
-        // console.log(locationData[0].numOfCourts)
-        for (let i = 1; i < locationData.length; i++) {
-            for (let j = locationData[i].numOfCourts; j > 0; j--) {
-                calendarCourts.push((
+    if (classData) {
+        if (dayView) {
+            for (let i = 1; i < locationData.length; i++) {
+                for (let j = locationData[i].numOfCourts; j > 0; j--) {
+                    calendarCourts.push((
+                        <CalendarCourt
+                            location={locationData[i]}
+                            courtNo={j}
+                            classData={classData}
+                            fetchClasses={fetchClasses}
+                        />
+                    ));
+                }
+            }
+        }
+
+        if (coachAll && !locationAll) {
+            let j = location.numOfCourts;
+            calendarCourts = [...Array(j)].map(() => {
+                return (
                     <CalendarCourt
-                        location={locationData[i]}
-                        courtNo={j}
+                        day={day}
+                        courtNo={j--}
+                        location={location}
                         classData={classData}
                         fetchClasses={fetchClasses}
                     />
-                ));
-            }
+                )
+            });
         }
-    }
 
-    if (classData && !locationAll) {
-        let j = location.numOfCourts;
-        calendarCourts = [...Array(j)].map(() => {
-            return (
-                <CalendarCourt
-                    day={day}
-                    courtNo={j--}
-                    location={location}
-                    classData={classData}
-                    fetchClasses={fetchClasses}
-                />
-            )
-        });
-    }
-
-    if (classData && !coachAll && !locationAll) {
-        let i = 0;
-        // console.log(classData)
-        calendarQuarterHours = [...Array(72)].map(() => {
-            return (
-                <CalendarQuarterHour
-                    day={day}
-                    quarterHour={++i}
-                    classData={classData}
-                    fetchClasses={fetchClasses}
-                />
-            )
-        });
+        if (!coachAll) {
+            let i = 0;
+            // console.log(classData)
+            calendarQuarterHours = [...Array(72)].map(() => {
+                return (
+                    <CalendarQuarterHour
+                        day={day}
+                        quarterHour={++i}
+                        classData={classData}
+                        fetchClasses={fetchClasses}
+                    />
+                )
+            });
+        }
     }
 
     const styles = {
@@ -92,7 +91,7 @@ export default function CalendarDay(props) {
 
     return (
         <div className={`calendar-day day-${day}`} style={styles}>
-            {!coachAll && !locationAll ? calendarQuarterHours : calendarCourts}
+            {calendarCourts[0] ? calendarCourts : calendarQuarterHours}
         </div> // change logic for className //
     )
 }

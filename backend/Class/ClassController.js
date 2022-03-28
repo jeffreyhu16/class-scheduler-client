@@ -62,12 +62,12 @@ exports.setClass = async (req, res) => {
 }
 
 exports.updateClass = async (req, res) => {
-    const { _id, startTime, endTime, studentName, coachName, location, note } = req.body;
+    let { _id, startTime, endTime, studentName, coachName, location, note } = req.body;
     const student = await Student.findOne({ name: studentName }); // query an array //
     const coach = await Coach.findOne({ name: coachName });
     const court = await Location.findOne({ name: location.name });
-    startTime = DateTime.fromObject(startTime).toJSDate();
-    endTime = DateTime.fromObject(endTime).toJSDate();
+    startTime = DateTime.fromObject(startTime).toISO();
+    endTime = DateTime.fromObject(endTime).toISO();
 
     const lesson = await Class.findByIdAndUpdate(_id, {
         startTime,

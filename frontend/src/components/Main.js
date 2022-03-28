@@ -1,18 +1,16 @@
 import React from 'react'
 import Calendar from './calendars/Calendar'
-import { dataContext } from './contexts/DataContext'
+import { renderContext } from './contexts/RenderContext';
 import Sidebar from './Sidebar'
 
 export default function Main(props) {
 
     const { breakPoint } = props;
-    const { calendarView, coach } = React.useContext(dataContext);
+    const { dayView, coachAll } = React.useContext(renderContext);
 
-    const dayView = calendarView === 'day';
-    const coachAll = coach.name === 'all';
     return (
         <main className="main-flex">
-            {(dayView || !coachAll) && breakPoint && <Sidebar />}
+            {(dayView || !coachAll) && breakPoint[1080] && <Sidebar />}
             <Calendar breakPoint={breakPoint}/>
         </main>
     )

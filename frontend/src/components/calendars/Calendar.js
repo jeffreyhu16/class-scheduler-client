@@ -4,13 +4,15 @@ import CalendarTime from './CalendarTime'
 import CalendarDay from './CalendarDay'
 import { glowContext } from '../contexts/GlowContext'
 import { dataContext } from '../contexts/DataContext'
+import { renderContext } from '../contexts/RenderContext'
 import { ScrollSync, ScrollSyncPane } from 'react-scroll-sync'
 import CalendarCopy from './CalendarCopy'
 
 export default function Calendar(props) {
     
     const { breakPoint } = props;
-    const { calendarView, location, coach } = React.useContext(dataContext);
+    const { location } = React.useContext(dataContext);
+    const { weekView, coachAll } = React.useContext(renderContext);
     const [ isGlow, setIsGlow ] = React.useState({ day: [], court: [], quarterHour: [] });
 
     let i = 0;
@@ -18,21 +20,16 @@ export default function Calendar(props) {
         return <CalendarDay day={++i} />
     });
 
-    const wideview = calendarView === 'week' && coach.name === 'all';
     const camberwell = location.name === 'Camberwell';
+    const wideview = weekView && coachAll && camberwell;
 
     const calendarStyles = {
-        width: wideview || !breakPoint ? '100%' : '79%'
+        width: wideview || !breakPoint[1080] ? '100%' : '81%'
     }
     
     const flexStyles = {
-        width: wideview && camberwell ? '180em' : '99%'
+        width: wideview ? '180em' : '100%'
     }
-
-    // function transformScroll(e) {
-    //     e.currentTarget.scrollLeft += e.deltaY;
-    //     e.preventDefault();
-    // }
 
     return (
         <glowContext.Provider value={{ isGlow, setIsGlow }}>
@@ -54,7 +51,7 @@ export default function Calendar(props) {
                                 <div className="calendar-time">
                                     <CalendarTime />
                                 </div>
-                                {calendarView === 'week' ? calendarDays : <CalendarDay/>}
+                                {weekView ? calendarDays : <CalendarDay/>}
                             </div>
                         </div>
                     </ScrollSyncPane>

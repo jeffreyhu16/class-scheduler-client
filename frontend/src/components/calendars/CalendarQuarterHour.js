@@ -1,15 +1,17 @@
 import React from 'react'
 import { DateTime } from 'luxon'
 import ClassForm from '../ClassForm'
-import { glowContext } from '../contexts/GlowContext';
+import { glowContext } from '../contexts/GlowContext'
+import { renderContext } from '../contexts/RenderContext'
 
 export default function CalendarQuarterHour(props) {
     const { classData, day, location, courtNo, quarterHour, fetchClasses } = props;
-    const { isGlow, setIsGlow } = React.useContext(glowContext);
-    const [isShow, setIsShow] = React.useState(false);
+    const { setIsGlow } = React.useContext(glowContext);
+    const { weekView } = React.useContext(renderContext);
+    const [ isShow, setIsShow ] = React.useState(false);
 
     let startTimeTarget, midTimeTarget, endTimeTarget;
-    let isStartTime, isMidTime, isEndTime;
+    let isStartTime, isMidTime, isEndTime, duration;
     if (classData.length > 0) {
         // filter startTime //
         startTimeTarget = classData.filter(dayTarget => {
@@ -28,7 +30,7 @@ export default function CalendarQuarterHour(props) {
             const startTimeQuarterHour = (startTime.hour - 6) * 4 + quarterInterval;
             const startDateTime = DateTime.fromObject(startTime);
             const endDateTime = DateTime.fromObject(endTime);
-            const duration = endDateTime.diff(startDateTime, 'minutes').toObject().minutes;
+            duration = endDateTime.diff(startDateTime, 'minutes').toObject().minutes;
             let isMidTime = false;
             if (duration > 30) {
                 const midTimeQuarterHours = (duration - 30) / 15;
@@ -102,7 +104,7 @@ export default function CalendarQuarterHour(props) {
                 onMouseEnter={() => handleOnMouse(day, courtNo, quarterHour, true)}
                 onMouseLeave={() => handleOnMouse(day, courtNo, quarterHour, false)}
                 className={
-                    day ?
+                    weekView ?
                         `calendar-quarter-hour day-${day} quarter-hour-${quarterHour}` :
                         `calendar-quarter-hour ${location.name}-${courtNo} quarter-hour-${quarterHour}`
                 }
@@ -111,14 +113,8 @@ export default function CalendarQuarterHour(props) {
             >
                 {isStartTime &&
                     <div className="calendar-class-info">
-                        <div className="calendar-class-info-student-name">
-                            {classTimeObj && classTimeObj.student[0].name}
-                        </div>
                         <div className="calendar-class-info-coach-name">
                             {classTimeObj && classTimeObj.coach.name}
-                        </div  >
-                        <div className="calendar-class-info-location">
-                            {classTimeObj && classTimeObj.location._id.name}
                         </div>
                         <div className="calendar-class-info-class-period">
                             {startHour > 12 ? startHour - 12 : startHour}:
@@ -126,6 +122,13 @@ export default function CalendarQuarterHour(props) {
                             {endHour > 12 ? endHour - 12 : endHour}:
                             {endMin === 0 ? '00' : endMin}
                         </div>
+                        <div className="calendar-class-info-student-name">
+                            {classTimeObj && classTimeObj.student[0].name}
+                        </div>
+                        <div className="calendar-class-info-location">
+                            {classTimeObj && duration > 30 && classTimeObj.location._id.name}
+                        </div>
+                        
                     </div>
                 }
             </div>

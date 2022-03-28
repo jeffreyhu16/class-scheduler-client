@@ -7,12 +7,12 @@ export default function Header(props) {
     return (
         <header className="header-flex">
             {
-                breakPoint && 
+                breakPoint[1080] && 
                 <div className="header-title">
                     <h1>Class Scheduler</h1>
                 </div>
             }
-            <HeaderNav />
+            <HeaderNav breakPoint={breakPoint}/>
         </header>
     )
 }

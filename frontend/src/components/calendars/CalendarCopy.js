@@ -1,13 +1,14 @@
 import React from 'react'
-import { DateTime } from 'luxon'
+import { dataContext } from '../contexts/DataContext'
+import { renderContext } from '../contexts/RenderContext'
 import { faCopy } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { dataContext } from '../contexts/DataContext'
 
 export default function CalendarCopy(props) {
 
     const [ isOn, setIsOn ] = React.useState(false);
-    const { calendarView, startOfWeek, setStartOfWeek, coach } = React.useContext(dataContext);
+    const { startOfWeek, setStartOfWeek } = React.useContext(dataContext);
+    const { weekView, coachAll } = React.useContext(renderContext);
 
     async function copyClasses(period) {
         fetch('class/copy', {
@@ -21,9 +22,6 @@ export default function CalendarCopy(props) {
         .then(() => setStartOfWeek(prev => ({ ...prev })));
     }
 
-    const weekView = calendarView === 'week';
-    const coachAll = coach.name === 'all';
-
     const copyStyles = {
         paddingTop: weekView && coachAll ? '0.3em' : '0.2em'
     }
@@ -34,10 +32,10 @@ export default function CalendarCopy(props) {
     }
     return (
         <div className="calendar-copy" style={copyStyles} onClick={() => setIsOn(prev => !prev)}>
-            <FontAwesomeIcon
+            {/* <FontAwesomeIcon
                 icon={faCopy}
                 className="icon-copy"
-            />
+            /> */}
             <div className="calendar-copy-popup" style={popupStyles}>
                 <div className="calendar-copy-msg">Copy from <span>previous week</span></div>
                 <div className="calendar-copy-confirm" onClick={() => copyClasses(1)}>Confirm</div>

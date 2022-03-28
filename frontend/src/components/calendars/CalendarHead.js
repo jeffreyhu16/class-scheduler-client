@@ -2,12 +2,15 @@ import React from 'react'
 import { DateTime } from 'luxon'
 import { dataContext } from '../contexts/DataContext'
 import { glowContext } from '../contexts/GlowContext'
+import { renderContext } from '../contexts/RenderContext'
 
 export default function CalendarHead() {
 
     const { isGlow } = React.useContext(glowContext);
     const [weekData, setWeekData] = React.useState();
-    const { calendarView, currentDate, startOfWeek, location, locationData, coach } = React.useContext(dataContext);
+    const { currentDate, startOfWeek, location, locationData } = React.useContext(dataContext);
+    const { weekView, coachAll, locationAll } = React.useContext(renderContext);
+    
     let i = 0;
     let weekDataArr, calendarHeads = [];
 
@@ -45,10 +48,6 @@ export default function CalendarHead() {
         });
         return <>{dayCourtHeads}</>
     }
-
-    const weekView = calendarView === 'week';
-    const coachAll = coach.name === 'all';
-    const locationAll = location.name === 'all';
 
     if (weekData && weekView) {
         weekDataArr = Object.entries(weekData);

@@ -7,15 +7,6 @@ export default function Dropdown(props) {
 
     const { label, listData, active, setActive } = props;
     const [ isOn, setIsOn ] = React.useState(false);
-    const [ listItemData, setListItemData ] = React.useState();
-    
-    // // change default location from all to camberwell //
-    // React.useEffect(() => {
-    //     fetch(`/${label}`)
-    //         .then(res => res.json())
-    //         .then(data => setListItemData([ { name: 'all' }, ...data ]))
-    //         .catch(err => console.log(err));
-    // }, []); // set logic for refetch when new items are added //
 
     let listItems, i = 0;
     if (listData) {
