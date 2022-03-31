@@ -515,11 +515,6 @@ h1 {
     margin-bottom: 1.5em;
 }
 
-.startTime::placeholder,
-.endTime::placeholder {
-    /* text-align: center; */
-}
-
 input:focus-visible,
 textarea:focus-visible {
     outline: none;
@@ -531,8 +526,40 @@ textarea:focus-visible {
     height: 4rem;
 }
 
-.note::placeholder {
-    /* transform: translate(0,0.4rem); */
+.form-location .MuiAutocomplete-root {
+    width: 49%;
+}
+
+.MuiTextField-root label {
+    font-size: 1rem;
+}
+
+.MuiTextField-root label.Mui-focused {
+    color: #003567;
+}
+
+.MuiTextField-root .MuiFilledInput-root {
+    background-color: #fff;
+    border-radius: 0.6em;
+    margin-bottom: 1em;
+    /* width: 100%; */
+    /* font-size: 1rem; */
+}
+
+.MuiTextField-root .MuiFilledInput-root.Mui-focused {
+    background-color: #fff;
+}
+
+.MuiTextField-root .MuiFilledInput-root:hover {
+    background-color: #fff;
+}
+
+.MuiTextField-root .MuiFilledInput-root::before {
+    display: none;
+}
+
+.MuiTextField-root .MuiFilledInput-root::after {
+    display: none;
 }
 
 button {
@@ -551,6 +578,7 @@ button {
     margin-top: auto;
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 
 .form-submit-button,
@@ -566,8 +594,9 @@ button {
 }
 
 .form-delete-button {
-    width: 20%;
+    padding: 0.8em 1em;
     background: #a40003;
+    border-radius: 2rem;
 }
 
 .form-delete-button:hover {

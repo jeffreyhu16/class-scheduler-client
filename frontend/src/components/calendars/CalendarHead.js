@@ -28,7 +28,7 @@ export default function CalendarHead() {
     function CalendarHeadCourt(props) {
         const { day, location } = props;
         let j = location.numOfCourts;
-
+        
         const dayCourtHeads = [...Array(j)].map(() => {
             const weekStyles = {
                 opacity: isGlow.day[day] && isGlow.court[j] ? '1' : '0',
@@ -54,7 +54,7 @@ export default function CalendarHead() {
         calendarHeads = weekDataArr.map(weekDay => {
             const styles = {
                 textShadow: isGlow.day[++i] ? '0 0 0.5rem #fff' : 'none',
-                marginBottom: !coachAll ? '1em' : '0'
+                marginBottom: !coachAll ? '0.8em' : '0'
             }
             return (
                 <div className={`calendar-head`} style={styles}>
@@ -65,7 +65,7 @@ export default function CalendarHead() {
                         {weekDay[1].day}
                     </div>
                     {
-                        !coachAll && !locationAll ? '' :
+                        weekView && coachAll &&
                             <div className="calendar-head-court-day">
                                 <CalendarHeadCourt day={i} location={location} />
                             </div>

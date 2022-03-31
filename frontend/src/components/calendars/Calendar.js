@@ -21,14 +21,15 @@ export default function Calendar(props) {
     });
 
     const camberwell = location.name === 'Camberwell';
-    const wideview = weekView && coachAll && camberwell;
+    const wideView = weekView && coachAll;
+    const scrollView = weekView && coachAll && camberwell;
 
     const calendarStyles = {
-        width: wideview || !breakPoint[1080] ? '100%' : '81%'
+        width: wideView || !breakPoint[1080] ? '100%' : '81%'
     }
     
     const flexStyles = {
-        width: wideview ? '180em' : '100%'
+        width: scrollView ? '180em' : '100%'
     }
 
     return (

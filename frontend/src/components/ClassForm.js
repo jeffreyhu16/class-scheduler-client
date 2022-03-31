@@ -1,20 +1,29 @@
 import React from 'react'
 import { DateTime } from 'luxon'
 import { dataContext } from './contexts/DataContext'
-import { faMinus } from '@fortawesome/free-solid-svg-icons'
+import { faMinus, faTrashCan } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Autocomplete, TextField } from '@mui/material'
 
 export default function ClassForm(props) {
     const { day, quarterHour, toggleForm, classTimeTarget } = props;
-    const { currentDate, startOfWeek, setStartOfWeek } = React.useContext(dataContext);
-    const [ inputs, setInputs ] = React.useState({
-        startTime: '.',
-        endTime: '.',
-        studentName: '.',
-        coachName: '.',
-        location: '.',
+    const { currentDate, startOfWeek, setStartOfWeek, locationData, coachData } = React.useContext(dataContext);
+    const [options, setOptions] = React.useState([]);
+    const [inputs, setInputs] = React.useState({
+        startTime: '',
+        endTime: '',
+        studentArr: [],
+        coachName: '',
+        location: { name: '', courtNo: '' },
         note: ''
-    }); // still an uncontrolled component //
+    });
+
+    React.useEffect(() => {
+        fetch('/student')
+            .then(res => res.json())
+            .then(data => setOptions(data))
+    }, []);
+
     const { startTime, endTime, studentName, coachName } = inputs;
     let dateObj, startDateTime, endDateTime, startTimeString, endTimeString
     const hour = Math.floor((quarterHour - 1) / 4 + 6);
@@ -43,9 +52,9 @@ export default function ClassForm(props) {
     React.useEffect(() => {
         if (startOfWeek || currentDate) {
             setInputs(prevInputs => ({
-            ...prevInputs,
-            startTime: startDateTime.toObject(),
-            endTime: endDateTime.toObject()
+                ...prevInputs,
+                startTime: startDateTime.toObject(),
+                endTime: endDateTime.toObject()
             }));
         }
     }, [startOfWeek, currentDate]); // check why using startDateTime will cause infinite re-render //
@@ -54,12 +63,12 @@ export default function ClassForm(props) {
         if (classTimeTarget) {
             const { startTime, endTime, student, coach, location, note } = classTimeTarget;
             setInputs({
-            startTime: startTime,
-            endTime: endTime,
-            studentName: student[0].name,
-            coachName: coach.name,
-            location: { name: location._id.name, courtNo: location.courtNo },
-            note: note  
+                startTime: startTime,
+                endTime: endTime,
+                studentArr: student,
+                coachName: coach.name,
+                location: { name: location._id.name, courtNo: location.courtNo },
+                note: note
             });
         }
     }, [classTimeTarget]);
@@ -74,18 +83,21 @@ export default function ClassForm(props) {
         if (name === 'name' || name === 'courtNo') {
             setInputs(prevInputs => {
                 const newInputs = { ...prevInputs };
-                newInputs.location = { 
+                newInputs.location = {
                     ...prevInputs.location,
-                    [name]: value.length > 1 ? value : parseInt(value) 
+                    [name]: value.length > 1 ? value : parseInt(value)
                 };
                 return newInputs;
             });
             return;
         }
-        setInputs(prevInputs => ({
-            ...prevInputs,
-            [name]: value
-        }));
+        setInputs(prevInputs => {
+            console.log(name, value)
+            return {
+                ...prevInputs,
+                [name]: value
+            }
+        });
     }
 
     function handleCancel(e) {
@@ -95,18 +107,18 @@ export default function ClassForm(props) {
 
     function handleDelete(e) {
         e.preventDefault();
-        fetch('/class',{
+        fetch('/class', {
             method: 'delete',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 _id: classTimeTarget._id
             })
         })
-        .then(() => {
-            setStartOfWeek(prev => ({ ...prev }));
-            toggleForm()
-        })
-        .catch(err => console.log(err));
+            .then(() => {
+                setStartOfWeek(prev => ({ ...prev }));
+                toggleForm()
+            })
+            .catch(err => console.log(err));
     }
 
     function handleSubmit(e) {
@@ -123,26 +135,72 @@ export default function ClassForm(props) {
                     _id: classTimeTarget._id
                 })
             })
-            .then(() => {
-                setStartOfWeek(prev => ({ ...prev }));
-                toggleForm()
-            })
-            .catch(err => console.log(err));
+                .then(() => {
+                    setStartOfWeek(prev => ({ ...prev }));
+                    toggleForm()
+                })
+                .catch(err => console.log(err));
         } else {
             fetch('/class', {
                 method: 'post',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(inputs)
             })
-            .then(res => {
-                if (res.status === 400) throw new Error('wrong student');
-                setStartOfWeek(prev => ({ ...prev }));
-                toggleForm();
-            })
-            .catch(err => console.log(err));
+                .then(res => {
+                    if (res.status === 400) throw new Error('wrong student');
+                    setStartOfWeek(prev => ({ ...prev }));
+                    toggleForm();
+                })
+                .catch(err => console.log(err));
         }
     }
-    // add courtNo to form //
+    const [ test, setTest ] = React.useState([]);
+    const studentChange = (e, values) => {
+        console.log(values)
+        setTest(values);
+        // setInputs(prev => ({
+        //     ...prev,
+        //     studentArr: values
+        // }));
+    }
+
+    const selectChange = (event, field) => {
+        const { value } = event.target;
+        console.log(event.target)
+        if (!value) return;
+        if (field === 'name' || field === 'courtNo') {
+            setInputs(prev => {
+                const newInputs = { ...prev };
+                const parse = value.length < 2;
+                newInputs.location[field] = parse ? parseInt(value) : value;
+                return newInputs;
+            });
+        } else {
+            
+            setInputs(prev => ({
+                ...prev,
+                [field]: value
+            }));
+        }
+    }
+    let coachOptions;
+    let locationOptions;
+    let courtNoOptions = [];
+    if (coachData) coachOptions = coachData.slice(1).map(coach => coach.name);
+    if (locationData) locationOptions = locationData.slice(1).map(location => location.name);
+    if (inputs.location.name === 'Camberwell')
+        courtNoOptions = ['1', '2', '3', '4', '5'];
+    else
+        courtNoOptions = ['1', '2'];
+
+    const textInput = (params, tag) => (
+        <TextField
+            {...params}
+            label={tag}
+            variant="filled"
+        />
+    )
+
     return (
         <div className="form-container">
             <form className="class-form" onSubmit={handleSubmit}>
@@ -171,31 +229,45 @@ export default function ClassForm(props) {
                     >
                     </input>
                 </div>
-                <label htmlFor="studentName"></label>
-                <input
-                    type="text"
-                    id="studentName"
-                    name="studentName"
-                    className="studentName"
-                    placeholder={classTimeTarget ? classTimeTarget.student[0].name : "Student Name"}
-                    onChange={handleChange}
-                    style={{ outline: studentName ? 'none' : 'red auto 1px' }}
-                >
-                </input>
-                <label htmlFor="coachName"></label>
-                <input
-                    type="text"
-                    id="coachName"
-                    name="coachName"
-                    className="coachName"
-                    placeholder={classTimeTarget ? classTimeTarget.coach.name : "Coach Name"}
-                    onChange={handleChange}
-                    style={{ outline: coachName ? 'none' : 'red auto 1px' }}
-                >
-                </input>
+                <Autocomplete
+                    options={options}
+                    renderInput={params => textInput(params, 'Student')}
+                    value={test}
+                    onChange={studentChange}
+                    size="small"
+                    autoHighlight
+                    multiple
+                />
+                <Autocomplete
+                    options={coachOptions}
+                    isOptionEqualToValue={(option, value) => true}
+                    renderInput={params => textInput(params, 'Coach')}
+                    value={inputs.coachName}
+                    onSelect={e => selectChange(e, 'coach')}
+                    size="small"
+                    autoHighlight
+                />
                 <div className="form-location">
-                    <label htmlFor="location"></label>
-                    <input
+                    <Autocomplete
+                        options={locationOptions}
+                        isOptionEqualToValue={(option, value) => true}
+                        renderInput={params => textInput(params, 'Location')}
+                        value={inputs.location.name}
+                        onSelect={e => selectChange(e, 'name')}
+                        size="small"
+                        autoHighlight
+                    />
+                    <Autocomplete
+                        options={courtNoOptions}
+                        getOptionLabel={option => option.toString()}
+                        isOptionEqualToValue={(option, value) => true}
+                        renderInput={params => textInput(params, 'Court No.')}
+                        value={inputs.location.courtNo}
+                        onSelect={e => selectChange(e, 'courtNo')}
+                        size="small"
+                        autoHighlight
+                    />
+                    {/* <input  
                         type="text"
                         id="location"
                         name="name"
@@ -204,8 +276,8 @@ export default function ClassForm(props) {
                         onChange={handleChange}
                         style={{ outline: inputs.location ? 'none' : 'red auto 1px' }}
                     >
-                    </input>
-                    <label htmlFor="courtNo"></label>
+                    </input> */}
+                    {/* <label htmlFor="courtNo"></label>
                     <input
                         type="text"
                         id="courtNo"
@@ -215,7 +287,7 @@ export default function ClassForm(props) {
                         onChange={handleChange}
                         style={{ outline: inputs.location ? 'none' : 'red auto 1px' }}
                     >
-                    </input>
+                    </input> */}
                 </div>
                 <label htmlFor="note"></label>
                 <textarea
@@ -232,7 +304,7 @@ export default function ClassForm(props) {
                     {
                         classTimeTarget &&
                         <button className="form-delete-button" onClick={handleDelete}>
-                            Delete
+                            <FontAwesomeIcon icon={faTrashCan} />
                         </button>
                     }
                     <button type="submit" className="form-submit-button">

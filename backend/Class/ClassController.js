@@ -29,7 +29,7 @@ exports.getClasses = async (req, res) => {
         _id: data._id,
         startTime: DateTime.fromISO(data.startTime).toObject(),
         endTime: DateTime.fromISO(data.endTime).toObject(),
-        student: data.student,
+        student: data.student.map(student => student.name),
         coach: data.coach,
         location: data.location,
         note: data.note
@@ -38,25 +38,30 @@ exports.getClasses = async (req, res) => {
 }
 
 exports.setClass = async (req, res) => {
-    let { startTime, endTime, studentName, coachName, location, note } = req.body;
-    const student = await Student.findOne({ name: studentName });
+    let { startTime, endTime, studentArr, coachName, location, note } = req.body;
     const coach = await Coach.findOne({ name: coachName });
     const court = await Location.findOne({ name: location.name });
     startTime = DateTime.fromObject(startTime).toISO();
     endTime = DateTime.fromObject(endTime).toISO();
 
-    if (!student) {
-        res.status(400).send();
-        return;
-    } 
+    let student = [];
+    studentArr.forEach(async student => {
+        const result = await Student.findOne({ name: student });
+        if (!result) {
+            res.status(400).send();
+            return;
+        }
+        student.push(result);
+    });
+
     const lesson = await Class.create({
         startTime,
         endTime,
+        student,
         coach,
         location: { courtNo: location.courtNo , _id: court },
         note
     })
-    lesson.student.push(student);
     await lesson.save().catch(err => console.log(err));
     res.send(lesson);
 }

@@ -110,7 +110,7 @@ export default function CalendarQuarterHour(props) {
                 }
                 onClick={toggleForm}
                 style={styles}
-            >
+            > 
                 {isStartTime &&
                     <div className="calendar-class-info">
                         <div className="calendar-class-info-coach-name">
@@ -123,8 +123,8 @@ export default function CalendarQuarterHour(props) {
                             {endMin === 0 ? '00' : endMin}
                         </div>
                         <div className="calendar-class-info-student-name">
-                            {classTimeObj && classTimeObj.student[0].name}
-                        </div>
+                            {classTimeObj && classTimeObj.student[0]} 
+                        </div> 
                         <div className="calendar-class-info-location">
                             {classTimeObj && duration > 30 && classTimeObj.location._id.name}
                         </div>
