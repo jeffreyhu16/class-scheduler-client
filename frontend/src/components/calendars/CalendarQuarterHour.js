@@ -83,14 +83,12 @@ export default function CalendarQuarterHour(props) {
         borderRight: isFree ? borderDefault : borderActive
     }
 
-    let classTimeObj, startHour, startMin, endHour, endMin;
+    let classTimeObj, startString, endString;
     if (isStartTime) {
         classTimeObj = startTimeTarget[0];
         const { startTime, endTime } = classTimeObj;
-        startHour = startTime.hour;
-        startMin = startTime.minute;
-        endHour = endTime.hour;
-        endMin = endTime.minute;
+        startString = DateTime.fromObject(startTime).toFormat('h:mm').toLowerCase();
+        endString = DateTime.fromObject(endTime).toFormat('h:mm').toLowerCase();
     }
     
     const classTimeTarget =
@@ -117,13 +115,10 @@ export default function CalendarQuarterHour(props) {
                             {classTimeObj && classTimeObj.coach.name}
                         </div>
                         <div className="calendar-class-info-class-period">
-                            {startHour > 12 ? startHour - 12 : startHour}:
-                            {startMin === 0 ? '00' : startMin}-
-                            {endHour > 12 ? endHour - 12 : endHour}:
-                            {endMin === 0 ? '00' : endMin}
+                            {startString}-{endString}
                         </div>
                         <div className="calendar-class-info-student-name">
-                            {classTimeObj && classTimeObj.student[0]} 
+                            {classTimeObj && classTimeObj.student} 
                         </div> 
                         <div className="calendar-class-info-location">
                             {classTimeObj && duration > 30 && classTimeObj.location._id.name}

@@ -1,4 +1,5 @@
 @import './calendar.css'; 
+@import './mui.css';
 
 *, ::before, ::after {
     box-sizing: border-box;
@@ -87,7 +88,7 @@ h1 {
     width: min(97%, 100rem);
 }
 
-@media (max-width: 1080px) {
+@media (max-width: 1280px) {
     .header-flex,
     .main-flex {
         margin: 0.5em auto;
@@ -227,7 +228,7 @@ h1 {
     margin: 0 0.7em;
 }
 
-@media (max-width: 1080px) {
+@media (max-width: 1280px) {
     html {
         font-size: 0.9rem;
     }
@@ -235,6 +236,10 @@ h1 {
     .header-nav {
         width: 100%;
         padding: 1.1em 1em 1.1em 1.2em;  
+    }
+
+    .class-form {
+        font-size: 16px !important;
     }
 }
 
@@ -444,7 +449,7 @@ h1 {
 .calendar-class-info-student-name,
 .calendar-class-info-coach-name,
 .calendar-class-info-location,
-.calendar-class-info-class-period {
+.calendar-class-info-class-period { 
     margin-bottom: 0.2em;
 }
 
@@ -453,7 +458,7 @@ h1 {
     color: #fff;
     position: fixed;
     padding: 1.5rem;
-    width: min(60%, 30rem);
+    width: 420px;
     height: 60%;
     top: 50%;
     left: 50%;
@@ -470,6 +475,16 @@ h1 {
 
 .class-form label {
     position: absolute;
+}
+
+.form-time-start {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.form-time-end {
+    display: flex;
+    justify-content: flex-end;
 }
 
 .startTime,
@@ -512,7 +527,6 @@ h1 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1.5em;
 }
 
 input:focus-visible,
@@ -524,42 +538,6 @@ textarea:focus-visible {
     resize: none;
     padding-top: 0.55em;
     height: 4rem;
-}
-
-.form-location .MuiAutocomplete-root {
-    width: 49%;
-}
-
-.MuiTextField-root label {
-    font-size: 1rem;
-}
-
-.MuiTextField-root label.Mui-focused {
-    color: #003567;
-}
-
-.MuiTextField-root .MuiFilledInput-root {
-    background-color: #fff;
-    border-radius: 0.6em;
-    margin-bottom: 1em;
-    /* width: 100%; */
-    /* font-size: 1rem; */
-}
-
-.MuiTextField-root .MuiFilledInput-root.Mui-focused {
-    background-color: #fff;
-}
-
-.MuiTextField-root .MuiFilledInput-root:hover {
-    background-color: #fff;
-}
-
-.MuiTextField-root .MuiFilledInput-root::before {
-    display: none;
-}
-
-.MuiTextField-root .MuiFilledInput-root::after {
-    display: none;
 }
 
 button {

@@ -25,3 +25,14 @@ exports.getFullWeek = (req, res) => {
         sun: monday.plus({days: 6}).toObject(),
     });
 };
+
+exports.getTimeOptions = (req, res) => {
+    let response = []; 
+    let startOfDay = DateTime.local().startOf('day').set({ hour: 6 });
+    for (let i = 0; i <= 72; i++) {
+        let option = startOfDay.toFormat('h:mm a').toLowerCase();
+        response.push(option);
+        startOfDay = startOfDay.plus({ minutes: 15 });
+    }
+    res.send(response);
+}

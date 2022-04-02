@@ -10,7 +10,7 @@ export default function Main(props) {
 
     return (
         <main className="main-flex">
-            {(dayView || !coachAll) && breakPoint[1080] && <Sidebar />}
+            {(dayView || !coachAll) && breakPoint[1280] && <Sidebar />}
             <Calendar breakPoint={breakPoint}/>
         </main>
     )

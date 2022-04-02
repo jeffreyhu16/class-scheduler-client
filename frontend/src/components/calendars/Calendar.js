@@ -25,7 +25,7 @@ export default function Calendar(props) {
     const scrollView = weekView && coachAll && camberwell;
 
     const calendarStyles = {
-        width: wideView || !breakPoint[1080] ? '100%' : '81%'
+        width: wideView || !breakPoint[1280] ? '100%' : '81%'
     }
     
     const flexStyles = {

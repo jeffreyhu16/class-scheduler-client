@@ -14,7 +14,7 @@ export default function App() {
     const [ location, setLocation ] = React.useState({ name: 'all'});
     const [ coach, setCoach ] = React.useState({ name: 'Tim' });
     const [ breakPoint, setBreakPoint ] = React.useState({ 
-        1080: window.innerWidth > 1080, 
+        1280: window.innerWidth > 1280, 
         710: window.innerWidth > 710,
         540: window.innerWidth > 540
     });
@@ -40,7 +40,7 @@ export default function App() {
 
         window.addEventListener('resize', () => {
             setBreakPoint({
-                1080: window.innerWidth > 1080,
+                1280: window.innerWidth > 1280,
                 710: window.innerWidth > 710,
                 540: window.innerWidth > 540,
             });

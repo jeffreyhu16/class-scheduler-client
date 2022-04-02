@@ -1,14 +1,21 @@
 import React from 'react'
 import { DateTime } from 'luxon'
 import { dataContext } from './contexts/DataContext'
-import { faMinus, faTrashCan } from '@fortawesome/free-solid-svg-icons'
+import { faTrashCan } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Autocomplete, TextField } from '@mui/material'
+import { Autocomplete, TextField, Popper } from '@mui/material'
 
 export default function ClassForm(props) {
     const { day, quarterHour, toggleForm, classTimeTarget } = props;
     const { currentDate, startOfWeek, setStartOfWeek, locationData, coachData } = React.useContext(dataContext);
-    const [options, setOptions] = React.useState([]);
+    const [timeOptions, setTimeOptions] = React.useState([]);
+    const [studentOptions, setStudentOptions] = React.useState([]);
+    const [inputDate, setInputDate] = React.useState({
+        startDate: '',
+        endDate: '',
+        startTimeString: '',
+        endTimeString: ''
+    });
     const [inputs, setInputs] = React.useState({
         startTime: '',
         endTime: '',
@@ -19,17 +26,23 @@ export default function ClassForm(props) {
     });
 
     React.useEffect(() => {
-        fetch('/student')
+        fetch('/student/options')
             .then(res => res.json())
-            .then(data => setOptions(data))
+            .then(data => setStudentOptions(data));
+        fetch('date/timeOptions')
+            .then(res => res.json())
+            .then(data => setTimeOptions(data));
     }, []);
-
-    const { startTime, endTime, studentName, coachName } = inputs;
-    let dateObj, startDateTime, endDateTime, startTimeString, endTimeString
+    const { startTime, endTime } = inputs;
+    let dateObj, startDateTime, endDateTime, startTimeString, endTimeString;
     const hour = Math.floor((quarterHour - 1) / 4 + 6);
     const min = (quarterHour - 1) % 4 * 15;
 
-    if (startOfWeek && day) {
+    if (classTimeTarget) {
+        const { startTime, endTime } = classTimeTarget;
+        startDateTime = DateTime.fromObject(startTime);
+        endDateTime = DateTime.fromObject(endTime);
+    } else if (startOfWeek && day) {
         dateObj = DateTime.fromObject(startOfWeek);
         startDateTime = dateObj.plus({ days: day - 1, hours: hour, minutes: min });
         endDateTime = dateObj.plus({ days: day - 1, hours: hour + 1, minutes: min });
@@ -38,16 +51,8 @@ export default function ClassForm(props) {
         startDateTime = dateObj.set({ hour: hour, minute: min });
         endDateTime = dateObj.set({ hour: hour + 1, minute: min });
     }
-    startTimeString = startDateTime.toLocaleString(DateTime.TIME_SIMPLE);
-    endTimeString = endDateTime.toLocaleString(DateTime.TIME_SIMPLE);
-
-    if (classTimeTarget) {
-        startDateTime = DateTime.fromObject(classTimeTarget.startTime);
-        endDateTime = DateTime.fromObject(classTimeTarget.endTime);
-
-        startTimeString = startDateTime.toLocaleString(DateTime.TIME_SIMPLE);
-        endTimeString = endDateTime.toLocaleString(DateTime.TIME_SIMPLE);
-    }
+    startTimeString = startDateTime.toFormat('h:mm a').toLowerCase();
+    endTimeString = endDateTime.toFormat('h:mm a').toLowerCase();
 
     React.useEffect(() => {
         if (startOfWeek || currentDate) {
@@ -57,21 +62,32 @@ export default function ClassForm(props) {
                 endTime: endDateTime.toObject()
             }));
         }
-    }, [startOfWeek, currentDate]); // check why using startDateTime will cause infinite re-render //
+    }, [startOfWeek, currentDate]); // maybe take away dependencies //
+
+    React.useEffect(() => {
+        if (startTimeString.length > 5) {
+            setInputDate({
+                startDate: startDateTime.toLocaleString(DateTime.DATE_SHORT),
+                endDate: endDateTime.toLocaleString(DateTime.DATE_SHORT),
+                startTimeString: startTimeString,
+                endTimeString: endTimeString
+            });
+        }
+    }, []); // maybe add startDateTime //
 
     React.useEffect(() => {
         if (classTimeTarget) {
             const { startTime, endTime, student, coach, location, note } = classTimeTarget;
             setInputs({
-                startTime: startTime,
-                endTime: endTime,
+                startTime,
+                endTime,
                 studentArr: student,
                 coachName: coach.name,
                 location: { name: location._id.name, courtNo: location.courtNo },
                 note: note
             });
         }
-    }, [classTimeTarget]);
+    }, [classTimeTarget]); // maybe take away dependencies //
 
     function handleChange(e) {
         let { name, value } = e.target;
@@ -154,19 +170,23 @@ export default function ClassForm(props) {
                 .catch(err => console.log(err));
         }
     }
-    const [ test, setTest ] = React.useState([]);
+    const dateChange = e => {
+        const { name, value } = e.target;
+        setInputDate(prev => ({
+            ...prev,
+            [name]: value
+        }))
+    }
+
     const studentChange = (e, values) => {
-        console.log(values)
-        setTest(values);
-        // setInputs(prev => ({
-        //     ...prev,
-        //     studentArr: values
-        // }));
+        setInputs(prev => ({
+            ...prev,
+            studentArr: values
+        }));
     }
 
     const selectChange = (event, field) => {
         const { value } = event.target;
-        console.log(event.target)
         if (!value) return;
         if (field === 'name' || field === 'courtNo') {
             setInputs(prev => {
@@ -176,7 +196,6 @@ export default function ClassForm(props) {
                 return newInputs;
             });
         } else {
-            
             setInputs(prev => ({
                 ...prev,
                 [field]: value
@@ -199,40 +218,93 @@ export default function ClassForm(props) {
             label={tag}
             variant="filled"
         />
+    );
+
+    const customPop = (props) => (
+        <Popper {...props} sx={popStyle} style={{ width: '85px' }} />
     )
+
+    const popStyle = {
+        boxShadow: '0 0 1rem 0 rgba(0, 0, 0, 0.2)',
+        "& .MuiAutocomplete-listbox": {
+            '& li': {
+                padding: '1px 0px 1px 10px'
+            }
+        }
+    }
+
+    const dateStyle = {
+        '& .MuiFilledInput-root': {
+            borderRadius: '0',
+            borderTopLeftRadius: '0.4em',
+            borderBottomLeftRadius: '0.4em',
+            '& .MuiFilledInput-input': {
+                paddingRight: '0px'
+            }
+        }
+    }
+
+    const timeStyle = {
+        '& .MuiTextField-root': {
+            '& .MuiFilledInput-root': {
+                borderRadius: '0',
+                borderTopRightRadius: '0.4em',
+                borderBottomRightRadius: '0.4em'
+            }
+        }
+    }
 
     return (
         <div className="form-container">
             <form className="class-form" onSubmit={handleSubmit}>
                 <div className="form-time">
-                    <label htmlFor="startTime"></label>
-                    <input
-                        type="text"
-                        id="startTime"
-                        name="startTime"
-                        className="startTime"
-                        placeholder={startTimeString}
-                        onChange={handleChange}
-                        style={{ outline: startTime ? 'none' : 'red auto 1px' }}
-                    >
-                    </input>
-                    <FontAwesomeIcon icon={faMinus} />
-                    <label htmlFor="endTime"></label>
-                    <input
-                        type="text"
-                        id="endTime"
-                        name="endTime"
-                        className="endTime"
-                        placeholder={endTimeString}
-                        onChange={handleChange}
-                        style={{ outline: endTime ? 'none' : 'red auto 1px' }}
-                    >
-                    </input>
+                    <div className="form-time-start">
+                        <TextField
+                            label="Start"
+                            name="startDate"
+                            value={inputDate.startDate}
+                            onChange={dateChange}
+                            variant="filled"
+                            size="small"
+                            sx={dateStyle}
+                        />
+                        <Autocomplete
+                            options={timeOptions.slice(0, 72)}
+                            renderInput={params => textInput(params, '')}
+                            value={inputDate.startTimeString}
+                            PopperComponent={customPop}
+                            size="small"
+                            autoHighlight
+                            popupIcon={null}
+                            sx={timeStyle}
+                        />
+                    </div>
+                    <div className="form-time-end">
+                        <TextField
+                            label="End"
+                            name="endDate"
+                            value={inputDate.endDate}
+                            onChange={dateChange}
+                            variant="filled"
+                            size="small"
+                            sx={dateStyle}
+                        />
+                        <Autocomplete
+                            options={timeOptions.slice(1)}
+                            renderInput={params => textInput(params, '')}
+                            value={inputDate.endTimeString}
+                            PopperComponent={customPop}
+                            size="small"
+                            autoHighlight
+                            popupIcon={null}
+                            sx={timeStyle}
+                        />
+                    </div>
                 </div>
                 <Autocomplete
-                    options={options}
+                    options={studentOptions}
                     renderInput={params => textInput(params, 'Student')}
-                    value={test}
+                    value={inputs.studentArr}
                     onChange={studentChange}
                     size="small"
                     autoHighlight
@@ -243,7 +315,7 @@ export default function ClassForm(props) {
                     isOptionEqualToValue={(option, value) => true}
                     renderInput={params => textInput(params, 'Coach')}
                     value={inputs.coachName}
-                    onSelect={e => selectChange(e, 'coach')}
+                    onSelect={e => selectChange(e, 'coachName')}
                     size="small"
                     autoHighlight
                 />
@@ -267,35 +339,14 @@ export default function ClassForm(props) {
                         size="small"
                         autoHighlight
                     />
-                    {/* <input  
-                        type="text"
-                        id="location"
-                        name="name"
-                        className="location"
-                        placeholder={classTimeTarget ? classTimeTarget.location._id.name : "Location"}
-                        onChange={handleChange}
-                        style={{ outline: inputs.location ? 'none' : 'red auto 1px' }}
-                    >
-                    </input> */}
-                    {/* <label htmlFor="courtNo"></label>
-                    <input
-                        type="text"
-                        id="courtNo"
-                        name="courtNo"
-                        className="courtNo"
-                        placeholder={classTimeTarget ? classTimeTarget.location.courtNo : "Court No."}
-                        onChange={handleChange}
-                        style={{ outline: inputs.location ? 'none' : 'red auto 1px' }}
-                    >
-                    </input> */}
                 </div>
-                <label htmlFor="note"></label>
-                <textarea
-                    id="note"
+                <TextField
+                    label="Note"
                     name="note"
-                    className="note"
-                    placeholder="Notes"
-                    onChange={handleChange}
+                    value={inputs.note}
+                    onChange={dateChange}
+                    variant="filled"
+                    size="small"
                 />
                 <div className="form-button-group">
                     <button className="form-cancel-button" onClick={handleCancel}>

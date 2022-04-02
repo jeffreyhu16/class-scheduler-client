@@ -7,7 +7,7 @@ export default function Header(props) {
     return (
         <header className="header-flex">
             {
-                breakPoint[1080] && 
+                breakPoint[1280] && 
                 <div className="header-title">
                     <h1>Class Scheduler</h1>
                 </div>

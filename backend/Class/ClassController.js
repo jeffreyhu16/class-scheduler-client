@@ -14,26 +14,29 @@ exports.getClasses = async (req, res) => {
     if (startOfWeek) startQuery = DateTime.fromISO(startOfWeek).plus({ days: day - 1 }).toISO();
     const endQuery = DateTime.fromISO(startQuery).plus({ days: 1 }).toISO();
 
-    const dbQuery = { 
-        startTime: { $gt: startQuery, $lt: endQuery } 
+    const dbQuery = {
+        startTime: { $gt: startQuery, $lt: endQuery }
     }
     if (location !== 'all') dbQuery['location._id'] = locationDoc;
     if (coach !== 'all') dbQuery.coach = coachDoc;
-    
+
     let result = await Class.find(dbQuery)
         .populate('student', 'name')
         .populate('coach', 'name')
         .populate('location._id', 'name');
 
-    const response = result.map(data => ({
-        _id: data._id,
-        startTime: DateTime.fromISO(data.startTime).toObject(),
-        endTime: DateTime.fromISO(data.endTime).toObject(),
-        student: data.student.map(student => student.name),
-        coach: data.coach,
-        location: data.location,
-        note: data.note
-    }));
+    const response = result.map(data => {
+        const studentMap = data.student.map(student => student.name);
+        return {
+            _id: data._id,
+            startTime: DateTime.fromISO(data.startTime).toObject(),
+            endTime: DateTime.fromISO(data.endTime).toObject(),
+            student: studentMap,
+            coach: data.coach,
+            location: data.location,
+            note: data.note
+        }
+    });
     res.send(response);
 }
 
@@ -44,25 +47,20 @@ exports.setClass = async (req, res) => {
     startTime = DateTime.fromObject(startTime).toISO();
     endTime = DateTime.fromObject(endTime).toISO();
 
-    let student = [];
-    studentArr.forEach(async student => {
-        const result = await Student.findOne({ name: student });
-        if (!result) {
-            res.status(400).send();
-            return;
-        }
-        student.push(result);
-    });
-
     const lesson = await Class.create({
         startTime,
         endTime,
-        student,
         coach,
-        location: { courtNo: location.courtNo , _id: court },
+        location: { courtNo: location.courtNo, _id: court },
         note
-    })
-    await lesson.save().catch(err => console.log(err));
+    });
+
+    const student = studentArr.map(async stud => {
+        return await Student.findOne({ name: stud }); 
+    });
+
+    lesson.student = await Promise.all(student);
+    await lesson.save()
     res.send(lesson);
 }
 
@@ -73,12 +71,12 @@ exports.updateClass = async (req, res) => {
     const court = await Location.findOne({ name: location.name });
     startTime = DateTime.fromObject(startTime).toISO();
     endTime = DateTime.fromObject(endTime).toISO();
-
+    
     const lesson = await Class.findByIdAndUpdate(_id, {
         startTime,
         endTime,
         coach,
-        location: { courtNo: location.courtNo , _id: court },
+        location: { courtNo: location.courtNo, _id: court },
         note
     }, { new: true });
 
