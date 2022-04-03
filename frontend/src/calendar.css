@@ -58,3 +58,13 @@
     cursor: pointer;
     background: rgb(255, 255, 255, 0.1);
 }
+
+.active-tile {
+    background: #c9e5ff;
+    color: #00182f;
+    font-weight: 700;
+}
+
+.active-tile:hover {
+    background: #c9e5ff;
+}
