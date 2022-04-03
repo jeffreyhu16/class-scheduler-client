@@ -33,7 +33,7 @@ export default function ClassForm(props) {
             .then(res => res.json())
             .then(data => setTimeOptions(data));
     }, []);
-    const { startTime, endTime } = inputs;
+
     let dateObj, startDateTime, endDateTime, startTimeString, endTimeString;
     const hour = Math.floor((quarterHour - 1) / 4 + 6);
     const min = (quarterHour - 1) % 4 * 15;
@@ -89,33 +89,6 @@ export default function ClassForm(props) {
         }
     }, [classTimeTarget]); // maybe take away dependencies //
 
-    function handleChange(e) {
-        let { name, value } = e.target;
-        if (name === 'startTime' || name === 'endTime') {
-            const hour = value.length === 4 ? parseInt(value[0]) : parseInt(value.slice(0, 2));
-            const min = parseInt(value.slice(value.length - 2));
-            value = startDateTime.set({ hour: hour, minute: min }).toObject();
-        }
-        if (name === 'name' || name === 'courtNo') {
-            setInputs(prevInputs => {
-                const newInputs = { ...prevInputs };
-                newInputs.location = {
-                    ...prevInputs.location,
-                    [name]: value.length > 1 ? value : parseInt(value)
-                };
-                return newInputs;
-            });
-            return;
-        }
-        setInputs(prevInputs => {
-            console.log(name, value)
-            return {
-                ...prevInputs,
-                [name]: value
-            }
-        });
-    }
-
     function handleCancel(e) {
         e.preventDefault();
         toggleForm();
@@ -139,56 +112,51 @@ export default function ClassForm(props) {
 
     function handleSubmit(e) {
         e.preventDefault();
-        for (let value in inputs) {
-            if (value === '.') return
-        }
+        let method, body;
         if (classTimeTarget) {
-            fetch('/class', {
-                method: 'put',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    ...inputs,
-                    _id: classTimeTarget._id
-                })
-            })
-                .then(() => {
-                    setStartOfWeek(prev => ({ ...prev }));
-                    toggleForm()
-                })
-                .catch(err => console.log(err));
+            method = 'put';
+            body = { ...inputs, _id: classTimeTarget._id }
         } else {
-            fetch('/class', {
-                method: 'post',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(inputs)
-            })
-                .then(res => {
-                    if (res.status === 400) throw new Error('wrong student');
-                    setStartOfWeek(prev => ({ ...prev }));
-                    toggleForm();
-                })
-                .catch(err => console.log(err));
+            method = 'post';
+            body = inputs;
         }
+        fetch('/class', {
+            method: method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        })
+            .then(() => {
+                setStartOfWeek(prev => ({ ...prev }));
+                toggleForm()
+            })
+            .catch(err => console.log(err));
     }
+
     const dateChange = e => {
         const { name, value } = e.target;
         setInputDate(prev => ({
             ...prev,
             [name]: value
         }))
-    }
+    }  // add input format restriction
 
     const studentChange = (e, values) => {
+        if (!values) return;
         setInputs(prev => ({
             ...prev,
             studentArr: values
         }));
     }
 
-    const selectChange = (event, field) => {
-        const { value } = event.target;
+    const selectChange = (e, field) => {
+        const { value } = e.target;
         if (!value) return;
-        if (field === 'name' || field === 'courtNo') {
+        if (field === 'startTimeString' || field === 'endTimeString') {
+            setInputDate(prev => ({
+                ...prev,
+                [field]: value
+            }));
+        } else if (field === 'name' || field === 'courtNo') {
             setInputs(prev => {
                 const newInputs = { ...prev };
                 const parse = value.length < 2;
@@ -202,6 +170,24 @@ export default function ClassForm(props) {
             }));
         }
     }
+
+    React.useEffect(() => {
+        if (inputDate.startDate) {
+            const { startDate, endDate, startTimeString, endTimeString } = inputDate;
+            const format = 'dd/MM/yyyy h:mm a';
+            const startTime =
+                DateTime.fromFormat(`${startDate} ${startTimeString}`, format).toObject();
+            const endTime =
+                DateTime.fromFormat(`${endDate} ${endTimeString}`, format).toObject();
+
+            setInputs(prev => ({
+                ...prev,
+                startTime: startTime,
+                endTime: endTime
+            }));
+        }
+    }, [inputDate]);
+
     let coachOptions;
     let locationOptions;
     let courtNoOptions = [];
@@ -271,6 +257,7 @@ export default function ClassForm(props) {
                         <Autocomplete
                             options={timeOptions.slice(0, 72)}
                             renderInput={params => textInput(params, '')}
+                            onSelect={e => selectChange(e, 'startTimeString')}
                             value={inputDate.startTimeString}
                             PopperComponent={customPop}
                             size="small"
@@ -292,6 +279,7 @@ export default function ClassForm(props) {
                         <Autocomplete
                             options={timeOptions.slice(1)}
                             renderInput={params => textInput(params, '')}
+                            onSelect={e => selectChange(e, 'endTimeString')}
                             value={inputDate.endTimeString}
                             PopperComponent={customPop}
                             size="small"

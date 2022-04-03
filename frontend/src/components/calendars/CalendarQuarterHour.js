@@ -3,6 +3,7 @@ import { DateTime } from 'luxon'
 import ClassForm from '../ClassForm'
 import { glowContext } from '../contexts/GlowContext'
 import { renderContext } from '../contexts/RenderContext'
+import { dataContext } from '../contexts/DataContext'
 
 export default function CalendarQuarterHour(props) {
     const { classData, day, location, courtNo, quarterHour, fetchClasses } = props;
@@ -11,7 +12,7 @@ export default function CalendarQuarterHour(props) {
     const [ isShow, setIsShow ] = React.useState(false);
 
     let startTimeTarget, midTimeTarget, endTimeTarget;
-    let isStartTime, isMidTime, isEndTime, duration;
+    let isStartTime, isMidTime, isEndTime, duration, showLocation;
     if (classData.length > 0) {
         // filter startTime //
         startTimeTarget = classData.filter(dayTarget => {
@@ -39,6 +40,7 @@ export default function CalendarQuarterHour(props) {
                         isMidTime = true;
                     }
                 }
+                if (startTimeQuarterHour === quarterHour - 1) showLocation = true;
             }
             return isMidTime;
         });
@@ -121,7 +123,7 @@ export default function CalendarQuarterHour(props) {
                             {classTimeObj && classTimeObj.student} 
                         </div> 
                         <div className="calendar-class-info-location">
-                            {classTimeObj && duration > 30 && classTimeObj.location._id.name}
+                            {classTimeObj && showLocation && classTimeObj.location._id.name}
                         </div>
                         
                     </div>

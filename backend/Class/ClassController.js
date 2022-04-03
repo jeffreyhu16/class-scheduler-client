@@ -60,13 +60,12 @@ exports.setClass = async (req, res) => {
     });
 
     lesson.student = await Promise.all(student);
-    await lesson.save()
+    await lesson.save().catch(err => console.log(err));
     res.send(lesson);
 }
 
 exports.updateClass = async (req, res) => {
-    let { _id, startTime, endTime, studentName, coachName, location, note } = req.body;
-    const student = await Student.findOne({ name: studentName }); // query an array //
+    let { _id, startTime, endTime, studentArr, coachName, location, note } = req.body;
     const coach = await Coach.findOne({ name: coachName });
     const court = await Location.findOne({ name: location.name });
     startTime = DateTime.fromObject(startTime).toISO();
@@ -80,8 +79,12 @@ exports.updateClass = async (req, res) => {
         note
     }, { new: true });
 
-    lesson.student.push(student); // assign the queried array directly instead of push //
-    await lesson.save().catch(err => console.log(err))
+    const student = studentArr.map(async stud => {
+        return await Student.findOne({ name: stud }); 
+    });
+
+    lesson.student = await Promise.all(student);
+    await lesson.save().catch(err => console.log(err));
     res.send(lesson);
 }  // fix update function, missing ObjectId update //
 
