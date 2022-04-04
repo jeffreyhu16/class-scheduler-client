@@ -13,7 +13,11 @@ export default function Calendar(props) {
     const { breakPoint } = props;
     const { location } = React.useContext(dataContext);
     const { weekView, coachAll } = React.useContext(renderContext);
-    const [ isGlow, setIsGlow ] = React.useState({ day: [], court: [], quarterHour: [] });
+    const [ isGlow, setIsGlow ] = React.useState({ 
+        day: [], 
+        location: { Camberwell: [], "St Roch's": [] }, 
+        quarterHour: [] 
+    });
 
     let i = 0;
     let calendarDays = [...Array(7)].map(() => {

@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "main": "App.js",
   "scripts": {
-    "start": "nodemon App.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node App.js",
+    "server": "nodemon App.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "heroku-postbuild": "cd frontend && npm i && npm run build"
   },
   "author": "",
   "license": "ISC",
@@ -17,5 +19,9 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.15"
+  },
+  "engines": {
+    "node": "16.14.0",
+    "npm": "8.5.1"
   }
 }

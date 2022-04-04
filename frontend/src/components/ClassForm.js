@@ -132,12 +132,20 @@ export default function ClassForm(props) {
             .catch(err => console.log(err));
     }
 
-    const dateChange = e => {
+    const handleChange = e => {
         const { name, value } = e.target;
-        setInputDate(prev => ({
-            ...prev,
-            [name]: value
-        }))
+        if (name === 'startDate' || name === 'endDate') {
+            setInputDate(prev => ({
+                ...prev,
+                [name]: value
+            }));
+        } else {
+            setInputs(prev => ({
+                ...prev,
+                [name]: value
+            }));
+        }
+
     }  // add input format restriction
 
     const studentChange = (e, values) => {
@@ -156,11 +164,16 @@ export default function ClassForm(props) {
                 ...prev,
                 [field]: value
             }));
-        } else if (field === 'name' || field === 'courtNo') {
+        } else if (field === 'location') {
             setInputs(prev => {
                 const newInputs = { ...prev };
-                const parse = value.length < 2;
-                newInputs.location[field] = parse ? parseInt(value) : value;
+                newInputs.location.name = value;
+                return newInputs;
+            });
+        } else if (field === 'courtNo') {
+            setInputs(prev => {
+                const newInputs = { ...prev };
+                newInputs.location.courtNo = parseInt(value);
                 return newInputs;
             });
         } else {
@@ -249,7 +262,7 @@ export default function ClassForm(props) {
                             label="Start"
                             name="startDate"
                             value={inputDate.startDate}
-                            onChange={dateChange}
+                            onChange={handleChange}
                             variant="filled"
                             size="small"
                             sx={dateStyle}
@@ -271,7 +284,7 @@ export default function ClassForm(props) {
                             label="End"
                             name="endDate"
                             value={inputDate.endDate}
-                            onChange={dateChange}
+                            onChange={handleChange}
                             variant="filled"
                             size="small"
                             sx={dateStyle}
@@ -313,7 +326,7 @@ export default function ClassForm(props) {
                         isOptionEqualToValue={(option, value) => true}
                         renderInput={params => textInput(params, 'Location')}
                         value={inputs.location.name}
-                        onSelect={e => selectChange(e, 'name')}
+                        onSelect={e => selectChange(e, 'location')}
                         size="small"
                         autoHighlight
                     />
@@ -332,9 +345,11 @@ export default function ClassForm(props) {
                     label="Note"
                     name="note"
                     value={inputs.note}
-                    onChange={dateChange}
+                    onChange={handleChange}
                     variant="filled"
+                    multiline={true}
                     size="small"
+                    rows={2}
                 />
                 <div className="form-button-group">
                     <button className="form-cancel-button" onClick={handleCancel}>

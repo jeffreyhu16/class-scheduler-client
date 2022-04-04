@@ -40,6 +40,10 @@ h1 {
     position: relative;
 }
 
+.dropdown-menu:hover {
+    background-color: #0055a4;
+}
+
 .dropdown-menu-list-item,
 .dropdown-menu-label {
     text-transform: capitalize;
@@ -161,12 +165,6 @@ h1 {
 .header-toggle-day,
 .header-toggle-week {
     cursor: pointer;
-}
-
-.header-toggle-week {
-    background: #c9e5ff;
-    color: #00182f;
-    box-shadow: 0 0 1rem 0 rgba(255, 255, 255, 0.4);
 }
 
 .header-toggle-group {
@@ -300,10 +298,6 @@ h1 {
 .calendar-head-day {
     text-transform: uppercase;
     margin-bottom: 0.2em;
-}
-
-.calendar-head-court {
-    margin-bottom: 0.8em;
 }
 
 .calendar-head-court-name {

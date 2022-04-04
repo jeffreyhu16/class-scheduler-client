@@ -66,7 +66,7 @@ export default function CalendarQuarterHour(props) {
         setIsGlow(prevIsGlow => {
             const newIsGlow = { ...prevIsGlow }
             if (dayIndex) newIsGlow.day[dayIndex] = boolean;
-            if (courtIndex) newIsGlow.court[courtIndex] = boolean;
+            if (courtIndex) newIsGlow.location[location.name][courtIndex] = boolean;
             newIsGlow.quarterHour[quarterHourIndex] = boolean;
             return newIsGlow;
         }) // fix for daily view //

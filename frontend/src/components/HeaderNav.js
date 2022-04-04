@@ -12,6 +12,7 @@ export default function HeaderNav(props) {
     const { setCalendarView, currentDate, setCurrentDate, startOfWeek, setStartOfWeek, locationData, setLocation, coachData, setCoach } = React.useContext(dataContext);
     const { weekView, dayView } = React.useContext(renderContext)
     const [active, setActive] = React.useState({ view: [, true], location: [, true], coach: [, , true] });
+    const [isHover, setIsHover] = React.useState([]);
     let currentDay, day1, day7, month, year, nextDay, prevDay, nextWeek, prevWeek;
 
     if (currentDate && startOfWeek) {
@@ -48,22 +49,31 @@ export default function HeaderNav(props) {
         if (weekView) {
             if (direction === 'next') setStartOfWeek(nextWeek);
             else setStartOfWeek(prevWeek);
-        } 
+        }
         if (dayView) {
             if (direction === 'next') setCurrentDate(nextDay);
             else setCurrentDate(prevDay);
         }
     }
+    
+    const castBackground = i => {
+        let background;
+        if (active.view[i] && !isHover[i]) background = '#c9e5ff';
+        if (active.view[i] && isHover[i]) background = '#c9e5fff1';
+        if (!active.view[i] && !isHover[i]) background = '#004b8f';
+        if (!active.view[i] && isHover[i]) background = '#0055a4';
+        return background;
+    }
 
     const activeShadow = '0 0 1rem 0 rgba(255, 255, 255, 0.4)';
     const defaultShadow = '0 0 1rem 0 rgba(0, 0, 0, 0.3)';
     const dayStyles = {
-        backgroundColor: active.view[0] ? '#c9e5ff' : '#004b8f',
+        backgroundColor: castBackground(0),
         color: active.view[0] ? '#00182f' : '#fff',
-        boxShadow: active.view[0] ? activeShadow : defaultShadow
+        boxShadow: active.view[0] ? activeShadow : defaultShadow,
     }
     const weekStyles = {
-        backgroundColor: active.view[1] ? '#c9e5ff' : '#004b8f',
+        backgroundColor: castBackground(1),
         color: active.view[1] ? '#00182f' : '#fff',
         boxShadow: active.view[1] ? activeShadow : defaultShadow
     }
@@ -80,6 +90,8 @@ export default function HeaderNav(props) {
                         <div
                             className="header-toggle-day"
                             onClick={() => toggleView('day')}
+                            onMouseEnter={() => setIsHover([ true, false ])}
+                            onMouseLeave={() => setIsHover([ false, false ])}
                             style={dayStyles}
                         >
                             Day
@@ -87,6 +99,8 @@ export default function HeaderNav(props) {
                         <div
                             className="header-toggle-week"
                             onClick={() => toggleView('week')}
+                            onMouseEnter={() => setIsHover([ false, true ])}
+                            onMouseLeave={() => setIsHover([ false, false ])}
                             style={weekStyles}
                         >
                             Week

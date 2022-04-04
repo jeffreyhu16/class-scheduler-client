@@ -31,13 +31,14 @@ export default function CalendarHead() {
         
         const dayCourtHeads = [...Array(j)].map(() => {
             const weekStyles = {
-                opacity: isGlow.day[day] && isGlow.court[j] ? '1' : '0',
+                opacity: isGlow.day[day] && isGlow.location[location.name][j] ? '1' : '0',
                 width: `calc(100% / ${location.numOfCourts})`,
                 marginBottom: '0.3em'
             }
             const dayStyles = {
-                opacity: '1',
-                width: `calc(98% / 7)` // change logic when new courts added //
+                textShadow: isGlow.location[location.name][j] ? '0 0 0.5rem #fff' : 'none',
+                width: `calc(98% / 7)`, // change logic when new courts added //
+                marginBottom: '0.8em' 
             }
             return (
                 <div className="calendar-head-court" style={weekView ? weekStyles : dayStyles}>

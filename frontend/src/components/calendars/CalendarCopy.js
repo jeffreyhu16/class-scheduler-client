@@ -32,10 +32,10 @@ export default function CalendarCopy(props) {
     }
     return (
         <div className="calendar-copy" style={copyStyles} onClick={() => setIsOn(prev => !prev)}>
-            {/* <FontAwesomeIcon
+            <FontAwesomeIcon
                 icon={faCopy}
                 className="icon-copy"
-            /> */}
+            />
             <div className="calendar-copy-popup" style={popupStyles}>
                 <div className="calendar-copy-msg">Copy from <span>previous week</span></div>
                 <div className="calendar-copy-confirm" onClick={() => copyClasses(1)}>Confirm</div>
