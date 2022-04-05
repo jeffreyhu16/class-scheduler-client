@@ -7,7 +7,7 @@ import { Autocomplete, TextField, Popper } from '@mui/material'
 Settings.defaultZone = 'Asia/Taipei';
 
 export default function ClassForm(props) {
-    const { day, quarterHour, toggleForm, classTimeTarget } = props;
+    const { day, quarterHour, setLoading, toggleForm, classTimeTarget } = props;
     const { api, currentDate, startOfWeek, setStartOfWeek, locationData, coachData } = React.useContext(dataContext);
     const [timeOptions, setTimeOptions] = React.useState([]);
     const [studentOptions, setStudentOptions] = React.useState([]);
@@ -97,6 +97,8 @@ export default function ClassForm(props) {
 
     function handleDelete(e) {
         e.preventDefault();
+        setLoading(true);
+        toggleForm();
         fetch(`${api}/class`, {
             method: 'delete',
             headers: { 'Content-Type': 'application/json' },
@@ -106,13 +108,15 @@ export default function ClassForm(props) {
         })
             .then(() => {
                 setStartOfWeek(prev => ({ ...prev }));
-                toggleForm()
+                setTimeout(() => setLoading(false), 1500);
             })
             .catch(err => console.log(err));
     }
 
     function handleSubmit(e) {
         e.preventDefault();
+        setLoading(true);
+        toggleForm();
         let method, body;
         if (classTimeTarget) {
             method = 'put';
@@ -128,7 +132,7 @@ export default function ClassForm(props) {
         })
             .then(() => {
                 setStartOfWeek(prev => ({ ...prev }));
-                toggleForm()
+                setTimeout(() => setLoading(false), 2000);
             })
             .catch(err => console.log(err));
     }
@@ -146,7 +150,6 @@ export default function ClassForm(props) {
                 [name]: value
             }));
         }
-
     }  // add input format restriction
 
     const studentChange = (e, values) => {

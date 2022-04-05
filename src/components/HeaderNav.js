@@ -5,6 +5,7 @@ import { faBars, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-i
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { dataContext } from './contexts/DataContext'
 import { renderContext } from './contexts/RenderContext'
+import { Backdrop, CircularProgress } from '@mui/material'
 Settings.defaultZone = 'Asia/Taipei';
 
 export default function HeaderNav(props) {
@@ -14,6 +15,7 @@ export default function HeaderNav(props) {
     const { weekView, dayView } = React.useContext(renderContext)
     const [active, setActive] = React.useState({ view: [, true], location: [, true], coach: [, , true] });
     const [isHover, setIsHover] = React.useState([]);
+    const [loading, setLoading] = React.useState(false);
     let currentDay, day1, day7, month, year, nextDay, prevDay, nextWeek, prevWeek;
 
     if (currentDate && startOfWeek) {
@@ -33,6 +35,7 @@ export default function HeaderNav(props) {
     }
 
     function toggleView(view) {
+        setLoading(true);
         setCalendarView(view);
         if (view === 'week') {
             setLocation(locationData[1]);
@@ -44,9 +47,11 @@ export default function HeaderNav(props) {
             setCoach({ name: 'all' });
             setActive({ view: [true, false], location: [false, true], coach: [false, true] });
         }
+        setTimeout(() => setLoading(false), 2500);
     }
 
     function shiftTime(direction) {
+        setLoading(true);
         if (weekView) {
             if (direction === 'next') setStartOfWeek(nextWeek);
             else setStartOfWeek(prevWeek);
@@ -55,6 +60,7 @@ export default function HeaderNav(props) {
             if (direction === 'next') setCurrentDate(nextDay);
             else setCurrentDate(prevDay);
         }
+        setTimeout(() => setLoading(false), 2500);
     }
     
     const castBackground = i => {
@@ -114,12 +120,14 @@ export default function HeaderNav(props) {
                             listData={locationData}
                             active={active}
                             setActive={setActive}
+                            setLoading={setLoading}
                         />
                         <Dropdown
                             label="coach"
                             listData={coachData}
                             active={active}
                             setActive={setActive}
+                            setLoading={setLoading}
                         />
                     </div>}
             </div>
@@ -146,6 +154,9 @@ export default function HeaderNav(props) {
                     </div>
                 </div>
             </div>
+            <Backdrop open={loading} sx={{ zIndex: '5' }}>
+                <CircularProgress color="inherit" />
+            </Backdrop>
         </div>
     )
 }

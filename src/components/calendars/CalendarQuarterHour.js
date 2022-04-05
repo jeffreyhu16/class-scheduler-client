@@ -3,13 +3,15 @@ import { DateTime, Settings } from 'luxon'
 import ClassForm from '../ClassForm'
 import { glowContext } from '../contexts/GlowContext'
 import { renderContext } from '../contexts/RenderContext'
+import { Backdrop, CircularProgress } from '@mui/material'
 Settings.defaultZone = 'Asia/Taipei';
 
 export default function CalendarQuarterHour(props) {
     const { classData, day, location, courtNo, quarterHour, fetchClasses } = props;
     const { setIsGlow } = React.useContext(glowContext);
     const { weekView } = React.useContext(renderContext);
-    const [ isShow, setIsShow ] = React.useState(false);
+    const [isShow, setIsShow] = React.useState(false);
+    const [loading, setLoading] = React.useState(false);
 
     let startTimeTarget, midTimeTarget, endTimeTarget;
     let isStartTime, isMidTime, isEndTime, duration, showLocation;
@@ -23,7 +25,7 @@ export default function CalendarQuarterHour(props) {
         });
         if (startTimeTarget[0]) isStartTime = true
         else isStartTime = false
-        
+
         // filter midTime //
         midTimeTarget = classData.filter(dayTarget => {
             const { startTime, endTime } = dayTarget;
@@ -46,7 +48,7 @@ export default function CalendarQuarterHour(props) {
         });
         if (midTimeTarget[0]) isMidTime = true
         else isMidTime = false
-        
+
         // filter endTime //
         endTimeTarget = classData.filter(dayTarget => {
             const { endTime } = dayTarget;
@@ -92,7 +94,7 @@ export default function CalendarQuarterHour(props) {
         startString = DateTime.fromObject(startTime).toFormat('h:mm').toLowerCase();
         endString = DateTime.fromObject(endTime).toFormat('h:mm').toLowerCase();
     }
-    
+
     const classTimeTarget =
         isStartTime ? startTimeTarget[0] :
             isMidTime ? midTimeTarget[0] :
@@ -110,7 +112,7 @@ export default function CalendarQuarterHour(props) {
                 }
                 onClick={toggleForm}
                 style={styles}
-            > 
+            >
                 {isStartTime &&
                     <div className="calendar-class-info">
                         <div className="calendar-class-info-coach-name">
@@ -120,12 +122,12 @@ export default function CalendarQuarterHour(props) {
                             {startString}-{endString}
                         </div>
                         <div className="calendar-class-info-student-name">
-                            {classTimeObj && classTimeObj.student} 
-                        </div> 
+                            {classTimeObj && classTimeObj.student}
+                        </div>
                         <div className="calendar-class-info-location">
                             {classTimeObj && showLocation && classTimeObj.location._id.name}
                         </div>
-                        
+
                     </div>
                 }
             </div>
@@ -134,11 +136,15 @@ export default function CalendarQuarterHour(props) {
                     day={day}
                     quarterHour={quarterHour}
                     courtNo={courtNo}
+                    setLoading={setLoading}
                     toggleForm={toggleForm}
                     fetchClasses={fetchClasses}
                     classTimeTarget={classTimeTarget}
                 />}
             {isShow && <div className="overlay"></div>}
+            <Backdrop open={loading}>
+                <CircularProgress color="inherit" />
+            </Backdrop>
         </>
     )
 }

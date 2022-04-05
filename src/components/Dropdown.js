@@ -2,11 +2,13 @@ import React from 'react'
 import DropdownItem from './DropdownItem'
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Backdrop, CircularProgress } from '@mui/material'
 
 export default function Dropdown(props) {
 
     const { label, listData, active, setActive } = props;
     const [ isOn, setIsOn ] = React.useState(false);
+    const [loading, setLoading] = React.useState(false);
 
     let listItems, i = 0;
     if (listData) {
@@ -17,6 +19,7 @@ export default function Dropdown(props) {
                     item={item}
                     active={active}
                     setActive={setActive}
+                    setLoading={setLoading}
                     index={++i}
                 />
             )
@@ -39,6 +42,9 @@ export default function Dropdown(props) {
             <div className="dropdown-menu-list" style={listStyles}>
                 {listItems}
             </div>
+            <Backdrop open={loading} sx={{ zIndex: '5' }}>
+                <CircularProgress color="inherit" />
+            </Backdrop>
         </div>
     )
 }

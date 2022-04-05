@@ -1,9 +1,9 @@
 import React from 'react'
 import { dataContext } from './contexts/DataContext'
-import { renderContext } from './contexts/RenderContext';
+import { renderContext } from './contexts/RenderContext'
 
 export default function DropdownItem(props) {
-    const { label, item, active, setActive, index } = props;
+    const { label, item, active, setActive, setLoading, index } = props;
     const { setCalendarView, setLocation, setCoach } = React.useContext(dataContext);
     const { locationAll, coachAll } = React.useContext(renderContext)
     const [on, setOn] = React.useState([]);
@@ -14,7 +14,7 @@ export default function DropdownItem(props) {
     }
 
     function handleClick(item, index) {
-
+        setLoading(true);
         const itemAll = item.name === 'all';
         if (label === 'location') {
             if (itemAll && coachAll) {
@@ -37,13 +37,13 @@ export default function DropdownItem(props) {
             }
             setCoach(item);
         };
-
         setActive(prevActive => {
             const newActive = { ...prevActive };
             newActive[label].fill(false);
             newActive[label][index] = true;
             return newActive;
-        })
+        });
+        setTimeout(() => setLoading(false), 2000);
     }
 
     function handleOnMouse(boolean, index) {
@@ -55,14 +55,17 @@ export default function DropdownItem(props) {
     }
 
     return (
-        <div
-            className="dropdown-menu-list-item"
-            onClick={() => handleClick(item, index)}
-            onMouseEnter={() => handleOnMouse(true, index)}
-            onMouseLeave={() => handleOnMouse(false, index)}
-            style={itemStyles}
-        >
-            {item.name}
-        </div>
+        <>
+            <div
+                className="dropdown-menu-list-item"
+                onClick={() => handleClick(item, index)}
+                onMouseEnter={() => handleOnMouse(true, index)}
+                onMouseLeave={() => handleOnMouse(false, index)}
+                style={itemStyles}
+            >
+                {item.name}
+            </div>
+            
+        </>
     )
 }
