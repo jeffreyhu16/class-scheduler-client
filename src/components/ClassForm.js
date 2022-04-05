@@ -1,9 +1,10 @@
 import React from 'react'
-import { DateTime } from 'luxon'
+import { DateTime, Settings } from 'luxon'
 import { dataContext } from './contexts/DataContext'
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Autocomplete, TextField, Popper } from '@mui/material'
+Settings.defaultZone = 'Asia/Taipei';
 
 export default function ClassForm(props) {
     const { day, quarterHour, toggleForm, classTimeTarget } = props;

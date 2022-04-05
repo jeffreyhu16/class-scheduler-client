@@ -1,10 +1,11 @@
 import React from 'react'
 import Dropdown from './Dropdown'
-import { DateTime } from 'luxon'
+import { DateTime, Settings } from 'luxon'
 import { faBars, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { dataContext } from './contexts/DataContext'
 import { renderContext } from './contexts/RenderContext'
+Settings.defaultZone = 'Asia/Taipei';
 
 export default function HeaderNav(props) {
 

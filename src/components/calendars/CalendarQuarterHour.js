@@ -1,9 +1,9 @@
 import React from 'react'
-import { DateTime } from 'luxon'
+import { DateTime, Settings } from 'luxon'
 import ClassForm from '../ClassForm'
 import { glowContext } from '../contexts/GlowContext'
 import { renderContext } from '../contexts/RenderContext'
-import { dataContext } from '../contexts/DataContext'
+Settings.defaultZone = 'Asia/Taipei';
 
 export default function CalendarQuarterHour(props) {
     const { classData, day, location, courtNo, quarterHour, fetchClasses } = props;

@@ -1,9 +1,10 @@
 import React from 'react'
-import { DateTime } from 'luxon'
+import { DateTime, Settings } from 'luxon'
 import { dataContext } from '../contexts/DataContext'
 import { renderContext } from '../contexts/RenderContext'
 import CalendarCourt from './CalendarCourt'
 import CalendarQuarterHour from './CalendarQuarterHour'
+Settings.defaultZone = 'Asia/Taipei';
 
 export default function CalendarDay(props) {
 

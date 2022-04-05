@@ -1,8 +1,9 @@
 import React from 'react'
-import { DateTime } from 'luxon'
+import { DateTime, Settings } from 'luxon'
 import { dataContext } from '../contexts/DataContext'
 import { glowContext } from '../contexts/GlowContext'
 import { renderContext } from '../contexts/RenderContext'
+Settings.defaultZone = 'Asia/Taipei';
 
 export default function CalendarHead() {
 
