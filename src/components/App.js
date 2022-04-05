@@ -3,22 +3,24 @@ import Header from './Header'
 import Main from './Main'
 import { dataContext } from './contexts/DataContext';
 import { renderContext } from './contexts/RenderContext'
+import { Backdrop, CircularProgress } from '@mui/material'
 
 export default function App() {
 
     const api = process.env.REACT_APP_API;
-    const [ calendarView, setCalendarView ] = React.useState('week');
-    const [ startOfWeek, setStartOfWeek ] = React.useState();
-    const [ currentDate, setCurrentDate ] = React.useState();
-    const [ locationData, setLocationData ] = React.useState();
-    const [ coachData, setCoachData ] = React.useState();
-    const [ location, setLocation ] = React.useState({ name: 'all'});
-    const [ coach, setCoach ] = React.useState({ name: 'Tim' });
-    const [ breakPoint, setBreakPoint ] = React.useState({ 
-        1280: window.innerWidth > 1280, 
+    const [calendarView, setCalendarView] = React.useState('week');
+    const [startOfWeek, setStartOfWeek] = React.useState();
+    const [currentDate, setCurrentDate] = React.useState();
+    const [locationData, setLocationData] = React.useState();
+    const [coachData, setCoachData] = React.useState();
+    const [location, setLocation] = React.useState({ name: 'all' });
+    const [coach, setCoach] = React.useState({ name: 'Tim' });
+    const [breakPoint, setBreakPoint] = React.useState({
+        1280: window.innerWidth > 1280,
         710: window.innerWidth > 710,
         540: window.innerWidth > 540
     });
+    const [loading, setLoading] = React.useState(true);
 
     React.useEffect(() => {
         Promise.all([
@@ -27,17 +29,20 @@ export default function App() {
             fetch(`${api}/location`),
             fetch(`${api}/coach`)
         ])
-        .then(([ res1, res2, res3, res4 ]) => {
-            res1.json().then(data => setCurrentDate(data));
-            res2.json().then(data => setStartOfWeek(data));
-            res3.json().then(data => {
-                setLocationData([{ name: 'all' }, ...data ]);
-            });
-            res4.json().then(data => {
-                setCoachData([{ name: 'all' }, ...data ]);
-            });
-        })
-        .catch(err => console.log(err));
+            .then(([res1, res2, res3, res4]) => {
+                res1.json().then(data => setCurrentDate(data));
+                res2.json().then(data => setStartOfWeek(data));
+                res3.json().then(data => {
+                    setLocationData([{ name: 'all' }, ...data]);
+                });
+                res4.json().then(data => {
+                    setCoachData([{ name: 'all' }, ...data]);
+                });
+            })
+            .then(() => {
+                setTimeout(() => setLoading(false), 3000);
+            })
+            .catch(err => console.log(err));
 
         window.addEventListener('resize', () => {
             setBreakPoint({
@@ -46,7 +51,7 @@ export default function App() {
                 540: window.innerWidth > 540,
             });
         });
-    }, []); 
+    }, []);
     const dayView = calendarView === 'day';
     const weekView = calendarView === 'week';
     const coachAll = coach.name === 'all';
@@ -58,13 +63,13 @@ export default function App() {
             setCalendarView,
             currentDate,
             setCurrentDate,
-            startOfWeek, 
+            startOfWeek,
             setStartOfWeek,
             locationData,
             location,
             setLocation,
             coachData,
-            coach, 
+            coach,
             setCoach
         }}>
             <renderContext.Provider value={{
@@ -73,9 +78,12 @@ export default function App() {
                 coachAll,
                 locationAll
             }}>
-                <Header breakPoint={breakPoint}/>
-                <Main breakPoint={breakPoint}/>
+                <Header breakPoint={breakPoint} />
+                <Main breakPoint={breakPoint} />
             </renderContext.Provider>
+            <Backdrop open={loading}>
+                <CircularProgress color="inherit" />
+            </Backdrop>
         </dataContext.Provider>
     )
 }
