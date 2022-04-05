@@ -7,7 +7,7 @@ import { Autocomplete, TextField, Popper } from '@mui/material'
 
 export default function ClassForm(props) {
     const { day, quarterHour, toggleForm, classTimeTarget } = props;
-    const { currentDate, startOfWeek, setStartOfWeek, locationData, coachData } = React.useContext(dataContext);
+    const { api, currentDate, startOfWeek, setStartOfWeek, locationData, coachData } = React.useContext(dataContext);
     const [timeOptions, setTimeOptions] = React.useState([]);
     const [studentOptions, setStudentOptions] = React.useState([]);
     const [inputDate, setInputDate] = React.useState({
@@ -26,10 +26,10 @@ export default function ClassForm(props) {
     });
 
     React.useEffect(() => {
-        fetch('/student/options')
+        fetch(`${api}/student/options`)
             .then(res => res.json())
             .then(data => setStudentOptions(data));
-        fetch('date/timeOptions')
+        fetch(`${api}/date/timeOptions`)
             .then(res => res.json())
             .then(data => setTimeOptions(data));
     }, []);
@@ -96,7 +96,7 @@ export default function ClassForm(props) {
 
     function handleDelete(e) {
         e.preventDefault();
-        fetch('/class', {
+        fetch(`${api}/class`, {
             method: 'delete',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -120,7 +120,7 @@ export default function ClassForm(props) {
             method = 'post';
             body = inputs;
         }
-        fetch('/class', {
+        fetch(`${api}/class`, {
             method: method,
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(body)

@@ -7,11 +7,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 export default function CalendarCopy(props) {
 
     const [ isOn, setIsOn ] = React.useState(false);
-    const { startOfWeek, setStartOfWeek } = React.useContext(dataContext);
+    const { api, startOfWeek, setStartOfWeek } = React.useContext(dataContext);
     const { weekView, coachAll } = React.useContext(renderContext);
 
     async function copyClasses(period) {
-        fetch('class/copy', {
+        fetch(`${api}/class/copy`, {
             method: 'post',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

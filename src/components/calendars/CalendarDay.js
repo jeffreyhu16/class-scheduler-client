@@ -8,7 +8,7 @@ import CalendarQuarterHour from './CalendarQuarterHour'
 export default function CalendarDay(props) {
 
     const { day } = props;
-    const { currentDate, startOfWeek, location, locationData, coach } = React.useContext(dataContext);
+    const { api, currentDate, startOfWeek, location, locationData, coach } = React.useContext(dataContext);
     const { dayView, coachAll, locationAll } = React.useContext(renderContext);
     const [classData, setClassData] = React.useState();
 
@@ -26,9 +26,9 @@ export default function CalendarDay(props) {
         const uri = encodeURIComponent(isoDate);
         let res;
         if (startOfWeek) {
-            res = await fetch(`/class/classes?startOfWeek=${uri}&day=${day}&location=${location.name}&coach=${coach.name}`);
+            res = await fetch(`${api}/class/classes?startOfWeek=${uri}&day=${day}&location=${location.name}&coach=${coach.name}`);
         } else if (currentDate) {
-            res = await fetch(`/class/classes?currentDate=${uri}&location=${location.name}&coach=${coach.name}`);
+            res = await fetch(`${api}/class/classes?currentDate=${uri}&location=${location.name}&coach=${coach.name}`);
         }
         res.json()
             .then(data => setClassData(data))

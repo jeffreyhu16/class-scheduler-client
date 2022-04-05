@@ -8,7 +8,7 @@ export default function CalendarHead() {
 
     const { isGlow } = React.useContext(glowContext);
     const [weekData, setWeekData] = React.useState();
-    const { currentDate, startOfWeek, location, locationData } = React.useContext(dataContext);
+    const { api, currentDate, startOfWeek, location, locationData } = React.useContext(dataContext);
     const { weekView, coachAll, locationAll } = React.useContext(renderContext);
     
     let i = 0;
@@ -18,7 +18,7 @@ export default function CalendarHead() {
         if (startOfWeek) {
             const isoDate = DateTime.fromObject(startOfWeek).toISO();
             const uri = encodeURIComponent(isoDate)
-            fetch(`/date/fullWeek?startOfWeek=${uri}`)
+            fetch(`${api}/date/fullWeek?startOfWeek=${uri}`)
                 .then(res => res.json())
                 .then(data => setWeekData(data))
                 .catch(err => console.log(err));

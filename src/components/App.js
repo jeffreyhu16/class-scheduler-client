@@ -6,6 +6,7 @@ import { renderContext } from './contexts/RenderContext'
 
 export default function App() {
 
+    const api = process.env.REACT_APP_API;
     const [ calendarView, setCalendarView ] = React.useState('week');
     const [ startOfWeek, setStartOfWeek ] = React.useState();
     const [ currentDate, setCurrentDate ] = React.useState();
@@ -21,10 +22,10 @@ export default function App() {
 
     React.useEffect(() => {
         Promise.all([
-            fetch('/date/currentDate'),
-            fetch('/date/startOfWeek'),
-            fetch('/location'),
-            fetch('/coach')
+            fetch(`${api}/date/currentDate`),
+            fetch(`${api}/date/startOfWeek`),
+            fetch(`${api}/location`),
+            fetch(`${api}/coach`)
         ])
         .then(([ res1, res2, res3, res4 ]) => {
             res1.json().then(data => setCurrentDate(data));
@@ -53,6 +54,7 @@ export default function App() {
 
     return (
         <dataContext.Provider value={{
+            api,
             setCalendarView,
             currentDate,
             setCurrentDate,
