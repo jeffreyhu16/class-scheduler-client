@@ -132,7 +132,7 @@ export default function ClassForm(props) {
         })
             .then(() => {
                 setStartOfWeek(prev => ({ ...prev }));
-                setTimeout(() => setLoading(false), 2000);
+                setTimeout(() => setLoading(false), 1500);
             })
             .catch(err => console.log(err));
     }
