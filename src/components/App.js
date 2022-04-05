@@ -14,7 +14,7 @@ export default function App() {
     const [locationData, setLocationData] = React.useState();
     const [coachData, setCoachData] = React.useState();
     const [location, setLocation] = React.useState({ name: 'all' });
-    const [coach, setCoach] = React.useState({ name: 'Tim' });
+    const [coach, setCoach] = React.useState({ name: 'Larry' });
     const [breakPoint, setBreakPoint] = React.useState({
         1280: window.innerWidth > 1280,
         710: window.innerWidth > 710,

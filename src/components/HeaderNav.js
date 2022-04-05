@@ -13,7 +13,7 @@ export default function HeaderNav(props) {
     const { breakPoint } = props;
     const { setCalendarView, currentDate, setCurrentDate, startOfWeek, setStartOfWeek, locationData, setLocation, coachData, setCoach } = React.useContext(dataContext);
     const { weekView, dayView } = React.useContext(renderContext)
-    const [active, setActive] = React.useState({ view: [, true], location: [, true], coach: [, , true] });
+    const [active, setActive] = React.useState({ view: [, true], location: [, true], coach: [,,, true] });
     const [isHover, setIsHover] = React.useState([]);
     const [loading, setLoading] = React.useState(false);
     let currentDay, day1, day7, month, year, nextDay, prevDay, nextWeek, prevWeek;
