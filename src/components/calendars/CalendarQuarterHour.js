@@ -87,7 +87,7 @@ export default function CalendarQuarterHour(props) {
         borderRight: isFree ? borderDefault : borderActive
     }
 
-    let classTimeObj, startString, endString, students;
+    let classTimeObj, startString, endString, students = '';
     if (isStartTime) {
         classTimeObj = startTimeTarget[0];
         const { startTime, endTime, student } = classTimeObj;
