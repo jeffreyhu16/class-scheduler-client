@@ -10,7 +10,7 @@ module.exports = {
     },
     
     resolve: {
-        modules: ['../frontend/node_modules', 'node_modules']
+        modules: ['../../frontend/node_modules', 'node_modules']
     },
 
     module: {
