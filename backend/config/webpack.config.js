@@ -8,6 +8,10 @@ module.exports = {
         path: path.resolve(__dirname, '/../../frontend/build'),
         filename: 'bundle.js'
     },
+    
+    resolve: {
+        modules: ['../frontend/node_modules', 'node_modules']
+    },
 
     module: {
         rules: [
