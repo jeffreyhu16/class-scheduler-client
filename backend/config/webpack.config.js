@@ -3,7 +3,7 @@ const extract = require("mini-css-extract-plugin");
 let CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 
 module.exports = {
-    entry: './src/index.js',
+    entry: '../../frontend/src/index.js',
     output: {
         path: path.resolve(__dirname, '/../../frontend/build'),
         filename: 'bundle.js'
