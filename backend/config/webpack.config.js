@@ -29,12 +29,6 @@ module.exports = {
                     },
                     {
                         loader: 'css-loader'
-                    },
-                    {
-                        loader: 'sass-loader',
-                        options: {
-                            implementation: require('sass')
-                        }
                     }
                 ]
             },
