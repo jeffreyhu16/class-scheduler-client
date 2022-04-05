@@ -87,12 +87,15 @@ export default function CalendarQuarterHour(props) {
         borderRight: isFree ? borderDefault : borderActive
     }
 
-    let classTimeObj, startString, endString;
+    let classTimeObj, startString, endString, students;
     if (isStartTime) {
         classTimeObj = startTimeTarget[0];
-        const { startTime, endTime } = classTimeObj;
+        const { startTime, endTime, student } = classTimeObj;
         startString = DateTime.fromObject(startTime).toFormat('h:mm').toLowerCase();
         endString = DateTime.fromObject(endTime).toFormat('h:mm').toLowerCase();
+        student.forEach(student => {
+            students += (student + ' ');
+        })
     }
 
     const classTimeTarget =
@@ -122,7 +125,7 @@ export default function CalendarQuarterHour(props) {
                             {startString}-{endString}
                         </div>
                         <div className="calendar-class-info-student-name">
-                            {classTimeObj && classTimeObj.student}
+                            {classTimeObj && students}
                         </div>
                         <div className="calendar-class-info-location">
                             {classTimeObj && showLocation && classTimeObj.location._id.name}
