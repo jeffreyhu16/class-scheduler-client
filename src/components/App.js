@@ -19,7 +19,7 @@ export default function App() {
         710: window.innerWidth > 710,
         540: window.innerWidth > 540
     });
-
+    console.log(api)
     React.useEffect(() => {
         Promise.all([
             fetch(`${api}/date/currentDate`),
