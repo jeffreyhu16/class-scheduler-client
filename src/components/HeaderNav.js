@@ -18,7 +18,7 @@ export default function HeaderNav(props) {
     const [loading, setLoading] = React.useState(false);
     let currentDay, day1, day7, month, year, nextDay, prevDay, nextWeek, prevWeek;
 
-    if (currentDate && startOfWeek) {
+    if (currentDate) {
         const currentDateTime = DateTime.fromObject(currentDate);
         const mon = DateTime.fromObject(startOfWeek);
         const sun = mon.plus({ days: 6 });
@@ -132,13 +132,15 @@ export default function HeaderNav(props) {
                     </div>}
             </div>
             <div className="header-date-group">
-                <div className="header-date">
-                    <div className="header-date-day">
-                        {weekView ? `${day1} - ${day7}` : currentDay}
+                {currentDate && 
+                    <div className="header-date">
+                        <div className="header-date-day">
+                            {weekView ? `${day1} - ${day7}` : currentDay}
+                        </div>
+                        <div className="header-date-month">{month}</div>
+                        <div className="header-date-year">{year}</div>
                     </div>
-                    <div className="header-date-month">{month}</div>
-                    <div className="header-date-year">{year}</div>
-                </div>
+                }
                 <div className="toggle-period">
                     <div className="icon-angle-left-container" onClick={() => shiftTime('prev')}>
                         <FontAwesomeIcon

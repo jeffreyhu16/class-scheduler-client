@@ -78,6 +78,7 @@ export default function CalendarDay(props) {
                         quarterHour={++i}
                         classData={classData}
                         fetchClasses={fetchClasses}
+                        setClassData={setClassData}
                     />
                 )
             });

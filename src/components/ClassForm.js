@@ -4,11 +4,13 @@ import { dataContext } from './contexts/DataContext'
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Autocomplete, TextField, Popper } from '@mui/material'
+import { renderContext } from './contexts/RenderContext'
 Settings.defaultZone = 'Asia/Taipei';
 
 export default function ClassForm(props) {
-    const { day, quarterHour, setLoading, toggleForm, classTimeTarget } = props;
-    const { api, currentDate, startOfWeek, setStartOfWeek, locationData, coachData } = React.useContext(dataContext);
+    const { day, quarterHour, setLoading, toggleForm, fetchClasses, classTimeTarget, setClassData } = props;
+    const { api, currentDate, startOfWeek, location, locationData, coach, coachData } = React.useContext(dataContext);
+    const { dayView, weekView } = React.useContext(renderContext);
     const [timeOptions, setTimeOptions] = React.useState([]);
     const [studentOptions, setStudentOptions] = React.useState([]);
     const [inputDate, setInputDate] = React.useState({
@@ -107,7 +109,8 @@ export default function ClassForm(props) {
             })
         })
             .then(() => {
-                setStartOfWeek(prev => ({ ...prev }));
+                if (weekView) fetchClasses('', startOfWeek, day, location, coach);
+                if (dayView) fetchClasses(currentDate, '', '', location, coach);
                 setTimeout(() => setLoading(false), 1000);
             })
             .catch(err => console.log(err));
@@ -131,7 +134,8 @@ export default function ClassForm(props) {
             body: JSON.stringify(body)
         })
             .then(() => {
-                setStartOfWeek(prev => ({ ...prev }));
+                if (weekView) fetchClasses('', startOfWeek, day, location, coach);
+                if (dayView) fetchClasses(currentDate, '', '', location, coach);
                 setTimeout(() => setLoading(false), 1000);
             })
             .catch(err => console.log(err));

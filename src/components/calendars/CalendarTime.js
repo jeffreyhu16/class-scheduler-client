@@ -2,7 +2,7 @@ import React from 'react'
 import { DateTime } from 'luxon'
 import { glowContext } from '../contexts/GlowContext';
 
-export default function CalendarTime() {
+function CalendarTime() {
     let i = 0
     const { isGlow } = React.useContext(glowContext);
     const time = DateTime.local().set({ hour: 6, minute: 0 });
@@ -25,3 +25,5 @@ export default function CalendarTime() {
     });
     return <>{calendarTimes}</>
 }
+
+export default React.memo(CalendarTime);

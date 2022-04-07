@@ -7,8 +7,8 @@ import { Backdrop, CircularProgress } from '@mui/material'
 Settings.defaultZone = 'Asia/Taipei';
 
 export default function CalendarQuarterHour(props) {
-    const { classData, day, location, courtNo, quarterHour, fetchClasses } = props;
-    const { setIsGlow } = React.useContext(glowContext);
+    const { classData, day, location, courtNo, quarterHour, fetchClasses, setClassData } = props;
+    // const { setIsGlow } = React.useContext(glowContext);
     const { weekView } = React.useContext(renderContext);
     const [isShow, setIsShow] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
@@ -64,15 +64,15 @@ export default function CalendarQuarterHour(props) {
         setIsShow(prevIsShow => !prevIsShow);
     }
 
-    function handleOnMouse(dayIndex, courtIndex, quarterHourIndex, boolean) {
-        setIsGlow(prevIsGlow => {
-            const newIsGlow = { ...prevIsGlow }
-            if (dayIndex) newIsGlow.day[dayIndex] = boolean;
-            if (courtIndex) newIsGlow.location[location.name][courtIndex] = boolean;
-            newIsGlow.quarterHour[quarterHourIndex] = boolean;
-            return newIsGlow;
-        }) // fix for daily view //
-    }
+    // function handleOnMouse(dayIndex, courtIndex, quarterHourIndex, boolean) {
+    //     setIsGlow(prevIsGlow => {
+    //         const newIsGlow = { ...prevIsGlow }
+    //         if (dayIndex) newIsGlow.day[dayIndex] = boolean;
+    //         if (courtIndex) newIsGlow.location[location.name][courtIndex] = boolean;
+    //         newIsGlow.quarterHour[quarterHourIndex] = boolean;
+    //         return newIsGlow;
+    //     }) // fix for daily view //
+    // }
 
     let isFree = true;
     if (isStartTime || isMidTime || isEndTime) isFree = false
@@ -106,8 +106,8 @@ export default function CalendarQuarterHour(props) {
     return (
         <>
             <div
-                onMouseEnter={() => handleOnMouse(day, courtNo, quarterHour, true)}
-                onMouseLeave={() => handleOnMouse(day, courtNo, quarterHour, false)}
+                // onMouseEnter={() => handleOnMouse(day, courtNo, quarterHour, true)}
+                // onMouseLeave={() => handleOnMouse(day, courtNo, quarterHour, false)}
                 className={
                     weekView ?
                         `calendar-quarter-hour day-${day} quarter-hour-${quarterHour}` :
@@ -142,12 +142,14 @@ export default function CalendarQuarterHour(props) {
                     setLoading={setLoading}
                     toggleForm={toggleForm}
                     fetchClasses={fetchClasses}
+                    setClassData={setClassData}
                     classTimeTarget={classTimeTarget}
                 />}
             {isShow && <div className="overlay"></div>}
+            {loading && 
             <Backdrop open={loading}>
                 <CircularProgress color="inherit" />
-            </Backdrop>
+            </Backdrop>}
         </>
     )
 }
