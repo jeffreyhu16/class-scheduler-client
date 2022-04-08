@@ -5,9 +5,10 @@ import { glowContext } from '../contexts/GlowContext'
 import { renderContext } from '../contexts/RenderContext'
 Settings.defaultZone = 'Asia/Taipei';
 
-export default function CalendarHead() {
+export default function CalendarHead(props) {
 
-    const { isGlow } = React.useContext(glowContext);
+    const { isGlow } = props;
+    // const { isGlow } = React.useContext(glowContext);
     const [weekData, setWeekData] = React.useState();
     const { api, currentDate, startOfWeek, location, locationData } = React.useContext(dataContext);
     const { weekView, coachAll, locationAll } = React.useContext(renderContext);

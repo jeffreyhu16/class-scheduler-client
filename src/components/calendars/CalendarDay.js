@@ -8,7 +8,7 @@ Settings.defaultZone = 'Asia/Taipei';
 
 export default function CalendarDay(props) {
 
-    const { day } = props;
+    const { day, setIsGlow, checkEquals } = props;
     const { api, currentDate, startOfWeek, location, locationData, coach } = React.useContext(dataContext);
     const { dayView, coachAll, locationAll } = React.useContext(renderContext);
     const [classData, setClassData] = React.useState();
@@ -46,6 +46,7 @@ export default function CalendarDay(props) {
                             location={locationData[i]}
                             courtNo={j}
                             classData={classData}
+                            setIsGlow={setIsGlow}
                             fetchClasses={fetchClasses}
                         />
                     ));
@@ -62,6 +63,8 @@ export default function CalendarDay(props) {
                         courtNo={j--}
                         location={location}
                         classData={classData}
+                        setIsGlow={setIsGlow}
+                        checkEquals={checkEquals}
                         fetchClasses={fetchClasses}
                     />
                 )
@@ -77,8 +80,9 @@ export default function CalendarDay(props) {
                         day={day}
                         quarterHour={++i}
                         classData={classData}
+                        setIsGlow={setIsGlow}
+                        checkEquals={checkEquals}
                         fetchClasses={fetchClasses}
-                        setClassData={setClassData}
                     />
                 )
             });

@@ -1,10 +1,9 @@
 import React from 'react'
 import { DateTime } from 'luxon'
-import { glowContext } from '../contexts/GlowContext';
 
-function CalendarTime() {
+function CalendarTime(props) {
     let i = 0
-    const { isGlow } = React.useContext(glowContext);
+    const { isGlow } = props;
     const time = DateTime.local().set({ hour: 6, minute: 0 });
 
     const calendarTimes = [...Array(72)].map(() => {

@@ -8,7 +8,7 @@ import { renderContext } from './contexts/RenderContext'
 Settings.defaultZone = 'Asia/Taipei';
 
 export default function ClassForm(props) {
-    const { day, quarterHour, setLoading, toggleForm, fetchClasses, classTimeTarget, setClassData } = props;
+    const { day, quarterHour, setLoading, toggleForm, fetchClasses, classTimeTarget } = props;
     const { api, currentDate, startOfWeek, location, locationData, coach, coachData } = React.useContext(dataContext);
     const { dayView, weekView } = React.useContext(renderContext);
     const [timeOptions, setTimeOptions] = React.useState([]);
