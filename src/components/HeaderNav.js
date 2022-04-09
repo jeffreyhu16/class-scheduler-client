@@ -47,7 +47,7 @@ export default function HeaderNav(props) {
             setCoach({ name: 'all' });
             setActive({ view: [true, false], location: [false, true], coach: [false, true] });
         }
-        setTimeout(() => setLoading(false), 2500);
+        setTimeout(() => setLoading(false), 1500);
     }
 
     function shiftTime(direction) {
@@ -60,7 +60,7 @@ export default function HeaderNav(props) {
             if (direction === 'next') setCurrentDate(nextDay);
             else setCurrentDate(prevDay);
         }
-        setTimeout(() => setLoading(false), 2500);
+        setTimeout(() => setLoading(false), 1500);
     }
     
     const castBackground = i => {
@@ -88,11 +88,11 @@ export default function HeaderNav(props) {
     return (
         <div className="header-nav">
             <div className="header-filter-group">
-                {!breakPoint[710] &&
+                {!breakPoint[780] &&
                     <div className="header-nav-dropdown">
                         <FontAwesomeIcon icon={faBars} className="icon-nav-dropdown" />
                     </div>}
-                {breakPoint[710] &&
+                {breakPoint[780] &&
                     <div className="header-toggle-group">
                         <div
                             className="header-toggle-day"
@@ -113,7 +113,7 @@ export default function HeaderNav(props) {
                             Week
                         </div>
                     </div>}
-                {breakPoint[540] &&
+                {breakPoint[660] &&
                     <div className="header-dropdown-group">
                         <Dropdown
                             label="location"

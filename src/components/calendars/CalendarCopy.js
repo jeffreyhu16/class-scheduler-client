@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export default function CalendarCopy(props) {
 
-    const [ isOn, setIsOn ] = React.useState(false);
+    const [isOn, setIsOn] = React.useState(false);
     const { api, startOfWeek, setStartOfWeek } = React.useContext(dataContext);
     const { weekView, coachAll } = React.useContext(renderContext);
 
@@ -19,7 +19,7 @@ export default function CalendarCopy(props) {
                 startOfWeek: startOfWeek
             })
         })
-        .then(() => setStartOfWeek(prev => ({ ...prev })));
+            .then(() => setStartOfWeek(prev => ({ ...prev })));
     }
 
     const copyStyles = {
@@ -31,11 +31,11 @@ export default function CalendarCopy(props) {
         pointerEvents: isOn ? 'auto' : 'none'
     }
     return (
-        <div className="calendar-copy" style={copyStyles} onClick={() => setIsOn(prev => !prev)}>
-            {/* <FontAwesomeIcon
+        <div className="calendar-copy" onClick={() => setIsOn(prev => !prev)}>
+            <FontAwesomeIcon
                 icon={faCopy}
                 className="icon-copy"
-            /> */}
+            />
             <div className="calendar-copy-popup" style={popupStyles}>
                 <div className="calendar-copy-msg">Copy from <span>previous week</span></div>
                 <div className="calendar-copy-confirm" onClick={() => copyClasses(1)}>Confirm</div>

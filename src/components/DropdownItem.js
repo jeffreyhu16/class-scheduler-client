@@ -43,7 +43,7 @@ export default function DropdownItem(props) {
             newActive[label][index] = true;
             return newActive;
         });
-        setTimeout(() => setLoading(false), 2000);
+        setTimeout(() => setLoading(false), 1500);
     }
 
     function handleOnMouse(boolean, index) {

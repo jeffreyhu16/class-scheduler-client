@@ -1,5 +1,4 @@
 import React from 'react'
-import isEqual from 'lodash'
 import CalendarHead from './CalendarHead'
 import CalendarTime from './CalendarTime'
 import CalendarDay from './CalendarDay'
@@ -27,38 +26,46 @@ export default function Calendar(props) {
     const camberwell = location.name === 'Camberwell';
     const wideView = weekView && coachAll;
     const scrollView = weekView && coachAll && camberwell;
+    
+    let flexView;
+    if (scrollView) flexView = '180em';
+    else if (!breakPoint[780]) flexView = '41.2875em';
+    else flexView = '100%';
 
     const calendarStyles = {
-        width: wideView || !breakPoint[1280] ? '100%' : '81%'
+        width: wideView || !breakPoint[1280] ? '100%' : 'calc(100% - 300px)'
     }
 
     const flexStyles = {
-        width: scrollView ? '180em' : '100%'
+        width: flexView
     }
 
     return (
         <ScrollSync>
             <div className="calendar" style={calendarStyles}>
+                <CalendarCopy />
                 <div className="calendar-head-sticky" >
                     <ScrollSyncPane>
                         <div className="calendar-head-scroll">
                             <div className="calendar-head-flex" style={flexStyles}>
-                                <CalendarCopy />
                                 <CalendarHead isGlow={isGlow} />
                             </div>
                         </div>
                     </ScrollSyncPane>
                 </div>
-                <ScrollSyncPane>
-                    <div className="calendar-body-scroll" >
-                        <div className="calendar-body-flex" style={flexStyles}>
-                            <div className="calendar-time">
-                                <CalendarTime isGlow={isGlow} />
-                            </div>
-                            {weekView ? calendarDays : <CalendarDay setIsGlow={setIsGlow} />}
-                        </div>
+                <div className="calendar-body-group">
+                    <div className="calendar-time">
+                        <CalendarTime isGlow={isGlow} />
                     </div>
-                </ScrollSyncPane>
+                    <ScrollSyncPane>
+                        <div className="calendar-body-scroll" >
+                            <div className="calendar-body-flex" style={flexStyles}>
+                                {weekView ? calendarDays : <CalendarDay setIsGlow={setIsGlow} />}
+                            </div>
+                        </div>
+                    </ScrollSyncPane>
+                </div>
+
             </div>
         </ScrollSync>
     )

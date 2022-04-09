@@ -39,7 +39,7 @@ export default function CalendarHead(props) {
             }
             const dayStyles = {
                 textShadow: isGlow.location[location.name][j] ? '0 0 0.5rem #fff' : 'none',
-                width: `calc(98% / 7)`, // change logic when new courts added //
+                width: `calc(100% / 7)`, // change logic when new courts added //
                 marginBottom: '0.8em' 
             }
             return (
@@ -57,7 +57,7 @@ export default function CalendarHead(props) {
         calendarHeads = weekDataArr.map(weekDay => {
             const styles = {
                 textShadow: isGlow.day[++i] ? '0 0 0.5rem #fff' : 'none',
-                marginBottom: !coachAll ? '0.8em' : '0'
+                marginBottom: !coachAll ? '1em' : '0'
             }
             return (
                 <div className={`calendar-head`} style={styles}>

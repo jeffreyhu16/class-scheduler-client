@@ -90,7 +90,7 @@ export default function CalendarDay(props) {
     }
 
     const styles = {
-        width: dayView ? '98%' : 'calc(98% / 7)',
+        width: dayView ? '100%' : 'calc(100% / 7)',
         display: dayView || coachAll ? 'flex' : 'block',
         borderRight: !dayView && coachAll ? '1px solid rgb(201,255,227,0.4)' : 'none'
     }

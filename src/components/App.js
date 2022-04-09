@@ -17,8 +17,8 @@ export default function App() {
     const [coach, setCoach] = React.useState({ name: 'Larry' });
     const [breakPoint, setBreakPoint] = React.useState({
         1280: window.innerWidth > 1280,
-        710: window.innerWidth > 710,
-        540: window.innerWidth > 540
+        780: window.innerWidth > 780,
+        660: window.innerWidth > 660
     });
     const [loading, setLoading] = React.useState(true);
 
@@ -47,8 +47,8 @@ export default function App() {
         window.addEventListener('resize', () => {
             setBreakPoint({
                 1280: window.innerWidth > 1280,
-                710: window.innerWidth > 710,
-                540: window.innerWidth > 540,
+                780: window.innerWidth > 780,
+                660: window.innerWidth > 660,
             });
         });
     }, []);
