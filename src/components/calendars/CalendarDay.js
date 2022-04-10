@@ -10,42 +10,19 @@ Settings.defaultZone = 'Asia/Taipei';
 
 export default function CalendarDay(props) {
 
-    const { day, checkEquals } = props;
+    const { day } = props;
     const { api, currentDate, startOfWeek, location, locationData, coach } = React.useContext(dataContext);
-    const { dayView, coachAll, locationAll } = React.useContext(renderContext);
-    const [classData, setClassData] = React.useState();
+    const { dayView, weekView, coachAll, locationAll } = React.useContext(renderContext);
 
-    // const classData = useSelector(state => state.classData.value);
-    // const dispatch = useDispatch();
-
-    // React.useEffect(() => {
-    //     // console.log('fetching..')
-    //     if (startOfWeek && !dayView) dispatch(fetchClassData(null, startOfWeek, day, location, coach));
-    //     if (currentDate && dayView) dispatch(fetchClassData(currentDate, null, null, location, coach));
-
-    // }, [dayView, currentDate, startOfWeek, location, coach]);
+    const classData = useSelector(state => state.classData[day ? day : 0]);
+    const dispatch = useDispatch();
 
     React.useEffect(() => {
         // console.log('fetching..')
-        if (startOfWeek && !dayView) fetchClasses(null, startOfWeek, day, location, coach);
-        if (currentDate && dayView) fetchClasses(currentDate, null, null, location, coach);
+        if (startOfWeek && weekView) dispatch(fetchClassData('', startOfWeek, day, location, coach));
+        if (currentDate && dayView) dispatch(fetchClassData(currentDate, '', '', location, coach));
 
     }, [dayView, currentDate, startOfWeek, location, coach]);
-
-    async function fetchClasses(currentDate, startOfWeek, day, location, coach) {
-        const inputDate = currentDate ? currentDate : startOfWeek;
-        const isoDate = DateTime.fromObject(inputDate).toISO();
-        const uri = encodeURIComponent(isoDate);
-        let res;
-        if (startOfWeek) {
-            res = await fetch(`${api}/class/classes?startOfWeek=${uri}&day=${day}&location=${location.name}&coach=${coach.name}`);
-        } else if (currentDate) {
-            res = await fetch(`${api}/class/classes?currentDate=${uri}&location=${location.name}&coach=${coach.name}`);
-        }
-        res.json()
-            .then(data => setClassData(data))
-            .catch(err => console.log(err));
-    }
 
     let calendarQuarterHours, calendarCourts = [];
     if (classData) {
@@ -56,8 +33,6 @@ export default function CalendarDay(props) {
                         <CalendarCourt
                             location={locationData[i]}
                             courtNo={j}
-                            classData={classData}
-                            fetchClasses={fetchClasses}
                         />
                     ));
                 }
@@ -72,9 +47,6 @@ export default function CalendarDay(props) {
                         day={day}
                         courtNo={j--}
                         location={location}
-                        classData={classData}
-                        checkEquals={checkEquals}
-                        fetchClasses={fetchClasses}
                     />
                 )
             });
@@ -89,8 +61,6 @@ export default function CalendarDay(props) {
                         day={day}
                         quarterHour={++i}
                         classData={classData}
-                        checkEquals={checkEquals}
-                        fetchClasses={fetchClasses}
                     />
                 )
             });

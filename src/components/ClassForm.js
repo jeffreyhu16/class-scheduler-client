@@ -5,10 +5,14 @@ import { faTrashCan } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Autocomplete, TextField, Popper } from '@mui/material'
 import { renderContext } from './contexts/RenderContext'
+import { fetchClassData } from '../redux/classDataSlice'
+import { useDispatch } from 'react-redux'
 Settings.defaultZone = 'Asia/Taipei';
 
 export default function ClassForm(props) {
-    const { day, quarterHour, setLoading, toggleForm, fetchClasses, classTimeTarget } = props;
+
+    const dispatch = useDispatch();
+    const { day, quarterHour, setLoading, toggleForm, classTimeTarget } = props;
     const { api, currentDate, startOfWeek, location, locationData, coach, coachData } = React.useContext(dataContext);
     const { dayView, weekView } = React.useContext(renderContext);
     const [timeOptions, setTimeOptions] = React.useState([]);
@@ -109,9 +113,9 @@ export default function ClassForm(props) {
             })
         })
             .then(() => {
-                if (weekView) fetchClasses('', startOfWeek, day, location, coach);
-                if (dayView) fetchClasses(currentDate, '', '', location, coach);
-                setTimeout(() => setLoading(false), 1000);
+                if (weekView) dispatch(fetchClassData('', startOfWeek, day, location, coach));
+                if (dayView) dispatch(fetchClassData(currentDate, '', '', location, coach));
+                setTimeout(() => setLoading(false), 500);
             })
             .catch(err => console.log(err));
     }
@@ -134,9 +138,9 @@ export default function ClassForm(props) {
             body: JSON.stringify(body)
         })
             .then(() => {
-                if (weekView) fetchClasses('', startOfWeek, day, location, coach);
-                if (dayView) fetchClasses(currentDate, '', '', location, coach);
-                setTimeout(() => setLoading(false), 1000);
+                if (weekView) dispatch(fetchClassData('', startOfWeek, day, location, coach));
+                if (dayView) dispatch(fetchClassData(currentDate, '', '', location, coach));
+                setTimeout(() => setLoading(false), 500);
             })
             .catch(err => console.log(err));
     }

@@ -3,12 +3,12 @@ import ClassForm from '../ClassForm'
 import { DateTime, Settings } from 'luxon'
 import { renderContext } from '../contexts/RenderContext'
 import { Backdrop, CircularProgress } from '@mui/material'
-import { useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { setIsGlow }  from '../../redux/isGlowSlice'
 Settings.defaultZone = 'Asia/Taipei';
 
 export default function CalendarQuarterHour(props) {
-    const { classData, day, location, courtNo, quarterHour, fetchClasses } = props;
+    const { day, location, courtNo, quarterHour, classData } = props;
     const { weekView } = React.useContext(renderContext);
     const [isShow, setIsShow] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
@@ -133,8 +133,6 @@ export default function CalendarQuarterHour(props) {
                     courtNo={courtNo}
                     setLoading={setLoading}
                     toggleForm={toggleForm}
-                    fetchClasses={fetchClasses}
-
                     classTimeTarget={classTimeTarget}
                 />}
             {isShow && <div className="overlay"></div>}
