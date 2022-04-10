@@ -1,10 +1,12 @@
 import React from 'react'
 import { DateTime } from 'luxon'
+import { useSelector } from 'react-redux';
 
-function CalendarTime(props) {
+export default function CalendarTime() {
     let i = 0
-    const { isGlow } = props;
     const time = DateTime.local().set({ hour: 6, minute: 0 });
+
+    const isGlow = useSelector(state => state.isGlow);
 
     const calendarTimes = [...Array(72)].map(() => {
 
@@ -24,5 +26,3 @@ function CalendarTime(props) {
     });
     return <>{calendarTimes}</>
 }
-
-export default React.memo(CalendarTime);

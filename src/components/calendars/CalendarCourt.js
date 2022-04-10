@@ -2,9 +2,9 @@ import React from 'react'
 import isEqual from 'lodash'
 import CalendarQuarterHour from './CalendarQuarterHour';
 
-function CalendarCourt(props) {
+export default function CalendarCourt(props) {
 
-    const { location, courtNo, classData, day, fetchClasses, setIsGlow } = props;
+    const { location, courtNo, classData, day, fetchClasses } = props;
     let classCourtData;
     if (day) {
         classCourtData = classData.filter(data => {
@@ -24,7 +24,6 @@ function CalendarCourt(props) {
                 location={location}
                 courtNo={courtNo}
                 quarterHour={++i}
-                setIsGlow={setIsGlow}
                 classData={classCourtData}
                 fetchClasses={fetchClasses}
             />
@@ -69,4 +68,4 @@ const classEquals = (prev, next) => {
     }
 }
 
-export default React.memo(CalendarCourt, classEquals);
+// export default React.memo(CalendarCourt, classEquals);

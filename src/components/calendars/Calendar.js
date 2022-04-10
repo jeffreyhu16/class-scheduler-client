@@ -12,21 +12,16 @@ export default function Calendar(props) {
     const { breakPoint } = props;
     const { location } = React.useContext(dataContext);
     const { weekView, coachAll } = React.useContext(renderContext);
-    const [isGlow, setIsGlow] = React.useState({
-        day: [],
-        location: { Camberwell: [], "St Roch's": [] },
-        quarterHour: []
-    });
 
     let i = 0;
     let calendarDays = [...Array(7)].map(() => {
-        return <CalendarDay day={++i} setIsGlow={setIsGlow} />
+        return <CalendarDay day={++i} />
     });
 
     const camberwell = location.name === 'Camberwell';
     const wideView = weekView && coachAll;
     const scrollView = weekView && coachAll && camberwell;
-    
+
     let flexView;
     if (scrollView) flexView = '180em';
     else if (!breakPoint[780]) flexView = '41.2875em';
@@ -48,19 +43,19 @@ export default function Calendar(props) {
                     <ScrollSyncPane>
                         <div className="calendar-head-scroll">
                             <div className="calendar-head-flex" style={flexStyles}>
-                                <CalendarHead isGlow={isGlow} />
+                                <CalendarHead />
                             </div>
                         </div>
                     </ScrollSyncPane>
                 </div>
                 <div className="calendar-body-group">
                     <div className="calendar-time">
-                        <CalendarTime isGlow={isGlow} />
+                        <CalendarTime />
                     </div>
                     <ScrollSyncPane>
                         <div className="calendar-body-scroll" >
                             <div className="calendar-body-flex" style={flexStyles}>
-                                {weekView ? calendarDays : <CalendarDay setIsGlow={setIsGlow} />}
+                                {weekView ? calendarDays : <CalendarDay />}
                             </div>
                         </div>
                     </ScrollSyncPane>

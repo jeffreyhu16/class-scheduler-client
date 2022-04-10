@@ -4,16 +4,27 @@ import { dataContext } from '../contexts/DataContext'
 import { renderContext } from '../contexts/RenderContext'
 import CalendarCourt from './CalendarCourt'
 import CalendarQuarterHour from './CalendarQuarterHour'
+import { useSelector, useDispatch } from 'react-redux'
+import { fetchClassData } from '../../redux/classDataSlice'
 Settings.defaultZone = 'Asia/Taipei';
 
 export default function CalendarDay(props) {
 
-    const { day, setIsGlow, checkEquals } = props;
+    const { day, checkEquals } = props;
     const { api, currentDate, startOfWeek, location, locationData, coach } = React.useContext(dataContext);
     const { dayView, coachAll, locationAll } = React.useContext(renderContext);
     const [classData, setClassData] = React.useState();
 
-    // create state for CourtNo //
+    // const classData = useSelector(state => state.classData.value);
+    // const dispatch = useDispatch();
+
+    // React.useEffect(() => {
+    //     // console.log('fetching..')
+    //     if (startOfWeek && !dayView) dispatch(fetchClassData(null, startOfWeek, day, location, coach));
+    //     if (currentDate && dayView) dispatch(fetchClassData(currentDate, null, null, location, coach));
+
+    // }, [dayView, currentDate, startOfWeek, location, coach]);
+
     React.useEffect(() => {
         // console.log('fetching..')
         if (startOfWeek && !dayView) fetchClasses(null, startOfWeek, day, location, coach);
@@ -46,7 +57,6 @@ export default function CalendarDay(props) {
                             location={locationData[i]}
                             courtNo={j}
                             classData={classData}
-                            setIsGlow={setIsGlow}
                             fetchClasses={fetchClasses}
                         />
                     ));
@@ -63,7 +73,6 @@ export default function CalendarDay(props) {
                         courtNo={j--}
                         location={location}
                         classData={classData}
-                        setIsGlow={setIsGlow}
                         checkEquals={checkEquals}
                         fetchClasses={fetchClasses}
                     />
@@ -80,7 +89,6 @@ export default function CalendarDay(props) {
                         day={day}
                         quarterHour={++i}
                         classData={classData}
-                        setIsGlow={setIsGlow}
                         checkEquals={checkEquals}
                         fetchClasses={fetchClasses}
                     />

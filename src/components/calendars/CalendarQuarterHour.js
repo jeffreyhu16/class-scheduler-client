@@ -1,16 +1,19 @@
 import React from 'react'
 import ClassForm from '../ClassForm'
-import isEqual from 'lodash'
 import { DateTime, Settings } from 'luxon'
 import { renderContext } from '../contexts/RenderContext'
 import { Backdrop, CircularProgress } from '@mui/material'
+import { useDispatch } from 'react-redux'
+import { setIsGlow }  from '../../redux/isGlowSlice'
 Settings.defaultZone = 'Asia/Taipei';
 
-function CalendarQuarterHour(props) {
-    const { classData, day, location, courtNo, quarterHour, fetchClasses, setIsGlow } = props;
+export default function CalendarQuarterHour(props) {
+    const { classData, day, location, courtNo, quarterHour, fetchClasses } = props;
     const { weekView } = React.useContext(renderContext);
     const [isShow, setIsShow] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
+
+    const dispatch = useDispatch();
 
     let startTimeTarget, midTimeTarget, endTimeTarget;
     let isStartTime, isMidTime, isEndTime, duration, showLocation;
@@ -63,16 +66,6 @@ function CalendarQuarterHour(props) {
         setIsShow(prevIsShow => !prevIsShow);
     }
 
-    function handleOnMouse(dayIndex, courtIndex, quarterHourIndex, boolean) {
-        setIsGlow(prevIsGlow => {
-            const newIsGlow = { ...prevIsGlow }
-            if (dayIndex) newIsGlow.day[dayIndex] = boolean;
-            if (courtIndex) newIsGlow.location[location.name][courtIndex] = boolean;
-            newIsGlow.quarterHour[quarterHourIndex] = boolean;
-            return newIsGlow;
-        }) // fix for daily view //
-    }
-
     let isFree = true;
     if (isStartTime || isMidTime || isEndTime) isFree = false
 
@@ -105,8 +98,8 @@ function CalendarQuarterHour(props) {
     return (
         <>
             <div
-                onMouseEnter={() => handleOnMouse(day, courtNo, quarterHour, true)}
-                onMouseLeave={() => handleOnMouse(day, courtNo, quarterHour, false)}
+                onMouseEnter={() => dispatch(setIsGlow(day, location, courtNo, quarterHour, true))}
+                onMouseLeave={() => dispatch(setIsGlow(day, location, courtNo, quarterHour, false))}
                 className={
                     weekView ?
                         `calendar-quarter-hour day-${day} quarter-hour-${quarterHour}` :
@@ -153,34 +146,3 @@ function CalendarQuarterHour(props) {
         </>
     )
 }
-
-const checkEquals = (prev, next) => {
-    if (!next.classData[0]) return false;
-    for (let i = 0; i < prev.classData.length; i++) {
-        for (const key in prev.classData[i]) {
-            if (!isEqual(prev.classData[i][key], next.classData[i][key]))
-                return false;
-        }
-    } return true;
-}
-const classCheck = (prev, next) => {
-    if (!next.classData[0]) return false;
-    for (let i = 0; i < prev.classData.length; i++) {
-        const diff = Object.keys(prev.classData[i]).reduce((result, key) => {
-            if (!next.classData[i].hasOwnProperty(key)) {
-                result.push(key);
-            } else if (isEqual(prev.classData[i][key], next.classData[i][key])) {
-                const resultKeyIndex = result.indexOf(key);
-                result.splice(resultKeyIndex, 1);
-            }
-            return result;
-        }, Object.keys(next.classData[i]));
-
-        if (diff.length > 0) {
-            // console.log(diff);
-            return false;
-        } else return true;
-    }
-}
-
-export default React.memo(CalendarQuarterHour, classCheck);

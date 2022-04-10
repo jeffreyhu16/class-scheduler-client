@@ -1,14 +1,13 @@
 import React from 'react'
 import { DateTime, Settings } from 'luxon'
 import { dataContext } from '../contexts/DataContext'
-import { glowContext } from '../contexts/GlowContext'
 import { renderContext } from '../contexts/RenderContext'
+import { useSelector } from 'react-redux'
 Settings.defaultZone = 'Asia/Taipei';
 
-export default function CalendarHead(props) {
+export default function CalendarHead() {
 
-    const { isGlow } = props;
-    // const { isGlow } = React.useContext(glowContext);
+    const isGlow = useSelector(state => state.isGlow);
     const [weekData, setWeekData] = React.useState();
     const { api, currentDate, startOfWeek, location, locationData } = React.useContext(dataContext);
     const { weekView, coachAll, locationAll } = React.useContext(renderContext);
