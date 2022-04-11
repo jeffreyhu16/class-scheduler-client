@@ -343,15 +343,15 @@ h1 {
 
 .calendar-copy-popup {
     position: absolute;
-    left: 4em;
-    top: 0em;
+    left: 4.7em;
+    top: 1em;
     width: 15em;
     padding: 1em;
     border-radius: 0.5rem;
     background-color: #004b8f;
     box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.5);
     transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
-    display: none;
+    z-index: 1;
 }
 
 .calendar-copy-popup::after {
@@ -382,6 +382,10 @@ h1 {
     color: #00182f;
     padding: 0.2em 0.6em;
     cursor: pointer;
+}
+
+.calendar-copy-confirm:hover {
+    background-color: #c9e5fff1;
 }
 
 .icon-copy {

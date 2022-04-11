@@ -47,7 +47,7 @@ export default function HeaderNav(props) {
             setCoach({ name: 'all' });
             setActive({ view: [true, false], location: [false, true], coach: [false, true] });
         }
-        setTimeout(() => setLoading(false), 1500);
+        setTimeout(() => setLoading(false), 2000);
     }
 
     function shiftTime(direction) {
@@ -60,7 +60,7 @@ export default function HeaderNav(props) {
             if (direction === 'next') setCurrentDate(nextDay);
             else setCurrentDate(prevDay);
         }
-        setTimeout(() => setLoading(false), 1500);
+        setTimeout(() => setLoading(false), 2000);
     }
     
     const castBackground = i => {

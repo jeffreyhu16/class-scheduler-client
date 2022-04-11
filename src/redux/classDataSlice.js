@@ -24,7 +24,7 @@ export const fetchClassData = (currentDate, startOfWeek, day, location, coach) =
         const inputDate = currentDate ? currentDate : startOfWeek;
         const isoDate = DateTime.fromObject(inputDate).toISO();
         const uri = encodeURIComponent(isoDate);
-        const api = process.env.REACT_APP_API;
+        const api = process.env.REACT_APP_LOCAL;
         let res;
         if (startOfWeek) {
             res = await fetch(`${api}/class/classes?startOfWeek=${uri}&day=${day}&location=${location.name}&coach=${coach.name}`);

@@ -7,7 +7,7 @@ import { Backdrop, CircularProgress } from '@mui/material'
 
 export default function App() {
 
-    const api = process.env.REACT_APP_API;
+    const api = process.env.REACT_APP_LOCAL;
     const [calendarView, setCalendarView] = React.useState('week');
     const [startOfWeek, setStartOfWeek] = React.useState();
     const [currentDate, setCurrentDate] = React.useState();
