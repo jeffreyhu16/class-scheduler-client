@@ -1,6 +1,6 @@
 import React from 'react'
 import Calendar from './calendars/Calendar'
-import { renderContext } from './contexts/RenderContext';
+import { renderContext } from '../contexts/RenderContext';
 import Sidebar from './Sidebar'
 
 export default function Main(props) {

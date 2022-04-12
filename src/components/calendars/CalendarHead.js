@@ -1,7 +1,7 @@
 import React from 'react'
 import { DateTime, Settings } from 'luxon'
-import { dataContext } from '../contexts/DataContext'
-import { renderContext } from '../contexts/RenderContext'
+import { dataContext } from '../../contexts/DataContext'
+import { renderContext } from '../../contexts/RenderContext'
 import { useSelector } from 'react-redux'
 Settings.defaultZone = 'Asia/Taipei';
 

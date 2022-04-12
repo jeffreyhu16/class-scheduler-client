@@ -1,10 +1,10 @@
 import React from 'react'
 import { DateTime, Settings } from 'luxon'
-import { dataContext } from './contexts/DataContext'
+import { dataContext } from '../contexts/DataContext'
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Autocomplete, TextField, Popper } from '@mui/material'
-import { renderContext } from './contexts/RenderContext'
+import { Autocomplete, TextField, Popper, Switch, FormControlLabel } from '@mui/material'
+import { renderContext } from '../contexts/RenderContext'
 import { fetchClassData } from '../redux/classDataSlice'
 import { useDispatch } from 'react-redux'
 Settings.defaultZone = 'Asia/Taipei';
@@ -29,7 +29,8 @@ export default function ClassForm(props) {
         studentArr: [],
         coachName: '',
         location: { name: '', courtNo: '' },
-        note: ''
+        note: '',
+        isLeave: false
     });
 
     React.useEffect(() => {
@@ -84,14 +85,15 @@ export default function ClassForm(props) {
 
     React.useEffect(() => {
         if (classTimeTarget) {
-            const { startTime, endTime, student, coach, location, note } = classTimeTarget;
+            const { startTime, endTime, student, coach, location, note, isLeave } = classTimeTarget;
             setInputs({
                 startTime,
                 endTime,
                 studentArr: student,
                 coachName: coach.name,
                 location: { name: location._id.name, courtNo: location.courtNo },
-                note: note
+                note: note,
+                isLeave: isLeave
             });
         }
     }, [classTimeTarget]); // maybe take away dependencies //
@@ -132,6 +134,7 @@ export default function ClassForm(props) {
             method = 'post';
             body = inputs;
         }
+        console.log(body)
         fetch(`${api}/class`, {
             method: method,
             headers: { 'Content-Type': 'application/json' },
@@ -146,11 +149,16 @@ export default function ClassForm(props) {
     }
 
     const handleChange = e => {
-        const { name, value } = e.target;
+        const { name, value, checked } = e.target;
         if (name === 'startDate' || name === 'endDate') {
             setInputDate(prev => ({
                 ...prev,
                 [name]: value
+            }));
+        } else if (checked !== undefined) {
+            setInputs(prev => ({
+                ...prev,
+                isLeave: checked
             }));
         } else {
             setInputs(prev => ({
@@ -362,6 +370,17 @@ export default function ClassForm(props) {
                     multiline={true}
                     size="small"
                     rows={2}
+                />
+                <FormControlLabel
+                    control={
+                        <Switch
+                            checked={inputs.isLeave}
+                            onChange={handleChange}
+                            color='default'
+                            // sx={{ marginLeft: 'auto' }}
+                        />
+                    }
+                    label="Leave"
                 />
                 <div className="form-button-group">
                     <button className="form-cancel-button" onClick={handleCancel}>

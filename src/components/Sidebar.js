@@ -1,7 +1,7 @@
 import React from 'react'
 import Calendar from 'react-calendar'
 import { DateTime, Settings } from 'luxon'
-import { dataContext } from './contexts/DataContext';
+import { dataContext } from '../contexts/DataContext';
 Settings.defaultZone = 'Asia/Taipei';
 
 export default function Sidebar() {

@@ -1,13 +1,13 @@
 import React from 'react'
 import Header from './Header'
 import Main from './Main'
-import { dataContext } from './contexts/DataContext';
-import { renderContext } from './contexts/RenderContext'
+import { dataContext } from '../contexts/DataContext';
+import { renderContext } from '../contexts/RenderContext'
 import { Backdrop, CircularProgress } from '@mui/material'
 
 export default function App() {
 
-    const api = process.env.REACT_APP_API;
+    const api = process.env.REACT_APP_LOCAL;
     const [calendarView, setCalendarView] = React.useState('week');
     const [startOfWeek, setStartOfWeek] = React.useState();
     const [currentDate, setCurrentDate] = React.useState();
@@ -40,7 +40,7 @@ export default function App() {
                 });
             })
             .then(() => {
-                setTimeout(() => setLoading(false), 3000);
+                setTimeout(() => setLoading(false), 4000);
             })
             .catch(err => console.log(err));
 

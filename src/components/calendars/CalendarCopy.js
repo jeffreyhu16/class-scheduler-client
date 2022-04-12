@@ -1,6 +1,6 @@
 import React from 'react'
-import { dataContext } from '../contexts/DataContext'
-import { renderContext } from '../contexts/RenderContext'
+import { dataContext } from '../../contexts/DataContext'
+import { renderContext } from '../../contexts/RenderContext'
 import { faCopy } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Backdrop, CircularProgress } from '@mui/material'

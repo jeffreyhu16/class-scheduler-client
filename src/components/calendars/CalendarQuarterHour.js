@@ -1,7 +1,7 @@
 import React from 'react'
 import ClassForm from '../ClassForm'
 import { DateTime, Settings } from 'luxon'
-import { renderContext } from '../contexts/RenderContext'
+import { renderContext } from '../../contexts/RenderContext'
 import { Backdrop, CircularProgress } from '@mui/material'
 import { useSelector, useDispatch } from 'react-redux'
 import { setIsGlow }  from '../../redux/isGlowSlice'
@@ -11,11 +11,12 @@ export default function CalendarQuarterHour(props) {
     const { day, location, courtNo, quarterHour, classData } = props;
     const { weekView } = React.useContext(renderContext);
     const [isShow, setIsShow] = React.useState(false);
+    const [isHover, setIsHover] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
 
     const dispatch = useDispatch();
 
-    let startTimeTarget, midTimeTarget, endTimeTarget;
+    let startTimeTarget, midTimeTarget, endTimeTarget, isLeave;
     let isStartTime, isMidTime, isEndTime, duration, showLocation;
     if (classData.length > 0) {
         // filter startTime //
@@ -66,19 +67,6 @@ export default function CalendarQuarterHour(props) {
         setIsShow(prevIsShow => !prevIsShow);
     }
 
-    let isFree = true;
-    if (isStartTime || isMidTime || isEndTime) isFree = false
-
-    const borderDefault = '1px solid rgba(201, 229, 255, 0.2)';
-    const borderActive = '1px solid #00407b';
-    const styles = {
-        backgroundColor: isFree ? '#00407b' : '#c9e5ff',
-        borderTop: isStartTime ? borderActive : borderDefault,
-        borderBottom: isEndTime ? borderActive : borderDefault,
-        borderLeft: isFree ? borderDefault : borderActive,
-        borderRight: isFree ? borderDefault : borderActive
-    }
-
     let classTimeObj, startString, endString, students = '';
     if (isStartTime) {
         classTimeObj = startTimeTarget[0];
@@ -87,19 +75,64 @@ export default function CalendarQuarterHour(props) {
         endString = DateTime.fromObject(endTime).toFormat('h:mm').toLowerCase();
         student.forEach(student => {
             students += (student + ' ');
-        })
+        });
     }
 
     const classTimeTarget =
         isStartTime ? startTimeTarget[0] :
             isMidTime ? midTimeTarget[0] :
                 isEndTime ? endTimeTarget[0] : '';
+    
+    if (classTimeTarget) isLeave = classTimeTarget.isLeave;
+
+    let isFree = true;
+    if (isStartTime || isMidTime || isEndTime) isFree = false
+
+    const borderDefault = '1px solid rgba(201, 229, 255, 0.2)';
+    const borderActive = '1px solid #00407b';
+
+    let backgroundColor, borderTop, borderBottom;
+    if (isStartTime) {
+        borderTop = borderActive;
+    } else if (isMidTime) {
+        borderTop = '';
+        borderBottom = '';
+    } else if (isEndTime) {
+        borderBottom = borderActive;
+    } else {
+        borderTop = borderDefault;
+        borderBottom = borderDefault;
+    }
+
+    if (isLeave || isLeave && isHover) {
+        backgroundColor = 'rgba(201,229,255,0.5)';
+    } else if (!isFree || isHover) {
+        backgroundColor = '#c9e5ff';
+    } else {
+        backgroundColor = '#00407b';
+    }
+
+    const styles = {
+        backgroundColor: backgroundColor,
+        borderTop: borderTop,
+        borderBottom: borderBottom,
+        borderLeft: isFree ? borderDefault : borderActive,
+        borderRight: isFree ? borderDefault : borderActive
+    }
+
+    
 
     return (
         <>
             <div
-                onMouseEnter={() => dispatch(setIsGlow(day, location, courtNo, quarterHour, true))}
-                onMouseLeave={() => dispatch(setIsGlow(day, location, courtNo, quarterHour, false))}
+                onMouseEnter={() => {
+                    setIsHover(true);
+                    dispatch(setIsGlow(day, location, courtNo, quarterHour, true));
+                }}
+                onMouseLeave={() => {
+                    setIsHover(false);
+                    dispatch(setIsGlow(day, location, courtNo, quarterHour, false));
+                }}
                 className={
                     weekView ?
                         `calendar-quarter-hour day-${day} quarter-hour-${quarterHour}` :

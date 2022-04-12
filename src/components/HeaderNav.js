@@ -3,8 +3,8 @@ import Dropdown from './Dropdown'
 import { DateTime, Settings } from 'luxon'
 import { faBars, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { dataContext } from './contexts/DataContext'
-import { renderContext } from './contexts/RenderContext'
+import { dataContext } from '../contexts/DataContext'
+import { renderContext } from '../contexts/RenderContext'
 import { Backdrop, CircularProgress } from '@mui/material'
 Settings.defaultZone = 'Asia/Taipei';
 

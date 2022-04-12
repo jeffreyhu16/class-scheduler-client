@@ -1,6 +1,6 @@
 import React from 'react'
-import { dataContext } from './contexts/DataContext'
-import { renderContext } from './contexts/RenderContext'
+import { dataContext } from '../contexts/DataContext'
+import { renderContext } from '../contexts/RenderContext'
 
 export default function DropdownItem(props) {
     const { label, item, active, setActive, setLoading, index } = props;
