@@ -11,6 +11,7 @@ export default function App() {
     const [calendarView, setCalendarView] = React.useState('week');
     const [startOfWeek, setStartOfWeek] = React.useState();
     const [currentDate, setCurrentDate] = React.useState();
+    const [presentDate, setPresentDate] = React.useState();
     const [locationData, setLocationData] = React.useState();
     const [coachData, setCoachData] = React.useState();
     const [location, setLocation] = React.useState({ name: 'all' });
@@ -24,14 +25,17 @@ export default function App() {
 
     React.useEffect(() => {
         Promise.all([
-            fetch(`${api}/date/currentDate`),
             fetch(`${api}/date/startOfWeek`),
+            fetch(`${api}/date/currentDate`),
             fetch(`${api}/location`),
             fetch(`${api}/coach`)
         ])
             .then(([res1, res2, res3, res4]) => {
-                res1.json().then(data => setCurrentDate(data));
-                res2.json().then(data => setStartOfWeek(data));
+                res1.json().then(data => setStartOfWeek(data));
+                res2.json().then(data => {
+                    setCurrentDate(data);
+                    setPresentDate(data);
+                });
                 res3.json().then(data => {
                     setLocationData([{ name: 'all' }, ...data]);
                 });
@@ -63,6 +67,7 @@ export default function App() {
             setCalendarView,
             currentDate,
             setCurrentDate,
+            presentDate,
             startOfWeek,
             setStartOfWeek,
             locationData,
