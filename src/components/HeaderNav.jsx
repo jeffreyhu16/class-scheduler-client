@@ -1,19 +1,21 @@
 import React from 'react'
 import Dropdown from './Dropdown'
 import { DateTime, Settings } from 'luxon'
-import { faBars, faAngleLeft, faAngleRight } from '@fortawesome/free-solid-svg-icons'
+import { faBars, faAngleLeft, faAngleRight, faUpRightFromSquare } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { dataContext } from '../contexts/DataContext'
 import { renderContext } from '../contexts/RenderContext'
 import { Backdrop, CircularProgress } from '@mui/material'
-Settings.defaultZone = 'Asia/Taipei';
+import html2canvas from 'html2canvas'
+import { jsPDF } from 'jspdf'
+Settings.defaultZone = 'Asia/Taipei'
 
 export default function HeaderNav(props) {
 
     const { breakPoint } = props;
     const { setCalendarView, currentDate, setCurrentDate, startOfWeek, setStartOfWeek, locationData, setLocation, coachData, setCoach } = React.useContext(dataContext);
     const { weekView, dayView } = React.useContext(renderContext)
-    const [active, setActive] = React.useState({ view: [, true], location: [, true], coach: [,,, true] });
+    const [active, setActive] = React.useState({ view: [, true], location: [, true], coach: [, , , true] });
     const [isHover, setIsHover] = React.useState([]);
     const [loading, setLoading] = React.useState(false);
     let currentDay, day1, day7, month, year, nextDay, prevDay, nextWeek, prevWeek;
@@ -62,7 +64,19 @@ export default function HeaderNav(props) {
         }
         setTimeout(() => setLoading(false), 2000);
     }
-    
+
+    const createPdf = () => {
+        const calendar = document.getElementById('calendar');
+        html2canvas(calendar)
+            .then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF({ unit: 'mm' });
+                pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297);
+                pdf.save("calendar.pdf");
+            })
+            .catch(err => console.log(err));
+    }
+
     const castBackground = i => {
         let background;
         if (active.view[i] && !isHover[i]) background = '#c9e5ff';
@@ -97,8 +111,8 @@ export default function HeaderNav(props) {
                         <div
                             className="header-toggle-day"
                             onClick={() => toggleView('day')}
-                            onMouseEnter={() => setIsHover([ true, false ])}
-                            onMouseLeave={() => setIsHover([ false, false ])}
+                            onMouseEnter={() => setIsHover([true, false])}
+                            onMouseLeave={() => setIsHover([false, false])}
                             style={dayStyles}
                         >
                             Day
@@ -106,8 +120,8 @@ export default function HeaderNav(props) {
                         <div
                             className="header-toggle-week"
                             onClick={() => toggleView('week')}
-                            onMouseEnter={() => setIsHover([ false, true ])}
-                            onMouseLeave={() => setIsHover([ false, false ])}
+                            onMouseEnter={() => setIsHover([false, true])}
+                            onMouseLeave={() => setIsHover([false, false])}
                             style={weekStyles}
                         >
                             Week
@@ -129,10 +143,16 @@ export default function HeaderNav(props) {
                             setActive={setActive}
                             setLoading={setLoading}
                         />
-                    </div>}
+                    </div>
+                }
             </div>
             <div className="header-date-group">
-                {currentDate && 
+                <FontAwesomeIcon 
+                    icon={faUpRightFromSquare} 
+                    className="icon-export" 
+                    onClick={createPdf}
+                />
+                {currentDate &&
                     <div className="header-date">
                         <div className="header-date-day">
                             {weekView ? `${day1} - ${day7}` : currentDay}

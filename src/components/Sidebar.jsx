@@ -8,7 +8,7 @@ Settings.defaultZone = 'Asia/Taipei';
 export default function Sidebar() {
 
     const { presentDate, currentDate, setCurrentDate, setStartOfWeek } = React.useContext(dataContext);
-    const [selectDate, setSelectDate] = React.useState();
+    const [selectDate, setSelectDate] = React.useState(DateTime.fromObject(currentDate).toJSDate());
     const [loading, setLoading] = React.useState(false);
 
     const matchTile = date => {
@@ -16,7 +16,7 @@ export default function Sidebar() {
         if (presentDate) {
             if (tileDate.equals(DateTime.fromObject(presentDate)))
                 return 'present-day-tile';
-        }
+        }   
 
         if (currentDate) {
             if (tileDate.equals(DateTime.fromObject(currentDate)))
@@ -39,6 +39,7 @@ export default function Sidebar() {
                 <Calendar
                     value={selectDate}
                     onChange={handleChange}
+                    defaultActiveStartDate={selectDate}
                     tileClassName={({ date }) => matchTile(date)}
                 />
                 <ul className="side-list">

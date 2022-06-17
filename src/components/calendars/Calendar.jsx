@@ -37,7 +37,7 @@ export default function Calendar(props) {
 
     return (
         <ScrollSync>
-            <div className="calendar" style={calendarStyles}>
+            <div id="calendar" className="calendar" style={calendarStyles}>
                 <CalendarCopy />
                 <div className="calendar-head-sticky" >
                     <ScrollSyncPane>
@@ -60,7 +60,6 @@ export default function Calendar(props) {
                         </div>
                     </ScrollSyncPane>
                 </div>
-
             </div>
         </ScrollSync>
     )

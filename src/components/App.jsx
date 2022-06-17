@@ -1,7 +1,7 @@
 import React from 'react'
 import Header from './Header'
 import Main from './Main'
-import { dataContext } from '../contexts/DataContext';
+import { dataContext } from '../contexts/DataContext'
 import { renderContext } from '../contexts/RenderContext'
 import { Backdrop, CircularProgress } from '@mui/material'
 
@@ -56,6 +56,7 @@ export default function App() {
             });
         });
     }, []);
+
     const dayView = calendarView === 'day';
     const weekView = calendarView === 'week';
     const coachAll = coach.name === 'all';

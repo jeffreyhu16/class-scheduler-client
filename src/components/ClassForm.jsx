@@ -1,7 +1,7 @@
 import React from 'react'
 import { DateTime, Settings } from 'luxon'
 import { dataContext } from '../contexts/DataContext'
-import { faTrashCan } from '@fortawesome/free-solid-svg-icons'
+import { faTrashCan, faLock, faUnlockKeyhole } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Autocomplete, TextField, Popper, Switch, FormControlLabel } from '@mui/material'
 import { renderContext } from '../contexts/RenderContext'
@@ -380,7 +380,7 @@ export default function ClassForm(props) {
                             // sx={{ marginLeft: 'auto' }}
                         />
                     }
-                    label="Leave"
+                    label={<FontAwesomeIcon icon={inputs.isLeave ? faLock : faUnlockKeyhole}/>}
                 />
                 <div className="form-button-group">
                     <button className="form-cancel-button" onClick={handleCancel}>

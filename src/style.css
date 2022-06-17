@@ -201,6 +201,12 @@ h1 {
     margin-left: 0.4em;
 }
 
+.icon-export {
+    font-size: 1rem;
+    padding: 0.6em;
+    margin-right: 0.3em;
+}
+
 .header-date-group {
     font-size: 1.2rem;
 }
@@ -220,6 +226,7 @@ h1 {
     padding: 0.35em 0;  
 }
 
+.icon-export:hover,
 .icon-copy:hover,
 .icon-angle-left-container:hover,
 .icon-angle-right-container:hover {
@@ -603,5 +610,5 @@ button {
     bottom: 0;
     left: 0;
     right: 0;
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(0, 0, 0, 0.2);
 }
