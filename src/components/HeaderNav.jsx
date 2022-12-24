@@ -71,7 +71,7 @@ export default function HeaderNav(props) {
             .then(canvas => {
                 const imgData = canvas.toDataURL('image/png');
                 const pdf = new jsPDF({ unit: 'mm' });
-                pdf.addImage(imgData, 'JPEG', 0, 0, 210, 297);
+                pdf.addImage(imgData, 'JPEG', 0, 0, 210, 345);
                 pdf.save("calendar.pdf");
             })
             .catch(err => console.log(err));
@@ -147,9 +147,9 @@ export default function HeaderNav(props) {
                 }
             </div>
             <div className="header-date-group">
-                <FontAwesomeIcon 
-                    icon={faUpRightFromSquare} 
-                    className="icon-export" 
+                <FontAwesomeIcon
+                    icon={faUpRightFromSquare}
+                    className="icon-export"
                     onClick={createPdf}
                 />
                 {currentDate &&
