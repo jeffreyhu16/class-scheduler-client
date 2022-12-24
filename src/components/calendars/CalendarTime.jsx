@@ -8,7 +8,7 @@ export default function CalendarTime() {
 
     const isGlow = useSelector(state => state.isGlow);
 
-    const calendarTimes = [...Array(72)].map(() => {
+    const calendarTimes = [...Array(72)].map((k, i) => {
 
         const newTime = time.plus({ minutes: 15 * i });
 
@@ -18,7 +18,7 @@ export default function CalendarTime() {
         }
         
         return (
-            <div className={`calendar-time-quarter`} style={styles}>
+            <div key={i} className={`calendar-time-quarter`} style={styles}>
                 {newTime.hour > 12 ? newTime.hour - 12 : newTime.hour}:
                 {newTime.minute === 0 ? '00' : newTime.minute}
             </div>

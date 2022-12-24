@@ -11,7 +11,7 @@ export default function CalendarHead() {
     const [weekData, setWeekData] = React.useState();
     const { api, currentDate, startOfWeek, location, locationData } = React.useContext(dataContext);
     const { weekView, coachAll, locationAll } = React.useContext(renderContext);
-    
+
     let i = 0;
     let weekDataArr, calendarHeads = [];
 
@@ -29,8 +29,8 @@ export default function CalendarHead() {
     function CalendarHeadCourt(props) {
         const { day, location } = props;
         let j = location.numOfCourts;
-        
-        const dayCourtHeads = [...Array(j)].map(() => {
+
+        const dayCourtHeads = [...Array(j)].map((k, i) => {
             const weekStyles = {
                 opacity: isGlow.day[day] && isGlow.location[location.name][j] ? '1' : '0',
                 width: `calc(100% / ${location.numOfCourts})`,
@@ -39,10 +39,10 @@ export default function CalendarHead() {
             const dayStyles = {
                 textShadow: isGlow.location[location.name][j] ? '0 0 0.5rem #fff' : 'none',
                 width: `calc(100% / 7)`, // change logic when new courts added //
-                marginBottom: '0.8em' 
+                marginBottom: '0.8em'
             }
             return (
-                <div className="calendar-head-court" style={weekView ? weekStyles : dayStyles}>
+                <div key={i} className="calendar-head-court" style={weekView ? weekStyles : dayStyles}>
                     <div className="calendar-head-court-name">{!weekView && location.name}</div>
                     <div>{weekView ? `Court ${j--}` : `# ${j--}`}</div>
                 </div>
@@ -53,24 +53,23 @@ export default function CalendarHead() {
 
     if (weekData && weekView) {
         weekDataArr = Object.entries(weekData);
-        calendarHeads = weekDataArr.map(weekDay => {
+        calendarHeads = weekDataArr.map((weekDay, i) => {
             const styles = {
                 textShadow: isGlow.day[++i] ? '0 0 0.5rem #fff' : 'none',
                 marginBottom: !coachAll ? '1em' : '0'
             }
             return (
-                <div className={`calendar-head`} style={styles}>
+                <div key={i} className={`calendar-head`} style={styles}>
                     <div className="calendar-head-day">
                         {weekDay[0]}
                     </div>
                     <div className="calendar-head-date">
                         {weekDay[1].day}
                     </div>
-                    {
-                        weekView && coachAll &&
-                            <div className="calendar-head-court-day">
-                                <CalendarHeadCourt day={i} location={location} />
-                            </div>
+                    {weekView && coachAll &&
+                        <div className="calendar-head-court-day">
+                            <CalendarHeadCourt day={i} location={location} />
+                        </div>
                     }
                 </div>
             )

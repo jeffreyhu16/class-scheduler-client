@@ -12,9 +12,10 @@ export default function Dropdown(props) {
 
     let listItems, i = 0;
     if (listData) {
-        listItems = listData.map(item => {
+        listItems = listData.map((item, i) => {
             return (
                 <DropdownItem 
+                    key={i}
                     label={label} 
                     item={item}
                     active={active}

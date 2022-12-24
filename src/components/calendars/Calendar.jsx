@@ -14,8 +14,8 @@ export default function Calendar(props) {
     const { weekView, coachAll } = React.useContext(renderContext);
 
     let i = 0;
-    let calendarDays = [...Array(7)].map(() => {
-        return <CalendarDay day={++i} />
+    let calendarDays = [...Array(7)].map((k, i) => {
+        return <CalendarDay key={i} day={++i} />
     });
 
     const camberwell = location.name === 'Camberwell';

@@ -41,9 +41,10 @@ export default function CalendarDay(props) {
 
         if (coachAll && !locationAll) {
             let j = location.numOfCourts;
-            calendarCourts = [...Array(j)].map(() => {
+            calendarCourts = [...Array(j)].map((k, i) => {
                 return (
                     <CalendarCourt
+                        key={i}
                         day={day}
                         courtNo={j--}
                         location={location}
@@ -55,9 +56,10 @@ export default function CalendarDay(props) {
         if (!coachAll) {
             let i = 0;
             // console.log(classData)
-            calendarQuarterHours = [...Array(72)].map(() => {
+            calendarQuarterHours = [...Array(72)].map((k, i) => {
                 return (
                     <CalendarQuarterHour
+                        key={i}
                         day={day}
                         quarterHour={++i}
                         classData={classData}
