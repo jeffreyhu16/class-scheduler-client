@@ -441,13 +441,18 @@ h1 {
 }
 
 .calendar-quarter-hour {
+    position: relative;
     height: calc(100% / 72);
     /* border-left: inherit; */
 }
 
 .calendar-class-info {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     text-align: center;
     color: #00182f;
+    z-index: 1;
 }
 
 .quarter-hour-1 {
