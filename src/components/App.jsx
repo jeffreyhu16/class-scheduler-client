@@ -16,6 +16,7 @@ export default function App() {
     const [coachData, setCoachData] = React.useState();
     const [location, setLocation] = React.useState({ name: 'all' });
     const [coach, setCoach] = React.useState({ name: 'Larry' });
+    const [printMode, setPrintMode] = React.useState(false);
     const [breakPoint, setBreakPoint] = React.useState({
         1280: window.innerWidth > 1280,
         780: window.innerWidth > 780,
@@ -82,7 +83,9 @@ export default function App() {
                 dayView,
                 weekView,
                 coachAll,
-                locationAll
+                locationAll,
+                printMode,
+                setPrintMode
             }}>
                 <Header breakPoint={breakPoint} />
                 <Main breakPoint={breakPoint} />

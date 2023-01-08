@@ -13,11 +13,25 @@ Settings.defaultZone = 'Asia/Taipei'
 export default function HeaderNav(props) {
 
     const { breakPoint } = props;
-    const { setCalendarView, currentDate, setCurrentDate, startOfWeek, setStartOfWeek, locationData, setLocation, coachData, setCoach } = React.useContext(dataContext);
-    const { weekView, dayView } = React.useContext(renderContext)
+
+    const {
+        setCalendarView,
+        currentDate,
+        setCurrentDate,
+        startOfWeek,
+        setStartOfWeek,
+        locationData,
+        setLocation,
+        coachData,
+        setCoach
+    } = React.useContext(dataContext);
+
+    const { weekView, dayView, printMode, setPrintMode } = React.useContext(renderContext)
+
     const [active, setActive] = React.useState({ view: [, true], location: [, true], coach: [, , , true] });
     const [isHover, setIsHover] = React.useState([]);
     const [loading, setLoading] = React.useState(false);
+
     let currentDay, day1, day7, month, year, nextDay, prevDay, nextWeek, prevWeek;
 
     if (currentDate) {
@@ -71,8 +85,9 @@ export default function HeaderNav(props) {
             .then(canvas => {
                 const imgData = canvas.toDataURL('image/png');
                 const pdf = new jsPDF({ unit: 'mm' });
-                pdf.addImage(imgData, 'JPEG', 0, 0, 210, 345);
+                pdf.addImage(imgData, 'JPEG', 0, 0, 210, 330);
                 pdf.save("calendar.pdf");
+                setPrintMode(false);
             })
             .catch(err => console.log(err));
     }
@@ -85,6 +100,12 @@ export default function HeaderNav(props) {
         if (!active.view[i] && isHover[i]) background = '#0055a4';
         return background;
     }
+
+    React.useEffect(() => {
+        if (!printMode) return;
+
+        createPdf();
+    }, [printMode]);
 
     const activeShadow = '0 0 1rem 0 rgba(255, 255, 255, 0.4)';
     const defaultShadow = '0 0 1rem 0 rgba(0, 0, 0, 0.3)';
@@ -150,7 +171,7 @@ export default function HeaderNav(props) {
                 <FontAwesomeIcon
                     icon={faUpRightFromSquare}
                     className="icon-export"
-                    onClick={createPdf}
+                    onClick={() => setPrintMode(true)}
                 />
                 {currentDate &&
                     <div className="header-date">
