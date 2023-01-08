@@ -8,6 +8,7 @@ import { renderContext } from '../contexts/RenderContext'
 import { Backdrop, CircularProgress } from '@mui/material'
 import html2canvas from 'html2canvas'
 import { jsPDF } from 'jspdf'
+import CalendarCopy from './calendars/CalendarCopy'
 Settings.defaultZone = 'Asia/Taipei'
 
 export default function HeaderNav(props) {
@@ -122,7 +123,7 @@ export default function HeaderNav(props) {
 
     return (
         <div className="header-nav">
-            <div className="header-filter-group">
+            <div className="header-left-group">
                 {!breakPoint[780] &&
                     <div className="header-nav-dropdown">
                         <FontAwesomeIcon icon={faBars} className="icon-nav-dropdown" />
@@ -167,12 +168,15 @@ export default function HeaderNav(props) {
                     </div>
                 }
             </div>
-            <div className="header-date-group">
-                <FontAwesomeIcon
-                    icon={faUpRightFromSquare}
-                    className="icon-export"
-                    onClick={() => setPrintMode(true)}
-                />
+            <div className="header-right-group">
+                <div className="header-action-group">
+                    <CalendarCopy />
+                    <FontAwesomeIcon
+                        icon={faUpRightFromSquare}
+                        className="icon-export"
+                        onClick={() => setPrintMode(true)}
+                    />
+                </div>
                 {currentDate &&
                     <div className="header-date">
                         <div className="header-date-day">

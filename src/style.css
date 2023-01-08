@@ -136,16 +136,16 @@ h1 {
     box-shadow: 0 0 1rem 0 rgba(0, 0, 0, 0.3);
 }
 
-.header-filter-group {
+.header-left-group {
     font-size: 1.2rem;
     width: 26rem;
 }
 
-.header-filter-group,
+.header-left-group,
 .header-toggle-group,
 .header-dropdown-group,
 .dropdown-menu,
-.header-date-group,
+.header-right-group,
 .header-date {
     display: flex;
     align-items: center;
@@ -175,6 +175,10 @@ h1 {
     width: 57%;
 }
 
+.icon-caret-down {
+    margin-left: 0.4em;
+}
+
 @media (max-width: 1280px) {
     .header-nav {
         width: 100%;
@@ -183,7 +187,7 @@ h1 {
 }
 
 @media (max-width: 780px) {
-    .header-filter-group {
+    .header-left-group {
         width: 16em;
     }
     .header-dropdown-group {
@@ -192,22 +196,22 @@ h1 {
 }
 
 @media (max-width: 660px) {
-    .header-filter-group {
+    .header-left-group {
         width: auto;
     }
 }
 
-.icon-caret-down {
-    margin-left: 0.4em;
+.header-action-group {
+    display: flex;
+    align-items: center;
+    margin-right: 0.75em;
 }
 
 .icon-export {
-    font-size: 1rem;
     padding: 0.6em;
-    margin-right: 0.3em;
 }
 
-.header-date-group {
+.header-right-group {
     font-size: 1.2rem;
 }
 
@@ -335,24 +339,16 @@ h1 {
     height: 130em;
 }
 
-.calendar-copy,
-.calendar-time {
-    width: 4em;
-    letter-spacing: 0.02rem;
-}
-
 .calendar-copy {
-    display: inline-block;
-    text-align: center;  /* why did removing position relative fix the stacking context issue */
-    vertical-align: top;
-    padding-top: 0.2em;
+    position: relative;
 }
 
 .calendar-copy-popup {
     position: absolute;
-    left: 4.7em;
-    top: 1em;
-    width: 15em;
+    top: 2.5em;
+    left: 50%;
+    text-align: center;
+    width: 14em;
     padding: 1em;
     border-radius: 0.5rem;
     background-color: #004b8f;
@@ -366,9 +362,9 @@ h1 {
     content: '';
     height: 0.6em;
     width: 0.6em;
-    left: -2%;
-    top: 1em;
-    transform: rotate(45deg);
+    left: 49.4%;
+    top: 0;
+    transform: rotate(45deg) translateX(-50%);
     background-color: #004b8f;
 }
 
@@ -387,7 +383,7 @@ h1 {
     background-color: #c9e5ff;
     border-radius: 1rem;
     color: #00182f;
-    padding: 0.2em 0.6em;
+    padding: 0.2em 1em;
     cursor: pointer;
 }
 
@@ -396,7 +392,7 @@ h1 {
 }
 
 .icon-copy {
-    padding: 0.7em;
+    padding: 0.6em;
 }
 
 @media (max-width: 660px) {
@@ -407,6 +403,16 @@ h1 {
     .icon-copy {
         font-size: 1rem;
     }
+}
+
+.coach-label {
+    width: 4em;
+    display: inline-block;
+}
+
+.calendar-time {
+    width: 4em;
+    letter-spacing: 0.02rem;
 }
 
 .calendar-time-quarter {

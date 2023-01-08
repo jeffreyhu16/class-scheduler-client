@@ -34,7 +34,7 @@ export default function CalendarCopy(props) {
     }
     const popupStyles = {
         opacity: isOn ? '1' : '0',
-        transform: isOn ? 'translateX(0)' : 'translateX(-0.4em)',
+        transform: isOn ? 'translate(-50%, 0.4em)' : 'translate(-50%, 0)',
         pointerEvents: isOn ? 'auto' : 'none'
     }
     return (

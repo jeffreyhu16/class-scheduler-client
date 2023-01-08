@@ -38,7 +38,7 @@ export default function Calendar(props) {
     return (
         <ScrollSync>
             <div id="calendar" className="calendar" style={calendarStyles}>
-                <CalendarCopy />
+                <div className="coach-label"></div>
                 <div className="calendar-head-sticky" >
                     <ScrollSyncPane>
                         <div className="calendar-head-scroll">
