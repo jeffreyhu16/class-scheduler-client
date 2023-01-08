@@ -43,7 +43,7 @@ export default function ClassForm(props) {
     }, []);
 
     let dateObj, startDateTime, endDateTime, startTimeString, endTimeString;
-    const hour = Math.floor((quarterHour - 1) / 4 + 6);
+    const hour = Math.floor((quarterHour - 1) / 4 + 7);
     const min = (quarterHour - 1) % 4 * 15;
 
     if (classTimeTarget) {
@@ -288,7 +288,7 @@ export default function ClassForm(props) {
                             sx={dateStyle}
                         />
                         <Autocomplete
-                            options={timeOptions.slice(0, 72)}
+                            options={timeOptions.slice(0, 64)}
                             renderInput={params => textInput(params, '')}
                             onSelect={e => selectChange(e, 'startTimeString')}
                             value={inputDate.startTimeString}

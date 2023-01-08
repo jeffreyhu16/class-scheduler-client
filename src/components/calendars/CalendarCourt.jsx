@@ -18,14 +18,14 @@ export default function CalendarCourt(props) {
         });
     }
     
-    let i = 0;
-    const calendarQuarterHours = [...Array(72)].map(() => {
+    const calendarQuarterHours = [...Array(64)].map((k, i) => {
         return (
             <CalendarQuarterHour
+                key={i}
                 day={day}
                 location={location}
                 courtNo={courtNo}
-                quarterHour={++i}
+                quarterHour={i + 1}
                 classData={classCourtData}
             />
         )

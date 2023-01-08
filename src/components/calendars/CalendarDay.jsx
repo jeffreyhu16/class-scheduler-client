@@ -56,7 +56,7 @@ export default function CalendarDay(props) {
         if (!coachAll) {
             let i = 0;
             // console.log(classData)
-            calendarQuarterHours = [...Array(72)].map((k, i) => {
+            calendarQuarterHours = [...Array(64)].map((k, i) => {
                 return (
                     <CalendarQuarterHour
                         key={i}

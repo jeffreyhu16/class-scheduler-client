@@ -4,11 +4,11 @@ import { useSelector } from 'react-redux';
 
 export default function CalendarTime() {
     let i = 0
-    const time = DateTime.local().set({ hour: 6, minute: 0 });
+    const time = DateTime.local().set({ hour: 7, minute: 0 });
 
     const isGlow = useSelector(state => state.isGlow);
 
-    const calendarTimes = [...Array(72)].map((k, i) => {
+    const calendarTimes = [...Array(64)].map((k, i) => {
 
         const newTime = time.plus({ minutes: 15 * i });
 
