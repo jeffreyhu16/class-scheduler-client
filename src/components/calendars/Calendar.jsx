@@ -10,8 +10,8 @@ import CalendarCopy from './CalendarCopy'
 export default function Calendar(props) {
 
     const { breakPoint } = props;
-    const { location } = React.useContext(dataContext);
-    const { weekView, coachAll } = React.useContext(renderContext);
+    const { coach, location } = React.useContext(dataContext);
+    const { weekView, coachAll, printMode } = React.useContext(renderContext);
 
     let i = 0;
     let calendarDays = [...Array(7)].map((k, i) => {
@@ -27,22 +27,28 @@ export default function Calendar(props) {
     else if (!breakPoint[780]) flexView = '41.2875em';
     else flexView = '100%';
 
-    const calendarStyles = {
-        width: wideView || !breakPoint[1280] ? '100%' : 'calc(100% - 300px)'
-    }
-
-    const flexStyles = {
-        width: flexView
+    const styles = {
+        calendar: {
+            width: wideView || !breakPoint[1280] ? '100%' : 'calc(100% - 300px)'
+        },
+        label: {
+            fontSize: printMode ? '1.25rem' : '1rem'
+        },
+        flexView: {
+            width: flexView
+        }
     }
 
     return (
         <ScrollSync>
-            <div id="calendar" className="calendar" style={calendarStyles}>
-                <div className="coach-label"></div>
+            <div id="calendar" className="calendar" style={styles.calendar}>
+                <div className="coach-label-container">
+                    <div className="coach-label" style={styles.label}>{coach.name}</div>
+                </div>
                 <div className="calendar-head-sticky" >
                     <ScrollSyncPane>
                         <div className="calendar-head-scroll">
-                            <div className="calendar-head-flex" style={flexStyles}>
+                            <div className="calendar-head-flex" style={styles.flexView}>
                                 <CalendarHead />
                             </div>
                         </div>
@@ -54,7 +60,7 @@ export default function Calendar(props) {
                     </div>
                     <ScrollSyncPane>
                         <div className="calendar-body-scroll" >
-                            <div className="calendar-body-flex" style={flexStyles}>
+                            <div className="calendar-body-flex" style={styles.flexView}>
                                 {weekView ? calendarDays : <CalendarDay />}
                             </div>
                         </div>

@@ -405,9 +405,19 @@ h1 {
     }
 }
 
-.coach-label {
+.coach-label-container {
+    position: relative;
+    vertical-align: top;
     width: 4em;
     display: inline-block;
+}
+
+.coach-label {
+    position: absolute;
+    padding: 0.3em 1.2em;
+    border-radius: 0.3rem;
+    color: #00182f;
+    background-color: #c9e5ff;
 }
 
 .calendar-time {
@@ -618,4 +628,5 @@ button {
     left: 0;
     right: 0;
     background: rgba(0, 0, 0, 0.2);
+    z-index: 1;
 }
